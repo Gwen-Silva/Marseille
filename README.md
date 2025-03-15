@@ -3,7 +3,7 @@ TCC Game Project - Card Game based on Tarot - Fatec São Caetano do Sul
 
 # Marseille - Jogo de Cartas baseado em Tarot
 
-![Logo Marseille](/Images/Logo_Marseille_1080p.png)
+![Logo Marseille](/Images/Capa_Marseille_FullHD.png)
 
 ## Descrição
 

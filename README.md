@@ -17,33 +17,13 @@ Marseille é um jogo de cartas baseado no Tarot de Marseille, desenvolvido como 
 
 ## Objetivo
 
-O jogador deve utilizar estratégias para derrotar seus oponentes, gerenciando suas cartas com sabedoria. O jogo também conta com um sistema de pontuação e desafios progressivos.
+O jogador deve utilizar estratégias para derrotar seus oponentes, gerenciando suas cartas com sabedoria.
 
 ## Tecnologias Utilizadas
 
 - **Linguagem**: JavaScript
 - **Framework**: Phaser.js (para desenvolvimento de jogos 2D)
 - **Controle de Versão**: GitHub
-
-## Como Jogar
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/marseille.git
-   ```
-2. Acesse o diretório do projeto:
-   ```bash
-   cd marseille
-   ```
-3. Instale as dependências:
-   ```bash
-   npm install
-   ```
-4. Execute o jogo:
-   ```bash
-   npm start
-   ```
-5. Acesse no navegador [**http://localhost:3000**](http://localhost:3000).
 
 ## Contribuição
 

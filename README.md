@@ -3,6 +3,8 @@ TCC Game Project - Card Game based on Tarot - Fatec São Caetano do Sul
 
 # Marseille - Jogo de Cartas baseado em Tarot
 
+![Logo Marseille](/images/Logo_Marseille_1080p.png)
+
 ## Descrição
 
 Marseille é um jogo de cartas baseado no Tarot de Marseille, desenvolvido como parte de um projeto de TCC. O jogo acompanha a jornada do Mago, um arcano que perdeu seus poderes e precisa interagir com outros arcanos para recuperá-los. A mecânica do jogo combina estratégia e gestão de recursos, utilizando cartas de quatro naipes distintos: **Amor, Esperança, Luto e Culpa**.
@@ -14,6 +16,8 @@ Marseille é um jogo de cartas baseado no Tarot de Marseille, desenvolvido como 
 - A segunda carta ativa o efeito do naipe, cujo impacto varia conforme sua força.
 - Os naipes das cartas representam sentimentos dos personagens
 - O naipe **Luto** por exemplo possui um efeito de **anulação**, cancelando ações adversárias ou prevenindo dano letal.
+
+![Gameplay](/images/Tabuleiro.png)
 
 ## Objetivo
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using AxolotlProductions;
 
 [CreateAssetMenu(menuName = "Card Data")]
 public class CardData : ScriptableObject

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2bfdabe04cd5a334290e5480bddeaf59
+guid: 5474a4da523995149b00231bfcd7f102
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5202724099939071846
-    second: Placeholder Carta Amor _0
+      213: -1558256198040742725
+    second: Deck_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Placeholder Carta Amor _0
+      name: Deck_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 5
-        width: 750
-        height: 990
+        y: 0
+        width: 201
+        height: 251
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6677b31f00ac33840800000000000000
-      internalID: 5202724099939071846
+      spriteID: bb41bbe6e36ff5ae0800000000000000
+      internalID: -1558256198040742725
       vertices: []
       indices: 
       edges: []
@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Deck_0: -1558256198040742725
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

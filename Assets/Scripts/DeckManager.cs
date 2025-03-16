@@ -10,6 +10,18 @@ public class DeckManager : MonoBehaviour
 
 	private int currentIndex = 0;
 
+	private void Start()
+	{
+		Card[] cards = Resources.LoadAll<Card>("Cards");
+
+		allCards.AddRange(cards);
+
+		HandManager hand = Object.FindFirstObjectByType<HandManager>();
+		for (int i = 0; i < 6; i++) {
+			DrawCard(hand);
+		}
+	}
+
 	public void DrawCard(HandManager handManager) {
 		if (allCards.Count == 0)
 			return;

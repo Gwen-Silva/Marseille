@@ -18,6 +18,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
 	private int currentState = 0;
 	private CardDisplay cardDisplay;
+	private bool isLocked = false;
 
 	void Awake() {
 		rectTransform = GetComponent<RectTransform>();
@@ -31,6 +32,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 	}
 
 	void Update() {
+		if (isLocked) return;
+
 		switch (currentState) {
 			case 1:
 				HandleHoverState();
@@ -44,11 +47,18 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 		}
 	}
 
+	public void LockCardInPlace() {
+		isLocked = true;
+	}
+
 	public void SetScaleForBoard() {
 		rectTransform.localScale = originalScale * 0.8f;
+		gloweffect.SetActive(false);
 	}
 
 	private void HandleDrop() {
+		if (isLocked) return;
+
 		col.enabled = false;
 		Collider2D hitCollider = Physics2D.OverlapPoint(transform.position);
 		col.enabled = true;
@@ -62,6 +72,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 	}
 
 	public void TransitionToState0() {
+		if (isLocked) return;
+
 		currentState = 0;
 		rectTransform.localScale = originalScale;
 		rectTransform.localPosition = originalPosition;
@@ -70,7 +82,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 	}
 
 	public void OnPointerEnter(PointerEventData eventData) {
-		if (currentState == 0) {
+		if (currentState == 0 && !isLocked) {
 			originalPosition = rectTransform.localPosition;
 			originalRotation = rectTransform.localRotation;
 			originalScale = rectTransform.localScale;
@@ -79,13 +91,13 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 	}
 
 	public void OnPointerExit(PointerEventData eventData) {
-		if (currentState == 1) {
+		if (currentState == 1 && !isLocked) {
 			TransitionToState0();
 		}
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
-		if (currentState == 1) {
+		if (currentState == 1 && !isLocked) {
 			currentState = 2;
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(
 				canvas.GetComponent<RectTransform>(),
@@ -97,7 +109,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 	}
 
 	public void OnDrag(PointerEventData eventData) {
-		if (currentState == 2) {
+		if (currentState == 2 && !isLocked) {
 			Vector2 localPointerPosition;
 			if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
 				canvas.GetComponent<RectTransform>(),
@@ -110,11 +122,13 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 	}
 
 	private void HandleHoverState() {
+		if (isLocked) return;
 		gloweffect.SetActive(true);
 		rectTransform.localScale = originalScale * selectScale;
 	}
 
 	private void HandleDragState() {
+		if (isLocked) return;
 		rectTransform.localRotation = Quaternion.identity;
 	}
 }

@@ -43,7 +43,6 @@ public class CardDisplay : MonoBehaviour {
 	public void ChangeToValueSprite() {
 		cardImage.sprite = valueOnlySprite;
 		cardTopValue.gameObject.SetActive(true);
-		cardBottomValue.gameObject.SetActive(true);
+		cardBottomValue.gameObject.SetActive(false);
 	}
-
 }

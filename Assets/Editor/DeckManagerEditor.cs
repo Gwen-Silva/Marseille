@@ -11,11 +11,20 @@ public class DeckManagerEditor : Editor {
 	public override void OnInspectorGUI() {
 		DeckManager deckManager = (DeckManager)target;
 
-		if (GUILayout.Button("Draw Next Card")) {
-			HandManager handManager = (HandManager)FindAnyObjectByType(typeof(HandManager));
+		if (GUILayout.Button("Draw Next Card (Player)")) {
+			BaseHandManager playerHand = FindAnyObjectByType<HandManager>();
 
-			if (handManager != null) {
-				deckManager.DrawCard(handManager);
+			if (playerHand != null) {
+				deckManager.DrawCard(playerHand, true);
+				EditorUtility.SetDirty(deckManager);
+			}
+		}
+
+		if (GUILayout.Button("Draw Next Card (Opponent)")) {
+			BaseHandManager opponentHand = FindAnyObjectByType<OpponentHandManager>();
+
+			if (opponentHand != null) {
+				deckManager.DrawCard(opponentHand, false);
 				EditorUtility.SetDirty(deckManager);
 			}
 		}

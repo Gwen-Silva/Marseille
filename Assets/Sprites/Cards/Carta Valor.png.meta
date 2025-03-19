@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9708a87c47ef14a4f8d81969eb1be330
+guid: aff0bac2d941bf64b8250d358121182b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3125307754168276774
-    second: Carta Cardback_0
+      213: 7540585947550909261
+    second: Carta Valor_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Carta Cardback_0
+      name: Carta Valor_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 751
-        height: 1000
+        y: 2
+        width: 301
+        height: 398
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 32, y: 32, z: 32, w: 32}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 62759f408d25f5b20800000000000000
-      internalID: 3125307754168276774
+      spriteID: d430312b7fa85a860800000000000000
+      internalID: 7540585947550909261
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: d67e66dd6a5bf184abb5b3cb2fdc3651
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Carta Cardback_0: 3125307754168276774
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

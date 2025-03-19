@@ -9,8 +9,6 @@ using UnityEditor;
 [CustomEditor(typeof(DeckManager))]
 public class DeckManagerEditor : Editor {
 	public override void OnInspectorGUI() {
-		DrawDefaultInspector();
-
 		DeckManager deckManager = (DeckManager)target;
 
 		if (GUILayout.Button("Draw Next Card")) {
@@ -21,6 +19,8 @@ public class DeckManagerEditor : Editor {
 				EditorUtility.SetDirty(deckManager);
 			}
 		}
+
+		DrawDefaultInspector();
 	}
 }
 #endif

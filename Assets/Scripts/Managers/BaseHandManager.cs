@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using AxolotlProductions;
 
-public class HandManager : MonoBehaviour {
-
+public abstract class BaseHandManager : MonoBehaviour {
 	public GameObject cardPrefab;
 	public Transform handTransform;
 	public float fanSpread = 7.5f;
@@ -12,7 +11,7 @@ public class HandManager : MonoBehaviour {
 
 	public List<CardDisplay> cardsInHand = new List<CardDisplay>();
 
-	public void AddCardToHand(Card cardData) {
+	public virtual void AddCardToHand(Card cardData) {
 		GameObject newCardObj = Instantiate(cardPrefab, handTransform.position, Quaternion.identity, handTransform);
 		CardDisplay newCard = newCardObj.GetComponent<CardDisplay>();
 
@@ -25,7 +24,14 @@ public class HandManager : MonoBehaviour {
 		UpdateHandVisuals();
 	}
 
-	private void UpdateHandVisuals() {
+	public virtual void RemoveCardFromHand(CardDisplay card) {
+		if (cardsInHand.Contains(card)) {
+			cardsInHand.Remove(card);
+			UpdateHandVisuals();
+		}
+	}
+
+	protected virtual void UpdateHandVisuals() {
 		int cardCount = cardsInHand.Count;
 
 		if (cardCount == 1) {

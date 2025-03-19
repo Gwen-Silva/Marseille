@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 73b6e123c5df32741815ba37f1f7ca6b
+guid: 9e415de31ef23024d8ec17443beb0e41
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1670939962693757434
-    second: Placeholder Carta Culpa_0
+      213: 3157145390269506736
+    second: Carta Luto_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 256
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Placeholder Carta Culpa_0
+      name: Carta Luto_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 5
-        width: 750
-        height: 990
+        y: 1
+        width: 301
+        height: 398
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 32, y: 32, z: 32, w: 32}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 60652aaf4f0afc8e0800000000000000
-      internalID: -1670939962693757434
+      spriteID: 0b4a643510f60db20800000000000000
+      internalID: 3157145390269506736
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: cc7c30e5d8f2df24080a7eaa31e5e4b9
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Placeholder Carta Culpa_0: -1670939962693757434
+      Carta Luto_0: 3157145390269506736
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

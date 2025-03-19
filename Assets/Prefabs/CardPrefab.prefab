@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3125783412685867154}
   - component: {fileID: 1419056009852003281}
   - component: {fileID: 307729987129014600}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BottomValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4429761510238598218}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Traits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 8776314558516632192}
   - component: {fileID: 8703941328218164695}
   - component: {fileID: 7132014653102537295}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: TopValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1237323763798198488}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 3144548948993268742}
   - component: {fileID: 1948345072400395421}
   - component: {fileID: 8227871982847542742}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CardCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -460,7 +460,7 @@ GameObject:
   - component: {fileID: 943167744206020107}
   - component: {fileID: 2612337204210470593}
   - component: {fileID: 710918721192171065}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CardHighlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -535,8 +535,10 @@ GameObject:
   - component: {fileID: 691072727073879235}
   - component: {fileID: 162363125344879710}
   - component: {fileID: 4477745565861418340}
-  m_Layer: 5
-  m_Name: LoveCardPrefab
+  - component: {fileID: 7231996506774068290}
+  - component: {fileID: 6109899839188960827}
+  m_Layer: 0
+  m_Name: CardPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -551,7 +553,7 @@ RectTransform:
   m_GameObject: {fileID: 8572909300847209160}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 1}
+  m_LocalScale: {x: 75, y: 75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5400756130251744871}
@@ -576,7 +578,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: ab22fce786a113a418f10a2f0710f2df, type: 2}
   cardImage: {fileID: 5775672345033607792}
-  valueText: {fileID: 7132014653102537295}
+  cardTopValue: {fileID: 7132014653102537295}
+  cardBottomValue: {fileID: 307729987129014600}
+  loveSprite: {fileID: -2504222913488476086, guid: 30859d6d518208344a3cd9b53d23dae4, type: 3}
+  doubtSprite: {fileID: -2805723754308519534, guid: bc331ee2f1b41ac4897c49ac40bf7018, type: 3}
+  griefSprite: {fileID: 3157145390269506736, guid: 9e415de31ef23024d8ec17443beb0e41, type: 3}
+  guiltySprite: {fileID: -4622842356103122130, guid: 86ae2e6bfd40ac34c9c970eef8137818, type: 3}
+  valueOnlySprite: {fileID: 7540585947550909261, guid: aff0bac2d941bf64b8250d358121182b, type: 3}
+  cardValuePrefab: {fileID: 8572909300847209160, guid: 77b3d0974f4734a40bf163e8ba17a724, type: 3}
 --- !u!114 &4477745565861418340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,10 +599,95 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectScale: 1.1
-  cardPlay: {x: 0, y: 0}
-  playPosition: {x: 0, y: 0, z: 0}
   gloweffect: {fileID: 8522211829204862639}
-  playArrow: {fileID: 0}
+  lerpFactor: 0.1
+--- !u!114 &7231996506774068290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572909300847209160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
+--- !u!61 &6109899839188960827
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572909300847209160}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 2.29755, y: 3.0595832}
+  m_EdgeRadius: 0
 --- !u!1 &9157459556598343049
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,7 +699,7 @@ GameObject:
   - component: {fileID: 4937195872336717519}
   - component: {fileID: 2072862942961850209}
   - component: {fileID: 5775672345033607792}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CardImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

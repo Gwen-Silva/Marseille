@@ -162,6 +162,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 61844327}
     m_Modifications:
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -943405455880525219, guid: abafd43fdc0490b439e9baf5ba1a446e, type: 3}
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 765628689239036055, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 0
@@ -208,6 +228,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7412127917703471676, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8419128492858949168, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -409,6 +433,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 61844327}
     m_Modifications:
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -943405455880525219, guid: abafd43fdc0490b439e9baf5ba1a446e, type: 3}
+    - target: {fileID: 765628689239036055, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1001010836375913825, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_Name
       value: OpponentValueSlot
@@ -451,6 +483,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7412127917703471676, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8419128492858949168, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -638,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1042,6 +1078,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 61844327}
     m_Modifications:
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6974418589067875543, guid: 9cfa7d6a3ace95247980af22619923d4, type: 3}
     - target: {fileID: 765628689239036055, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 0
@@ -1092,6 +1132,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7412127917703471676, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8419128492858949168, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1276,6 +1320,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 61844327}
     m_Modifications:
+    - target: {fileID: 741101376324647087, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6974418589067875543, guid: 9cfa7d6a3ace95247980af22619923d4, type: 3}
     - target: {fileID: 1001010836375913825, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_Name
       value: PlayerEffectSlot
@@ -1322,6 +1370,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7412127917703471676, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8419128492858949168, guid: c5538c8f78e47e448b4465545fe05de5, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

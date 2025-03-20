@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler {
+public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+{
 	private RectTransform rectTransform;
 	private Canvas canvas;
 	private Vector2 originalLocalPointerPosition;
@@ -14,13 +15,14 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
 	[SerializeField] private float selectScale = 1.1f;
 	[SerializeField] private GameObject gloweffect;
-	[SerializeField] private float lerpFactor = 0.1f;
 
 	private int currentState = 0;
 	private CardDisplay cardDisplay;
 	private bool isLocked = false;
+	private bool isDragging = false;
 
-	void Awake() {
+	void Awake()
+	{
 		rectTransform = GetComponent<RectTransform>();
 		canvas = GetComponentInParent<Canvas>();
 		originalScale = rectTransform.localScale;
@@ -31,47 +33,59 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 		cardDisplay = GetComponent<CardDisplay>();
 	}
 
-	void Update() {
+	void Update()
+	{
 		if (isLocked) return;
 
-		switch (currentState) {
+		switch (currentState)
+		{
 			case 1:
 				HandleHoverState();
 				break;
 			case 2:
 				HandleDragState();
-				if (!Input.GetMouseButton(0)) {
-					HandleDrop();
-				}
+				rectTransform.position = Input.mousePosition;
 				break;
+		}
+
+		if (isDragging && Input.GetMouseButtonUp(0))
+		{
+			HandleDrop();
+			isDragging = false;
 		}
 	}
 
-	public void LockCardInPlace() {
+	public void LockCardInPlace()
+	{
 		isLocked = true;
 	}
 
-	public void SetScaleForBoard() {
+	public void SetScaleForBoard()
+	{
 		rectTransform.localScale = originalScale * 0.8f;
 		gloweffect.SetActive(false);
 	}
 
-	private void HandleDrop() {
+	private void HandleDrop()
+	{
 		if (isLocked) return;
 
 		col.enabled = false;
 		Collider2D hitCollider = Physics2D.OverlapPoint(transform.position);
 		col.enabled = true;
 
-		if (hitCollider != null && hitCollider.TryGetComponent(out ICardDropArea cardDropArea)) {
+		if (hitCollider != null && hitCollider.TryGetComponent(out ICardDropArea cardDropArea))
+		{
 			cardDropArea.OnCardDropped(cardDisplay);
 		}
-		else {
+		else
+		{
 			TransitionToState0();
 		}
 	}
 
-	public void TransitionToState0() {
+	public void TransitionToState0()
+	{
 		if (isLocked) return;
 
 		currentState = 0;
@@ -81,8 +95,10 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 		gloweffect.SetActive(false);
 	}
 
-	public void OnPointerEnter(PointerEventData eventData) {
-		if (currentState == 0 && !isLocked) {
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		if (currentState == 0 && !isLocked)
+		{
 			originalPosition = rectTransform.localPosition;
 			originalRotation = rectTransform.localRotation;
 			originalScale = rectTransform.localScale;
@@ -90,15 +106,20 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 		}
 	}
 
-	public void OnPointerExit(PointerEventData eventData) {
-		if (currentState == 1 && !isLocked) {
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		if (currentState == 1 && !isLocked)
+		{
 			TransitionToState0();
 		}
 	}
 
-	public void OnPointerDown(PointerEventData eventData) {
-		if (currentState == 1 && !isLocked) {
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		if (currentState == 1 && !isLocked)
+		{
 			currentState = 2;
+			isDragging = true; // 🔹 Ativa o estado de arrastar
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(
 				canvas.GetComponent<RectTransform>(),
 				eventData.position,
@@ -108,26 +129,23 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 		}
 	}
 
-	public void OnDrag(PointerEventData eventData) {
-		if (currentState == 2 && !isLocked) {
-			Vector2 localPointerPosition;
-			if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-				canvas.GetComponent<RectTransform>(),
-				eventData.position,
-				eventData.pressEventCamera,
-				out localPointerPosition)) {
-				rectTransform.position = Vector3.Lerp(rectTransform.position, Input.mousePosition, lerpFactor);
-			}
+	public void OnDrag(PointerEventData eventData)
+	{
+		if (currentState == 2 && !isLocked)
+		{
+			rectTransform.position = Input.mousePosition;
 		}
 	}
 
-	private void HandleHoverState() {
+	private void HandleHoverState()
+	{
 		if (isLocked) return;
 		gloweffect.SetActive(true);
 		rectTransform.localScale = originalScale * selectScale;
 	}
 
-	private void HandleDragState() {
+	private void HandleDragState()
+	{
 		if (isLocked) return;
 		rectTransform.localRotation = Quaternion.identity;
 	}

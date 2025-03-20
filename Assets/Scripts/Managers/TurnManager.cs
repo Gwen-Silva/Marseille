@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class TurnManager : MonoBehaviour {
+public class TurnManager : MonoBehaviour
+{
 	public static TurnManager Instance;
 
 	public Transform[] playerDropZones;
@@ -8,45 +9,51 @@ public class TurnManager : MonoBehaviour {
 	private int currentTurnIndex = 0;
 	private bool isPlayerTurn = true;
 
-	private void Awake() {
-		if (Instance == null) {
+	private void Awake()
+	{
+		if (Instance == null)
+		{
 			Instance = this;
 		}
-		else {
+		else
+		{
 			Destroy(gameObject);
 		}
 	}
 
-	private void Start() {
+	private void Start()
+	{
 		UpdateSlotHighlight();
 	}
 
-
-
-	public Transform GetExpectedDropZone() {
-		if (isPlayerTurn) {
-			if (currentTurnIndex < playerDropZones.Length) {
-				return playerDropZones[currentTurnIndex];
-			}
-		}
-		else {
-			if (currentTurnIndex < opponentDropZones.Length) {
-				return opponentDropZones[currentTurnIndex];
-			}
-		}
-		return null;
+	public Transform GetExpectedDropZone()
+	{
+		Transform[] activeDropZones = isPlayerTurn ? playerDropZones : opponentDropZones;
+		return currentTurnIndex < activeDropZones.Length ? activeDropZones[currentTurnIndex] : null;
 	}
 
+	public void OnCardPlayed()
+	{
+		AdvanceTurn();
+	}
 
-	public void AdvanceTurn() {
-		Transform[] activeDropZones = isPlayerTurn ? playerDropZones : opponentDropZones;
-
-		if (currentTurnIndex < activeDropZones.Length - 1) {
-			currentTurnIndex++;
+	public void AdvanceTurn()
+	{
+		if (isPlayerTurn)
+		{
+			isPlayerTurn = false;
+			OpponentAI.Instance.PlayCard();
 		}
-		else {
-			currentTurnIndex = 0;
-			isPlayerTurn = !isPlayerTurn;
+		else
+		{
+			isPlayerTurn = true;
+			currentTurnIndex++;
+
+			if (currentTurnIndex >= playerDropZones.Length)
+			{
+				ResetTurn();
+				return;
+			}
 		}
 
 		Debug.Log("Mudando turno. Agora é turno do " + (isPlayerTurn ? "Jogador" : "Oponente"));
@@ -54,36 +61,44 @@ public class TurnManager : MonoBehaviour {
 		UpdateSlotHighlight();
 	}
 
-
-	public void ResetTurn() {
+	public void ResetTurn()
+	{
 		currentTurnIndex = 0;
 		isPlayerTurn = true;
 		UpdateSlotHighlight();
 	}
 
-	public bool IsOpponentTurn() {
+	public bool IsOpponentTurn()
+	{
 		return !isPlayerTurn;
-	}
+	}	
 
-	public void UpdateSlotHighlight() {
-		foreach (Transform zone in playerDropZones) {
+	public void UpdateSlotHighlight()
+	{
+		foreach (Transform zone in playerDropZones)
+		{
 			CardDropZone dropZone = zone.GetComponent<CardDropZone>();
-			if (dropZone != null) {
+			if (dropZone != null)
+			{
 				dropZone.ToggleHighlight(false);
 			}
 		}
 
-		foreach (Transform zone in opponentDropZones) {
+		foreach (Transform zone in opponentDropZones)
+		{
 			CardDropZone dropZone = zone.GetComponent<CardDropZone>();
-			if (dropZone != null) {
+			if (dropZone != null)
+			{
 				dropZone.ToggleHighlight(false);
 			}
 		}
 
 		Transform[] activeDropZones = isPlayerTurn ? playerDropZones : opponentDropZones;
-		if (currentTurnIndex < activeDropZones.Length) {
+		if (currentTurnIndex < activeDropZones.Length)
+		{
 			CardDropZone nextDropZone = activeDropZones[currentTurnIndex].GetComponent<CardDropZone>();
-			if (nextDropZone != null) {
+			if (nextDropZone != null)
+			{
 				nextDropZone.ToggleHighlight(true);
 			}
 		}

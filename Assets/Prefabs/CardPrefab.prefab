@@ -548,6 +548,8 @@ MonoBehaviour:
   doubtSprite: {fileID: -2805723754308519534, guid: bc331ee2f1b41ac4897c49ac40bf7018, type: 3}
   griefSprite: {fileID: 3157145390269506736, guid: 9e415de31ef23024d8ec17443beb0e41, type: 3}
   guiltySprite: {fileID: -4622842356103122130, guid: 86ae2e6bfd40ac34c9c970eef8137818, type: 3}
+  angerSprite: {fileID: -9181724635258427942, guid: 513ea4c8ff4d22542bc561c620583487, type: 3}
+  simpathySprite: {fileID: 4643279891095108012, guid: 1671a8c5728cd304bb2e789b5b53529d, type: 3}
   valueOnlySprite: {fileID: 7540585947550909261, guid: aff0bac2d941bf64b8250d358121182b, type: 3}
 --- !u!114 &4477745565861418340
 MonoBehaviour:
@@ -563,7 +565,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectScale: 1.1
   gloweffect: {fileID: 8522211829204862639}
-  lerpFactor: 0.1
 --- !u!114 &7231996506774068290
 MonoBehaviour:
   m_ObjectHideFlags: 0

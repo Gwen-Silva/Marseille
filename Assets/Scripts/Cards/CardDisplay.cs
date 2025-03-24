@@ -13,6 +13,8 @@ public class CardDisplay : MonoBehaviour {
 	public Sprite doubtSprite;
 	public Sprite griefSprite;
 	public Sprite guiltySprite;
+    public Sprite angerSprite;
+    public Sprite simpathySprite;
 
 	public Sprite valueOnlySprite;
 
@@ -37,7 +39,13 @@ public class CardDisplay : MonoBehaviour {
 			case CardEffect.Guilty:
 				cardImage.sprite = guiltySprite;
 				break;
-		}
+            case CardEffect.Anger:
+                cardImage.sprite = angerSprite;
+                break;
+            case CardEffect.Simpathy:
+				cardImage.sprite = simpathySprite;
+				break;
+        }
 	}
 
 	public void ChangeToValueSprite() {

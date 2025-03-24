@@ -16,6 +16,8 @@ namespace AxolotlProductions {
 		Love,
 		Guilty,
 		Doubt,
-		Grief
+		Grief,
+		Anger,
+		Simpathy,
 	}
 }

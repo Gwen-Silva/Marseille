@@ -1,30 +1,40 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using AxolotlProductions;
 
-public class CardDisplay : MonoBehaviour {
-	public Card cardData;
+public class CardDisplay : MonoBehaviour
+{
+	[Header("Dados")]
+	public CardData cardData;
+
+	[Header("Referências visuais")]
 	public Image cardImage;
 	public TMP_Text cardTopValue;
 	public TMP_Text cardBottomValue;
 
+	[Header("Sprites de efeitos")]
 	public Sprite loveSprite;
 	public Sprite doubtSprite;
 	public Sprite griefSprite;
 	public Sprite guiltySprite;
 
+	[Header("Sprite neutro")]
 	public Sprite valueOnlySprite;
 
-	void Start() {
+	private void Start()
+	{
 		UpdateCardDisplay();
 	}
 
-	public void UpdateCardDisplay() {
+	public void UpdateCardDisplay()
+	{
+		if (cardData == null) return;
+
 		cardTopValue.text = cardData.cardValue.ToString();
 		cardBottomValue.text = cardData.cardValue.ToString();
 
-		switch (cardData.cardEffect) {
+		switch (cardData.cardEffect)
+		{
 			case CardEffect.Love:
 				cardImage.sprite = loveSprite;
 				break;
@@ -40,7 +50,8 @@ public class CardDisplay : MonoBehaviour {
 		}
 	}
 
-	public void ChangeToValueSprite() {
+	public void ChangeToValueSprite()
+	{
 		cardImage.sprite = valueOnlySprite;
 		cardTopValue.gameObject.SetActive(true);
 		cardBottomValue.gameObject.SetActive(false);

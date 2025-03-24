@@ -1,4 +1,3 @@
-﻿using AxolotlProductions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,42 +35,23 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 
 	public void OnCardDropped(CardDisplay cardDisplay)
 	{
-		if (cardPlaced) return;
+		if (cardPlaced || cardDisplay == null)
+			return;
 
-		cardDisplay.transform.position = transform.position;
-		cardDisplay.transform.rotation = transform.rotation;
-		cardDisplay.GetComponent<CardMovement>().SetScaleForBoard();
-
-		if (isValueSlot)
+		ActionSystem.Instance.Perform(new PlayCardGA
 		{
-			cardDisplay.UpdateCardDisplay();
-			cardDisplay.ChangeToValueSprite();
-			var topValueText = cardDisplay.cardTopValue.GetComponent<RectTransform>();
-			topValueText.anchoredPosition = Vector2.zero;
-			cardDisplay.cardTopValue.fontSize = 1;
-			cardDisplay.cardBottomValue.gameObject.SetActive(false);
-		}
-
-		RemoveCardFromHand(cardDisplay);
-		cardDisplay.GetComponent<CardMovement>().LockCardInPlace();
-
-		TurnManager.Instance.OnCardPlayed();
+			Card = cardDisplay,
+			TargetSlot = this,
+			IsValueSlot = isValueSlot
+		});
 
 		cardPlaced = true;
+		ToggleHighlight(false);
 	}
 
-	private void RemoveCardFromHand(CardDisplay cardDisplay)
+	public void ForceResetSlot()
 	{
-		HandManager handManager = FindFirstObjectByType<HandManager>();
-		OpponentHandManager opponentHandManager = FindFirstObjectByType<OpponentHandManager>();
-
-		if (handManager != null && handManager.cardsInHand.Contains(cardDisplay))
-		{
-			handManager.RemoveCardFromHand(cardDisplay);
-		}
-		else if (opponentHandManager != null && opponentHandManager.cardsInHand.Contains(cardDisplay))
-		{
-			opponentHandManager.RemoveCardFromHand(cardDisplay);
-		}
+		cardPlaced = false;
+		ToggleHighlight(false);
 	}
 }

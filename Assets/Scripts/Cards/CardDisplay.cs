@@ -4,21 +4,21 @@ using TMPro;
 
 public class CardDisplay : MonoBehaviour
 {
-	[Header("Dados")]
+	[Header("Card Data")]
 	public CardData cardData;
 
-	[Header("Referências visuais")]
+	[Header("Visual References")]
 	public Image cardImage;
 	public TMP_Text cardTopValue;
 	public TMP_Text cardBottomValue;
 
-	[Header("Sprites de efeitos")]
+	[Header("Effect Sprites")]
 	public Sprite loveSprite;
 	public Sprite doubtSprite;
 	public Sprite griefSprite;
 	public Sprite guiltySprite;
 
-	[Header("Sprite neutro")]
+	[Header("Neutral Sprite")]
 	public Sprite valueOnlySprite;
 
 	private void Start()
@@ -46,6 +46,9 @@ public class CardDisplay : MonoBehaviour
 				break;
 			case CardEffect.Guilty:
 				cardImage.sprite = guiltySprite;
+				break;
+			default:
+				cardImage.sprite = valueOnlySprite;
 				break;
 		}
 	}

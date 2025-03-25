@@ -23,11 +23,6 @@ public class DeckSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<ShuffleDeckGA>();
 	}
 
-	private void Awake()
-	{
-		ActionSystem.Instance.Perform(new GenerateDecksGA());
-	}
-
 	public CardData DrawFromPlayerDeck()
 	{
 		if (playerDeck.Count == 0) return null;
@@ -46,7 +41,7 @@ public class DeckSystem : MonoBehaviour
 		return card;
 	}
 
-	private IEnumerator GenerateDecksPerformer(GenerateDecksGA action)
+	private IEnumerator GenerateDecksPerformer(GenerateDecksGA generateDecksGA)
 	{
 		playerDeck.Clear();
 		opponentDeck.Clear();
@@ -64,20 +59,17 @@ public class DeckSystem : MonoBehaviour
 				opponentDeck.Add(opponentCard);
 			}
 		}
-
-		ActionSystem.Instance.Perform(new ShuffleDeckGA(playerDeck));
-		ActionSystem.Instance.Perform(new ShuffleDeckGA(opponentDeck));
-
 		yield return null;
 	}
 
-	private IEnumerator ShuffleDeckPerformer(ShuffleDeckGA action)
+	private IEnumerator ShuffleDeckPerformer(ShuffleDeckGA shuffleDeckGA)
 	{
-		List<CardData> deck = action.deck;
+		Debug.Log("Shuffling deck...");
+		List<CardData> deck = shuffleDeckGA.deck;
 		for (int i = deck.Count - 1; i > 0; i--)
 		{
-			int rand = Random.Range(0, i + 1);
-			(deck[i], deck[rand]) = (deck[rand], deck[i]);
+			int randIndex = Random.Range(0, i + 1);
+			(deck[i], deck[randIndex]) = (deck[randIndex], deck[i]);
 		}
 		yield return null;
 	}

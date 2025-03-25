@@ -1,13 +1,14 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 public class DrawCardGA : GameAction
 {
-	public int Amount;
 	public HorizontalCardHolder targetHolder;
+	public int amount;
+	public List<Card> spawnedCards = new();
 
-	public DrawCardGA(int amount, HorizontalCardHolder targetHolder)
+	public DrawCardGA(HorizontalCardHolder targetHolder, int amount)
 	{
-		Amount = amount;
 		this.targetHolder = targetHolder;
+		this.amount = amount;
 	}
 }

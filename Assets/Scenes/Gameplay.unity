@@ -922,8 +922,8 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   deck: {fileID: 1497232451}
   slotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
+  targetHolder: {fileID: 911302868}
   isPlayerCardHolder: 0
-  cardsToSpawn: 6
   cards: []
   tweenCardReturn: 1
 --- !u!1 &913965588
@@ -1808,6 +1808,7 @@ Transform:
   - {fileID: 1556687819}
   - {fileID: 1251348616}
   - {fileID: 703102154}
+  - {fileID: 2127614500}
   m_Father: {fileID: 1249723709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1497232450
@@ -1890,7 +1891,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367ddd383435e9f4a8777540a18ff342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalCardHolder: {fileID: 1673909257}
 --- !u!1 &1612863257
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,8 +2047,8 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   deck: {fileID: 1497232451}
   slotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
+  targetHolder: {fileID: 1673909257}
   isPlayerCardHolder: 1
-  cardsToSpawn: 6
   cards: []
   tweenCardReturn: 1
 --- !u!114 &1673909258
@@ -2744,6 +2744,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5804738931377351250, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
   m_PrefabInstance: {fileID: 2082317148}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2127614499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2127614500}
+  - component: {fileID: 2127614501}
+  m_Layer: 0
+  m_Name: GameSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2127614500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127614499}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1473724930}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2127614501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127614499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb97c6422f340a141977510aeab6d0ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHand: {fileID: 1673909257}
+  opponentHand: {fileID: 911302868}
+  cardSlotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
+  cardsToDraw: 6
 --- !u!1 &2145992736
 GameObject:
   m_ObjectHideFlags: 0

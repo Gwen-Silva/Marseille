@@ -90,6 +90,7 @@ MonoBehaviour:
   SelectEvent:
     m_PersistentCalls:
       m_Calls: []
+  isPlayerCard: 1
 --- !u!114 &2813900446313811149
 MonoBehaviour:
   m_ObjectHideFlags: 0

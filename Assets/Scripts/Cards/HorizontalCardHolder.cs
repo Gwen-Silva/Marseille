@@ -14,11 +14,13 @@ public class HorizontalCardHolder : MonoBehaviour
 
 	[SerializeField] private Transform deck;
 	[SerializeField] private GameObject slotPrefab;
+	public HorizontalCardHolder targetHolder;
 	[SerializeField] private bool isPlayerCardHolder = true;
+	public GameObject SlotPrefab => slotPrefab;
+	public bool IsPlayerCardHolder => isPlayerCardHolder;
 	private RectTransform rect;
 
 	[Header("Spawn Settings")]
-	[SerializeField] private int cardsToSpawn = 8;
 	public List<Card> cards;
 
 	bool isCrossing = false;
@@ -27,43 +29,6 @@ public class HorizontalCardHolder : MonoBehaviour
 	protected virtual void Start()
 	{
 		rect = GetComponent<RectTransform>();
-		SpawnCards(cardsToSpawn);
-	}
-
-	public void SpawnCards(int amount)
-	{
-		StartCoroutine(SpawnRoutine(amount));
-	}
-
-	private IEnumerator SpawnRoutine(int amount)
-	{
-		if (cards == null)
-			cards = new List<Card>();
-
-		for (int i = 0; i < amount; i++)
-		{
-			GameObject slotGO = Instantiate(slotPrefab, transform);
-			Card card = slotGO.GetComponentInChildren<Card>();
-			card.isPlayerCard = isPlayerCardHolder;
-
-			cards.Add(card);
-
-			card.PointerEnterEvent.AddListener(CardPointerEnter);
-			card.PointerExitEvent.AddListener(CardPointerExit);
-			card.BeginDragEvent.AddListener(BeginDrag);
-			card.EndDragEvent.AddListener(EndDrag);
-			card.name = cards.Count.ToString();
-
-			yield return new WaitForSeconds(0.1f);
-		}
-
-		yield return new WaitForSecondsRealtime(0.1f);
-
-		for (int i = 0; i < cards.Count; i++)
-		{
-			if (cards[i].cardVisual != null)
-				cards[i].cardVisual.UpdateIndex(transform.childCount);
-		}
 	}
 
 	public void InstantiateSlotExternally()
@@ -71,13 +36,13 @@ public class HorizontalCardHolder : MonoBehaviour
 		GameObject slotGO = Instantiate(slotPrefab, transform);
 	}
 
-	private void BeginDrag(Card card)
+	public void BeginDrag(Card card)
 	{
 		selectedCard = card;
 	}
 
 
-	void EndDrag(Card card)
+	public void EndDrag(Card card)
 	{
 		if (selectedCard == null)
 			return;
@@ -91,12 +56,12 @@ public class HorizontalCardHolder : MonoBehaviour
 
 	}
 
-	void CardPointerEnter(Card card)
+	public void CardPointerEnter(Card card)
 	{
 		hoveredCard = card;
 	}
 
-	void CardPointerExit(Card card)
+	public void CardPointerExit(Card card)
 	{
 		hoveredCard = null;
 	}
@@ -108,6 +73,14 @@ public class HorizontalCardHolder : MonoBehaviour
 			if (hoveredCard != null)
 			{
 				ActionSystem.Instance.Perform(new DestroyCardGA(hoveredCard));
+			}
+		}
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			if (hoveredCard != null)
+			{
+				ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard));
 			}
 		}
 

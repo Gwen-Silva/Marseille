@@ -27,6 +27,8 @@ public class CardVisual : MonoBehaviour
 	private Canvas shadowCanvas;
 	[SerializeField] private Transform shakeParent;
 	[SerializeField] private Transform tiltParent;
+	[SerializeField] private GameObject flipParent;
+	public GameObject FlipParent => flipParent;
 
 	[Header("Follow Parameters")]
 	[SerializeField] private float followSpeed = 30;
@@ -64,6 +66,7 @@ public class CardVisual : MonoBehaviour
 	private float curveYOffset;
 	private float curveRotationOffset;
 	private Coroutine pressCoroutine;
+	public bool isFlipped = false;
 
 	private void Start()
 	{

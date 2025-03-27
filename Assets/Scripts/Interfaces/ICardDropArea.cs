@@ -1,5 +1,7 @@
+using UnityEngine;
+
 public interface ICardDropArea
 {
-	void OnCardDropped(CardDisplay cardDisplay);
+	void OnCardDropped(Card card);
 	void ToggleHighlight(bool state);
 }

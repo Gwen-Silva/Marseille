@@ -12,6 +12,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 	private Canvas canvas;
 	private Image imageComponent;
 	[SerializeField] private bool instantiateVisual = true;
+	[HideInInspector] public CardData cardData;
 	private VisualCardsHandler visualHandler;
 	private Vector3 offset;
 
@@ -58,6 +59,12 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
 		cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
 		cardVisual.Initialize(this);
+		CardDisplay display = cardVisual.GetComponent<CardDisplay>();
+		if (display != null)
+		{
+			display.OwnerCard = this;
+			display.SetupDisplay(cardData);
+		}
 	}
 
 	void Update()
@@ -106,6 +113,20 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 		canvas.GetComponent<GraphicRaycaster>().enabled = true;
 		imageComponent.raycastTarget = true;
 
+		List<RaycastResult> raycastResults = new List<RaycastResult>();
+		EventSystem.current.RaycastAll(eventData, raycastResults);
+
+		foreach (var result in raycastResults)
+		{
+			var dropZone = result.gameObject.GetComponentInParent<ICardDropArea>();
+			if (dropZone != null)
+			{
+				dropZone.OnCardDropped(this);
+				StartCoroutine(FrameWait());
+				return;
+			}
+		}
+
 		StartCoroutine(FrameWait());
 
 		IEnumerator FrameWait()
@@ -114,6 +135,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 			wasDragged = false;
 		}
 	}
+
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
@@ -192,5 +214,8 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 		PointerDownEvent.RemoveAllListeners();
 		PointerUpEvent.RemoveAllListeners();
 		SelectEvent.RemoveAllListeners();
+
+		isHovering = false;
+		PointerExitEvent.Invoke(this);
 	}
 }

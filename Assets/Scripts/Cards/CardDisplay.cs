@@ -21,8 +21,11 @@ public class CardDisplay : MonoBehaviour
 	[Header("Neutral Sprite")]
 	public Sprite valueOnlySprite;
 
-	private void Start()
+	[HideInInspector] public Card OwnerCard;
+
+	public void SetupDisplay(CardData data)
 	{
+		cardData = data;
 		UpdateCardDisplay();
 	}
 
@@ -56,7 +59,11 @@ public class CardDisplay : MonoBehaviour
 	public void ChangeToValueSprite()
 	{
 		cardImage.sprite = valueOnlySprite;
+
 		cardTopValue.gameObject.SetActive(true);
+		cardTopValue.rectTransform.anchoredPosition = Vector2.zero;
+		cardTopValue.fontSize = 90;
+
 		cardBottomValue.gameObject.SetActive(false);
 	}
 }

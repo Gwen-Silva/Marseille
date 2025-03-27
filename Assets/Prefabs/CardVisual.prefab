@@ -112,7 +112,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 50.4, y: -75}
-  m_SizeDelta: {x: 100, y: 50}
+  m_SizeDelta: {x: 150, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6647171949948753296
 CanvasRenderer:
@@ -496,7 +496,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -50.8, y: 71.6}
-  m_SizeDelta: {x: 100, y: 50}
+  m_SizeDelta: {x: 150, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &216770104980632703
 CanvasRenderer:
@@ -667,6 +667,7 @@ MonoBehaviour:
   griefSprite: {fileID: 3157145390269506736, guid: 9e415de31ef23024d8ec17443beb0e41, type: 3}
   guiltySprite: {fileID: -4622842356103122130, guid: 86ae2e6bfd40ac34c9c970eef8137818, type: 3}
   valueOnlySprite: {fileID: 7540585947550909261, guid: aff0bac2d941bf64b8250d358121182b, type: 3}
+  OwnerCard: {fileID: 0}
 --- !u!114 &7994647478966201829
 MonoBehaviour:
   m_ObjectHideFlags: 0

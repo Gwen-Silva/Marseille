@@ -33,10 +33,14 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 		}
 	}
 
-	public void OnCardDropped(CardDisplay cardDisplay)
+	public void OnCardDropped(Card card)
 	{
-		if (cardPlaced || cardDisplay == null)
+		if (cardPlaced || card == null)
+		{
 			return;
+		}
+
+		var cardDisplay = card.cardVisual.GetComponent<CardDisplay>();
 
 		ActionSystem.Instance.Perform(new PlayCardGA
 		{
@@ -46,12 +50,6 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 		});
 
 		cardPlaced = true;
-		ToggleHighlight(false);
-	}
-
-	public void ForceResetSlot()
-	{
-		cardPlaced = false;
 		ToggleHighlight(false);
 	}
 }

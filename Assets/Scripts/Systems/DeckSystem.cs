@@ -64,7 +64,6 @@ public class DeckSystem : MonoBehaviour
 
 	private IEnumerator ShuffleDeckPerformer(ShuffleDeckGA shuffleDeckGA)
 	{
-		Debug.Log("Shuffling deck...");
 		List<CardData> deck = shuffleDeckGA.deck;
 		for (int i = deck.Count - 1; i > 0; i--)
 		{

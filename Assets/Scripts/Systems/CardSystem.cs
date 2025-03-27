@@ -14,6 +14,7 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.AttachPerformer<DestroyCardGA>(DestroyCardPerformer);
 		ActionSystem.AttachPerformer<PlayCardGA>(PlayCardPerformer);
 		ActionSystem.AttachPerformer<FlipCardGA>(FlipCardPerformer);
+		ActionSystem.AttachPerformer<DrawInitialCardsGA>(DrawInitialCardsPerformer);
 	}
 
 	private void OnDisable()
@@ -26,6 +27,7 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<DrawCardGA>();
 		ActionSystem.DetachPerformer<PlayCardGA>();
 		ActionSystem.DetachPerformer<FlipCardGA>();
+		ActionSystem.DetachPerformer<DrawInitialCardsGA>();
 	}
 
 	private IEnumerator DrawCardPerformer(DrawCardGA drawCardGA)
@@ -39,28 +41,13 @@ public class CardSystem : MonoBehaviour
 				? deckSystem.DrawFromPlayerDeck()
 				: deckSystem.DrawFromOpponentDeck();
 
-			if (data == null)
-			{
-				Debug.LogWarning("Tentou comprar carta de um baralho vazio.");
-				break;
-			}
-
 			GameObject slotGO = Instantiate(drawCardGA.targetHolder.SlotPrefab, drawCardGA.targetHolder.transform);
 			Card card = slotGO.GetComponentInChildren<Card>();
-			if (card == null)
-			{
-				Debug.LogError("Slot prefab não contém componente Card.");
-				continue;
-			}
 
 			card.isPlayerCard = drawCardGA.targetHolder.IsPlayerCardHolder;
+			card.cardData = data;
 
 			CardDisplay display = card.GetComponentInChildren<CardDisplay>();
-			if (display != null)
-			{
-				display.cardData = data;
-				display.UpdateCardDisplay();
-			}
 
 			drawCardGA.targetHolder.cards.Add(card);
 			spawnedCards.Add(card);
@@ -85,8 +72,44 @@ public class CardSystem : MonoBehaviour
 		drawCardGA.spawnedCards = spawnedCards;
 	}
 
+	private IEnumerator DrawInitialCardsPerformer(DrawInitialCardsGA ga)
+	{
+		var drawPlayer = new DrawCardGA(ga.playerHand, ga.amount);
+		var drawOpponent = new DrawCardGA(ga.opponentHand, ga.amount);
+
+		ActionSystem.Instance.AddReaction(drawPlayer);
+		ActionSystem.Instance.AddReaction(drawOpponent);
+
+		yield return null;
+	}
+
 	private IEnumerator PlayCardPerformer(PlayCardGA action)
 	{
+		CardDisplay cardDisplay = action.Card;
+		Card card = cardDisplay.OwnerCard;
+
+		card.DisableInteraction();
+
+		cardDisplay.transform.position = action.TargetSlot.transform.position;
+		cardDisplay.transform.rotation = action.TargetSlot.transform.rotation;
+		Vector3 boardScale = new Vector3(0.85f, 0.85f, 0.85f);
+		cardDisplay.transform.DOScale(boardScale, 0.2f).SetEase(Ease.OutQuad);
+
+		if (action.IsValueSlot)
+		{
+			cardDisplay.ChangeToValueSprite();
+		}
+
+		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
+		if (holder != null)
+		{
+			holder.cards.Remove(card);
+		}
+		Destroy(card.transform.parent.gameObject);
+
+		card.transform.SetParent(action.TargetSlot.transform);
+		card.transform.localPosition = Vector3.zero;
+
 		yield return null;
 	}
 

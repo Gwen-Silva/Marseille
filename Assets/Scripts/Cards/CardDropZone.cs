@@ -1,15 +1,21 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class CardDropZone : MonoBehaviour, ICardDropArea
 {
+	public bool IsPlayerSlot = true;
 	private bool cardPlaced = false;
 	public bool isValueSlot;
 
+	[Header("References")]
 	[SerializeField] private GameObject gloweffect;
 	[SerializeField] private Image slotImage;
 	[SerializeField] private Sprite valueSlotSprite;
 	[SerializeField] private Sprite effectSlotSprite;
+
+	[Header("Dependencies")]
+	[SerializeField] private TurnSystem turnSystem;
+
 
 	private void Start()
 	{
@@ -36,9 +42,18 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 	public void OnCardDropped(Card card)
 	{
 		if (cardPlaced || card == null)
+			return;
+
+		if (turnSystem.CurrentActiveSlot != this)
 		{
+			Debug.Log($"[🚫] Tentativa de jogar em slot errado: {name}");
 			return;
 		}
+
+		bool isCardFromPlayer = card.isPlayerCard;
+
+		if (isCardFromPlayer != IsPlayerSlot)
+			return;
 
 		var cardDisplay = card.cardVisual.GetComponent<CardDisplay>();
 

@@ -80,6 +80,8 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.Instance.AddReaction(drawPlayer);
 		ActionSystem.Instance.AddReaction(drawOpponent);
 
+		ActionSystem.Instance.AddReaction(new StartGameGA());
+
 		yield return null;
 	}
 
@@ -173,19 +175,34 @@ public class CardSystem : MonoBehaviour
 
 	private IEnumerator DestroyCardPerformer(DestroyCardGA destroyCardGA)
 	{
-		if (destroyCardGA.card != null)
-		{
-			HorizontalCardHolder holder = destroyCardGA.card.GetComponentInParent<HorizontalCardHolder>();
-			if (holder != null)
-				holder.cards.Remove(destroyCardGA.card);
+		Card card = destroyCardGA.card;
 
-			if (destroyCardGA.card.cardVisual != null)
-			{
-				DOTween.Kill(destroyCardGA.card.cardVisual.transform);
-				Destroy(destroyCardGA.card.cardVisual.gameObject);
-			}
-			Destroy(destroyCardGA.card.transform.parent.gameObject);
+		if (card == null)
+			yield break;
+
+		Debug.Log($"[DestroyCardPerformer] Iniciando destruição da carta: {card.name}");
+
+		// Remove da mão, se estiver em algum holder
+		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
+		if (holder != null)
+		{
+			Debug.Log($"[DestroyCardPerformer] Removendo carta da mão.");
+			holder.cards.Remove(card);
 		}
+
+		// Destroi o visual, se existir
+		if (card.cardVisual != null)
+		{
+			Debug.Log($"[DestroyCardPerformer] Destruindo CardVisual: {card.cardVisual.name}");
+			DOTween.Kill(card.cardVisual.transform);
+			Destroy(card.cardVisual.gameObject);
+		}
+
+		// Destroi o próprio Card
+		Debug.Log($"[DestroyCardPerformer] Destruindo objeto Card: {card.name}");
+		DOTween.Kill(card.transform);
+		Destroy(card.gameObject);
+
 		yield return null;
 	}
 

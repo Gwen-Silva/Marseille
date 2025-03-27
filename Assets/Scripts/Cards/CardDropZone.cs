@@ -1,16 +1,21 @@
-﻿using AxolotlProductions;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class CardDropZone : MonoBehaviour, ICardDropArea
 {
+	public bool IsPlayerSlot = true;
 	private bool cardPlaced = false;
 	public bool isValueSlot;
 
+	[Header("References")]
 	[SerializeField] private GameObject gloweffect;
 	[SerializeField] private Image slotImage;
 	[SerializeField] private Sprite valueSlotSprite;
 	[SerializeField] private Sprite effectSlotSprite;
+
+	[Header("Dependencies")]
+	[SerializeField] private TurnSystem turnSystem;
+
 
 	private void Start()
 	{
@@ -34,44 +39,32 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 		}
 	}
 
-	public void OnCardDropped(CardDisplay cardDisplay)
+	public void OnCardDropped(Card card)
 	{
-		if (cardPlaced) return;
+		if (cardPlaced || card == null)
+			return;
 
-		cardDisplay.transform.position = transform.position;
-		cardDisplay.transform.rotation = transform.rotation;
-		cardDisplay.GetComponent<CardMovement>().SetScaleForBoard();
-
-		if (isValueSlot)
+		if (turnSystem.CurrentActiveSlot != this)
 		{
-			cardDisplay.UpdateCardDisplay();
-			cardDisplay.ChangeToValueSprite();
-			var topValueText = cardDisplay.cardTopValue.GetComponent<RectTransform>();
-			topValueText.anchoredPosition = Vector2.zero;
-			cardDisplay.cardTopValue.fontSize = 1;
-			cardDisplay.cardBottomValue.gameObject.SetActive(false);
+			Debug.Log($"[🚫] Tentativa de jogar em slot errado: {name}");
+			return;
 		}
 
-		RemoveCardFromHand(cardDisplay);
-		cardDisplay.GetComponent<CardMovement>().LockCardInPlace();
+		bool isCardFromPlayer = card.isPlayerCard;
 
-		TurnManager.Instance.OnCardPlayed();
+		if (isCardFromPlayer != IsPlayerSlot)
+			return;
+
+		var cardDisplay = card.cardVisual.GetComponent<CardDisplay>();
+
+		ActionSystem.Instance.Perform(new PlayCardGA
+		{
+			Card = cardDisplay,
+			TargetSlot = this,
+			IsValueSlot = isValueSlot
+		});
 
 		cardPlaced = true;
-	}
-
-	private void RemoveCardFromHand(CardDisplay cardDisplay)
-	{
-		HandManager handManager = FindFirstObjectByType<HandManager>();
-		OpponentHandManager opponentHandManager = FindFirstObjectByType<OpponentHandManager>();
-
-		if (handManager != null && handManager.cardsInHand.Contains(cardDisplay))
-		{
-			handManager.RemoveCardFromHand(cardDisplay);
-		}
-		else if (opponentHandManager != null && opponentHandManager.cardsInHand.Contains(cardDisplay))
-		{
-			opponentHandManager.RemoveCardFromHand(cardDisplay);
-		}
+		ToggleHighlight(false);
 	}
 }

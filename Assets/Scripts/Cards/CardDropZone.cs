@@ -67,4 +67,9 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 		cardPlaced = true;
 		ToggleHighlight(false);
 	}
+
+	public void ResetSlot()
+	{
+		cardPlaced = false;
+	}
 }

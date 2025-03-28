@@ -12,7 +12,10 @@ public class TurnSystem : MonoBehaviour
 	[SerializeField] private List<CardDropZone> opponentEffectSlots;
 
 	private int currentTurnIndex = 0;
+	private int roundCount = 0;
+	public bool IsFirstRound => roundCount == 1;
 	private bool isPlayerStarting = true;
+	public bool IsPlayerStarting => isPlayerStarting;
 	public CardDropZone CurrentActiveSlot => turnOrder[currentTurnIndex];
 
 	private List<CardDropZone> turnOrder = new();
@@ -22,16 +25,19 @@ public class TurnSystem : MonoBehaviour
 		ActionSystem.AttachPerformer<AdvanceTurnGA>(AdvanceTurnPerformer);
 		ActionSystem.AttachPerformer<StartGameGA>(StartGamePerformer);
 		ActionSystem.AttachPerformer<ResolveRoundGA>(ResolveRoundPerformer);
+		ActionSystem.AttachPerformer<ToggleTurnOwnerGA>(ToggleTurnOwnerPerformer);
 	}
 	private void OnDisable()
 	{
 		ActionSystem.DetachPerformer<AdvanceTurnGA>();
 		ActionSystem.DetachPerformer<StartGameGA>();
 		ActionSystem.DetachPerformer<ResolveRoundGA>();
+		ActionSystem.DetachPerformer<ToggleTurnOwnerGA>();
 	}
 
 	private IEnumerator StartGamePerformer(StartGameGA ga)
 	{
+		roundCount++;
 		SetupRound();
 		yield return null;
 	}
@@ -97,7 +103,12 @@ public class TurnSystem : MonoBehaviour
 	{
 		Debug.Log("[TurnSystem] Resolvendo rodada");
 		yield return new WaitForSeconds(0.5f);
+	}
 
+	private IEnumerator ToggleTurnOwnerPerformer(ToggleTurnOwnerGA ga)
+	{
 		isPlayerStarting = !isPlayerStarting;
+		Debug.Log("[TurnSystem] Novo dono do turno: " + (isPlayerStarting ? "Jogador" : "Oponente"));
+		yield return null;
 	}
 }

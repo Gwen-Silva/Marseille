@@ -2,9 +2,16 @@ using UnityEngine;
 using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CardSystem : MonoBehaviour
 {
+	[SerializeField] private Transform discardPoint;
+	[SerializeField] private HorizontalCardHolder playerHand;
+	[SerializeField] private HorizontalCardHolder opponentHand;
+	public HorizontalCardHolder PlayerCardHolder => playerHand;
+	public HorizontalCardHolder OpponentCardHolder => opponentHand;
+
 	private void OnEnable()
 	{
 		ActionSystem.AttachPerformer<DrawCardGA>(DrawCardPerformer);
@@ -15,6 +22,7 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.AttachPerformer<PlayCardGA>(PlayCardPerformer);
 		ActionSystem.AttachPerformer<FlipCardGA>(FlipCardPerformer);
 		ActionSystem.AttachPerformer<DrawInitialCardsGA>(DrawInitialCardsPerformer);
+		ActionSystem.AttachPerformer<ClearBoardGA>(ClearBoardPerformer);
 	}
 
 	private void OnDisable()
@@ -28,6 +36,7 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<PlayCardGA>();
 		ActionSystem.DetachPerformer<FlipCardGA>();
 		ActionSystem.DetachPerformer<DrawInitialCardsGA>();
+		ActionSystem.DetachPerformer<ClearBoardGA>();
 	}
 
 	private IEnumerator DrawCardPerformer(DrawCardGA drawCardGA)
@@ -182,26 +191,21 @@ public class CardSystem : MonoBehaviour
 
 		Debug.Log($"[DestroyCardPerformer] Iniciando destruição da carta: {card.name}");
 
-		// Remove da mão, se estiver em algum holder
 		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
 		if (holder != null)
 		{
-			Debug.Log($"[DestroyCardPerformer] Removendo carta da mão.");
 			holder.cards.Remove(card);
 		}
 
-		// Destroi o visual, se existir
 		if (card.cardVisual != null)
 		{
-			Debug.Log($"[DestroyCardPerformer] Destruindo CardVisual: {card.cardVisual.name}");
 			DOTween.Kill(card.cardVisual.transform);
 			Destroy(card.cardVisual.gameObject);
 		}
 
-		// Destroi o próprio Card
-		Debug.Log($"[DestroyCardPerformer] Destruindo objeto Card: {card.name}");
-		DOTween.Kill(card.transform);
-		Destroy(card.gameObject);
+		Transform slot = card.transform.parent;
+		DOTween.Kill(slot);
+		Destroy(slot.gameObject);
 
 		yield return null;
 	}
@@ -215,10 +219,51 @@ public class CardSystem : MonoBehaviour
 		visual.isFlipped = !visual.isFlipped;
 
 		float angle = visual.isFlipped ? 180f : 0f;
-		float duration = 0.25f;
+		float duration = flipCardGA.duration;
 
 		visual.FlipParent.transform.DOLocalRotate(new Vector3(0f, angle, 0f), duration);
 
 		yield return new WaitForSeconds(duration);
+	}
+
+	private IEnumerator ClearBoardPerformer(ClearBoardGA action)
+	{
+		Debug.Log("[ClearBoardPerformer] Limpando cartas do board...");
+
+		var boardSlots = GameObject.FindObjectsByType<CardDropZone>(FindObjectsSortMode.None)
+			.Where(slot => slot.CompareTag("BoardSlot"))
+			.ToList();
+
+		foreach (var slot in boardSlots)
+		{
+			if (slot.transform.childCount > 0)
+			{
+				Card card = slot.GetComponentInChildren<Card>();
+				if (card != null)
+				{
+					card.DisableInteraction();
+
+					Sequence discardSequence = DOTween.Sequence();
+
+					discardSequence.Append(card.transform.DOMove(discardPoint.position, 0.2f).SetEase(Ease.InOutQuad));
+
+					discardSequence.OnComplete(() =>
+					{
+						if (card.cardVisual != null)
+							Destroy(card.cardVisual.gameObject);
+
+						Destroy(card.gameObject);
+					});
+
+					yield return discardSequence.WaitForCompletion();
+
+					CardDropZone dropZone = slot.GetComponent<CardDropZone>();
+					if (dropZone != null)
+						dropZone.ResetSlot();
+				}
+			}
+		}
+
+		yield return null;
 	}
 }

@@ -33,7 +33,7 @@ public class ActionSystem : Singleton<ActionSystem>
 	{
 		reactions = action.PreReactions ?? new List<GameAction>();
 		PerformSubscribers(action, preSubs);
-		yield return null;
+		yield return PerformReactions();
 
 		reactions = action.PerformReactions ?? new List<GameAction>();
 		yield return PerformPerformer(action);

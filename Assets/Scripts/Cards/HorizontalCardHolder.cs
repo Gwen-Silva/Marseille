@@ -70,7 +70,7 @@ public class HorizontalCardHolder : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Delete))
 		{
-			if (hoveredCard != null)
+			if (hoveredCard != null && cards.Contains(hoveredCard))
 			{
 				ActionSystem.Instance.Perform(new DestroyCardGA(hoveredCard));
 			}
@@ -80,7 +80,7 @@ public class HorizontalCardHolder : MonoBehaviour
 		{
 			if (hoveredCard != null)
 			{
-				ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard));
+				ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard, 0.25f));
 			}
 		}
 

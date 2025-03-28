@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5930804018264387829}
   m_Layer: 0
   m_Name: BoardSlot
-  m_TagString: Untagged
+  m_TagString: BoardSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,11 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009dbe69dcedc0f4ca8fd9945b1290c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsPlayerSlot: 1
   isValueSlot: 0
   gloweffect: {fileID: 9136963566849656716}
   slotImage: {fileID: 6093782872945060388}
   valueSlotSprite: {fileID: -943405455880525219, guid: abafd43fdc0490b439e9baf5ba1a446e, type: 3}
   effectSlotSprite: {fileID: -6974418589067875543, guid: 9cfa7d6a3ace95247980af22619923d4, type: 3}
+  turnSystem: {fileID: 0}
 --- !u!61 &5930804018264387829
 BoxCollider2D:
   m_ObjectHideFlags: 0

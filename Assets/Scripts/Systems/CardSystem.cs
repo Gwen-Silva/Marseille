@@ -228,8 +228,6 @@ public class CardSystem : MonoBehaviour
 
 	private IEnumerator ClearBoardPerformer(ClearBoardGA action)
 	{
-		Debug.Log("[ClearBoardPerformer] Limpando cartas do board...");
-
 		var boardSlots = GameObject.FindObjectsByType<CardDropZone>(FindObjectsSortMode.None)
 			.Where(slot => slot.CompareTag("BoardSlot"))
 			.ToList();

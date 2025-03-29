@@ -92,6 +92,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		BeginDragEvent.Invoke(this);
+
+		if (selected)
+		{
+			selected = false;
+			SelectEvent.Invoke(this, false);
+			transform.localPosition = Vector3.zero;
+		}
+
 		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		offset = Vector2.zero;
 		transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);

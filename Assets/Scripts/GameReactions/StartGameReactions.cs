@@ -26,8 +26,6 @@ public class StartGameReactions : MonoBehaviour
 
 		ActionSystem.Instance.AddReaction(new DrawCardGA(cardSystem.PlayerCardHolder, cardsToDraw));
 		ActionSystem.Instance.AddReaction(new DrawCardGA(cardSystem.OpponentCardHolder, cardsToDraw));
-
-		Debug.Log($"[StartGameDrawReaction] {cardsToDraw} cartas compradas para cada jogador.");
 	}
 
 }

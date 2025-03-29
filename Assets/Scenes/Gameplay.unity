@@ -333,9 +333,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1361470401}
     m_Modifications:
+    - target: {fileID: 188918889861899512, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Name
+      value: OpponentHealthEffectPoint
+      objectReference: {fileID: 0}
     - target: {fileID: 5386733284056908419, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Name
       value: OpponentHealthVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: isPlayerHealth
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7957836204586524786, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Pivot.x
@@ -438,6 +446,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b556a4d55ec4a4383b81111d802239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &441540126 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7732003896945153786, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+  m_PrefabInstance: {fileID: 441540123}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1660,6 +1673,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1361470401}
     m_Modifications:
+    - target: {fileID: 188918889861899512, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Name
+      value: PlayerHealthEffectPoint
+      objectReference: {fileID: 0}
     - target: {fileID: 5386733284056908419, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Name
       value: PlayerHealthVisual
@@ -1765,6 +1782,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b556a4d55ec4a4383b81111d802239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1259950925 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7732003896945153786, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+  m_PrefabInstance: {fileID: 1259950922}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1285519872
 GameObject:
   m_ObjectHideFlags: 0
@@ -2148,10 +2170,11 @@ Transform:
   m_Children:
   - {fileID: 1556687819}
   - {fileID: 1251348616}
-  - {fileID: 703102154}
-  - {fileID: 2127614500}
   - {fileID: 1646544928}
+  - {fileID: 1667491951}
   - {fileID: 1701688430}
+  - {fileID: 2127614500}
+  - {fileID: 703102154}
   m_Father: {fileID: 1249723709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1497232450
@@ -2408,6 +2431,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97282f0c8755f0c4cae2ebcc47fd823d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healEffectPrefab: {fileID: 5361297683926766726, guid: 1cc6d06c0e06bdf4eb940bcb26ff5d83, type: 3}
+  playerEffectPoint: {fileID: 1259950925}
+  opponentEffectPoint: {fileID: 441540126}
+--- !u!1 &1667491950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1667491951}
+  - component: {fileID: 1667491952}
+  m_Layer: 0
+  m_Name: EffectSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1667491951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667491950}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1473724930}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1667491952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667491950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f68dd41d92c5f0e478f7ba2c456b472f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 1259950924}
+  opponentHealth: {fileID: 441540125}
 --- !u!1 &1673909256
 GameObject:
   m_ObjectHideFlags: 0

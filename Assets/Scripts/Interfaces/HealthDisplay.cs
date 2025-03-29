@@ -23,6 +23,14 @@ public class HealthDisplay : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 	}
 
+	public IEnumerator AddHealth(int amount)
+	{
+		currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+		UpdateHealthDisplay();
+
+		yield return new WaitForSeconds(0.2f);
+	}
+
 	private void UpdateHealthDisplay()
 	{
 		if (healthText != null)

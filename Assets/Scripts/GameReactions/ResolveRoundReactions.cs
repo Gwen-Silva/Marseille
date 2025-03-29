@@ -20,6 +20,8 @@ public class ResolveRoundReactions : MonoBehaviour
 	{
 		Card playerCardComponent = turnSystem.PlayerValueSlot.GetComponentInChildren<Card>();
 		Card opponentCardComponent = turnSystem.OpponentValueSlot.GetComponentInChildren<Card>();
+		Card playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
+		Card opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
 
 		CardDisplay playerCard = playerCardComponent?.cardVisual?.GetComponent<CardDisplay>();
 		CardDisplay opponentCard = opponentCardComponent?.cardVisual?.GetComponent<CardDisplay>();
@@ -28,6 +30,23 @@ public class ResolveRoundReactions : MonoBehaviour
 		int opponentValue = GetCardValue(opponentCard);
 
 		bool isPlayerAttacking = turnSystem.IsPlayerStarting;
+
+		if (turnSystem.IsPlayerStarting)
+		{
+			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Love)
+				ActionSystem.Instance.AddReaction(new LoveGA(playerEffectCard));
+
+			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Love)
+				ActionSystem.Instance.AddReaction(new LoveGA(opponentEffectCard));
+		}
+		else
+		{
+			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Love)
+				ActionSystem.Instance.AddReaction(new LoveGA(opponentEffectCard));
+
+			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Love)
+				ActionSystem.Instance.AddReaction(new LoveGA(playerEffectCard));
+		}
 
 		int difference = isPlayerAttacking
 			? playerValue - opponentValue

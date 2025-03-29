@@ -6,10 +6,13 @@ public class TurnSystem : MonoBehaviour
 {
 	[SerializeField] private List<CardDropZone> playerValueSlots;
 	[SerializeField] private List<CardDropZone> playerEffectSlots;
-	public CardDropZone PlayerValueSlot => playerValueSlots[0];
-	public CardDropZone OpponentValueSlot => opponentValueSlots[0];
 	[SerializeField] private List<CardDropZone> opponentValueSlots;
 	[SerializeField] private List<CardDropZone> opponentEffectSlots;
+
+	public CardDropZone PlayerValueSlot => playerValueSlots[0];
+	public CardDropZone OpponentValueSlot => opponentValueSlots[0];
+	public CardDropZone PlayerEffectSlot => playerEffectSlots[0];
+	public CardDropZone OpponentEffectSlot => opponentEffectSlots[0];
 
 	private int currentTurnIndex = 0;
 	private int roundCount = 0;
@@ -101,14 +104,12 @@ public class TurnSystem : MonoBehaviour
 
 	private IEnumerator ResolveRoundPerformer(ResolveRoundGA ga)
 	{
-		Debug.Log("[TurnSystem] Resolvendo rodada");
 		yield return new WaitForSeconds(0.5f);
 	}
 
 	private IEnumerator ToggleTurnOwnerPerformer(ToggleTurnOwnerGA ga)
 	{
 		isPlayerStarting = !isPlayerStarting;
-		Debug.Log("[TurnSystem] Novo dono do turno: " + (isPlayerStarting ? "Jogador" : "Oponente"));
 		yield return null;
 	}
 }

@@ -119,42 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &15996653
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 15996654}
-  m_Layer: 0
-  m_Name: POST
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &15996654
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 15996653}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1334546467}
-  - {fileID: 1308197205}
-  - {fileID: 1550633455}
-  - {fileID: 1984501196}
-  - {fileID: 136158443}
-  m_Father: {fileID: 1886688586}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &108163971
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +205,7 @@ GameObject:
   - component: {fileID: 136158443}
   - component: {fileID: 136158444}
   m_Layer: 0
-  m_Name: StartGameReactionsPOST
+  m_Name: StartGameReactions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +224,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 15996654}
+  m_Father: {fileID: 1886688586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &136158444
 MonoBehaviour:
@@ -1950,7 +1914,7 @@ GameObject:
   - component: {fileID: 1308197205}
   - component: {fileID: 1308197206}
   m_Layer: 0
-  m_Name: ShuffleDeckReactionsPOST
+  m_Name: ShuffleDeckReactions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1969,7 +1933,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 15996654}
+  m_Father: {fileID: 1886688586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1308197206
 MonoBehaviour:
@@ -2042,7 +2006,7 @@ GameObject:
   - component: {fileID: 1334546467}
   - component: {fileID: 1334546468}
   m_Layer: 0
-  m_Name: GenerateDecksReactionsPOST
+  m_Name: GenerateDecksReactions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2061,7 +2025,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 15996654}
+  m_Father: {fileID: 1886688586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1334546468
 MonoBehaviour:
@@ -2237,7 +2201,7 @@ GameObject:
   - component: {fileID: 1550633455}
   - component: {fileID: 1550633456}
   m_Layer: 0
-  m_Name: PlayCardReactionsPOST
+  m_Name: PlayCardReactions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2256,7 +2220,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 15996654}
+  m_Father: {fileID: 1886688586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1550633456
 MonoBehaviour:
@@ -2716,7 +2680,7 @@ GameObject:
   - component: {fileID: 1697599081}
   - component: {fileID: 1697599082}
   m_Layer: 0
-  m_Name: ClearBoardReactionsPRE
+  m_Name: ClearBoardReactions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2735,7 +2699,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2119156939}
+  m_Father: {fileID: 1886688586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1697599082
 MonoBehaviour:
@@ -3191,8 +3155,12 @@ Transform:
   m_LocalScale: {x: 108, y: 108, z: 108}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2119156939}
-  - {fileID: 15996654}
+  - {fileID: 1334546467}
+  - {fileID: 1308197205}
+  - {fileID: 1550633455}
+  - {fileID: 1984501196}
+  - {fileID: 136158443}
+  - {fileID: 1697599081}
   m_Father: {fileID: 1249723709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1952251920
@@ -3281,7 +3249,7 @@ GameObject:
   - component: {fileID: 1984501196}
   - component: {fileID: 1984501197}
   m_Layer: 0
-  m_Name: ResolveRoundReactionsPOST
+  m_Name: ResolveRoundReactions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3300,7 +3268,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 15996654}
+  m_Father: {fileID: 1886688586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1984501197
 MonoBehaviour:
@@ -3518,38 +3486,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009dbe69dcedc0f4ca8fd9945b1290c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2119156938
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2119156939}
-  m_Layer: 0
-  m_Name: PRE
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2119156939
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119156938}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1697599081}
-  m_Father: {fileID: 1886688586}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2127614499
 GameObject:
   m_ObjectHideFlags: 0

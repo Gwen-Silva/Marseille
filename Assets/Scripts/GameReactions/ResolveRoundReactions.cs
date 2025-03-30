@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ResolveRoundReactions : MonoBehaviour
 {
@@ -8,44 +8,40 @@ public class ResolveRoundReactions : MonoBehaviour
 
 	private void OnEnable()
 	{
+		ActionSystem.SubscribeReaction<ResolveRoundGA>(GriefNullifyBeforeResolve, ReactionTiming.PRE);
 		ActionSystem.SubscribeReaction<ResolveRoundGA>(ResolveRoundReaction, ReactionTiming.POST);
 	}
 
 	private void OnDisable()
 	{
+		ActionSystem.UnsubscribeReaction<ResolveRoundGA>(GriefNullifyBeforeResolve, ReactionTiming.PRE);
 		ActionSystem.UnsubscribeReaction<ResolveRoundGA>(ResolveRoundReaction, ReactionTiming.POST);
 	}
 
 	private void ResolveRoundReaction(ResolveRoundGA ga)
 	{
-		Card playerCardComponent = turnSystem.PlayerValueSlot.GetComponentInChildren<Card>();
-		Card opponentCardComponent = turnSystem.OpponentValueSlot.GetComponentInChildren<Card>();
-		Card playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
-		Card opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
+		var playerCardComponent = turnSystem.PlayerValueSlot.GetComponentInChildren<Card>();
+		var opponentCardComponent = turnSystem.OpponentValueSlot.GetComponentInChildren<Card>();
+		var playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
+		var opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
 
-		CardDisplay playerCard = playerCardComponent?.cardVisual?.GetComponent<CardDisplay>();
-		CardDisplay opponentCard = opponentCardComponent?.cardVisual?.GetComponent<CardDisplay>();
+		var playerCard = playerCardComponent?.cardVisual?.GetComponent<CardDisplay>();
+		var opponentCard = opponentCardComponent?.cardVisual?.GetComponent<CardDisplay>();
 
 		int playerValue = GetCardValue(playerCard);
 		int opponentValue = GetCardValue(opponentCard);
 
 		bool isPlayerAttacking = turnSystem.IsPlayerStarting;
 
-		if (turnSystem.IsPlayerStarting)
+		if (isPlayerAttacking)
 		{
-			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Love)
-				ActionSystem.Instance.AddReaction(new LoveGA(playerEffectCard));
-
-			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Love)
-				ActionSystem.Instance.AddReaction(new LoveGA(opponentEffectCard));
+			TriggerEffect(playerEffectCard);
+			TriggerEffect(opponentEffectCard);
 		}
 		else
 		{
-			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Love)
-				ActionSystem.Instance.AddReaction(new LoveGA(opponentEffectCard));
-
-			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Love)
-				ActionSystem.Instance.AddReaction(new LoveGA(playerEffectCard));
+			TriggerEffect(opponentEffectCard);
+			TriggerEffect(playerEffectCard);
 		}
 
 		int difference = isPlayerAttacking
@@ -56,12 +52,10 @@ public class ResolveRoundReactions : MonoBehaviour
 		{
 			if (isPlayerAttacking)
 			{
-				Debug.Log($"[ResolveReaction] Jogador causou {difference} de dano no oponente");
 				ActionSystem.Instance.AddReaction(new DealDamageGA(playerCard, opponentCard, opponentHealth, difference));
 			}
 			else
 			{
-				Debug.Log($"[ResolveReaction] Oponente causou {difference} de dano no jogador");
 				ActionSystem.Instance.AddReaction(new DealDamageGA(opponentCard, playerCard, playerHealth, difference));
 			}
 		}
@@ -77,6 +71,59 @@ public class ResolveRoundReactions : MonoBehaviour
 		ActionSystem.Instance.AddReaction(new ClearBoardGA());
 		ActionSystem.Instance.AddReaction(new ToggleTurnOwnerGA());
 		ActionSystem.Instance.AddReaction(new StartGameGA());
+	}
+
+	private void TriggerEffect(Card effectCard)
+	{
+		if (effectCard == null || effectCard.cardData.cardEffect == CardEffect.None)
+			return;
+
+		switch (effectCard.cardData.cardEffect)
+		{
+			case CardEffect.Love:
+				ActionSystem.Instance.AddReaction(new LoveGA(effectCard));
+				break;
+			case CardEffect.Grief:
+				ActionSystem.Instance.AddReaction(new GriefGA(effectCard));
+				break;
+		}
+	}
+
+	private void GriefNullifyBeforeResolve(ResolveRoundGA ga)
+	{
+		var playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
+		var opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
+
+		if (turnSystem.IsPlayerStarting)
+		{
+			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Grief)
+			{
+				int tier = CardEffectUtils.GetTier(playerEffectCard.cardData.cardValue);
+				if (tier >= 1 && tier <= 3)
+					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: false));
+			}
+			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Grief)
+			{
+				int tier = CardEffectUtils.GetTier(opponentEffectCard.cardData.cardValue);
+				if (tier >= 1 && tier <= 3)
+					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: true));
+			}
+		}
+		else
+		{
+			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Grief)
+			{
+				int tier = CardEffectUtils.GetTier(opponentEffectCard.cardData.cardValue);
+				if (tier >= 1 && tier <= 3)
+					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: true));
+			}
+			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Grief)
+			{
+				int tier = CardEffectUtils.GetTier(playerEffectCard.cardData.cardValue);
+				if (tier >= 1 && tier <= 3)
+					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: false));
+			}
+		}
 	}
 
 	private int GetCardValue(CardDisplay display)

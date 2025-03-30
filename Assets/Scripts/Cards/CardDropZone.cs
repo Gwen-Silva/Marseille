@@ -46,7 +46,6 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 
 		if (turnSystem.CurrentActiveSlot != this)
 		{
-			Debug.Log($"[🚫] Tentativa de jogar em slot errado: {name}");
 			return;
 		}
 

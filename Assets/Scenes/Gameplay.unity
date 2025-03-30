@@ -345,6 +345,18 @@ PrefabInstance:
       propertyPath: isPlayerHealth
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: effectSpawnPoint
+      value: 
+      objectReference: {fileID: 441540126}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: griefShieldOnEffect
+      value: 
+      objectReference: {fileID: 1633385134506183751, guid: a0be464261358c04099ce1a761ee4f0f, type: 3}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: griefShieldUIIconPrefab
+      value: 
+      objectReference: {fileID: 1633385134506183751, guid: a0be464261358c04099ce1a761ee4f0f, type: 3}
     - target: {fileID: 7957836204586524786, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1508,6 +1520,50 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1183456620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1183456621}
+  - component: {fileID: 1183456622}
+  m_Layer: 0
+  m_Name: GriefReactions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1183456621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183456620}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1886688586}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1183456622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183456620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a4f5033a9c5db47963eef151a184c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1249723705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1737,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerHealthVisual
       objectReference: {fileID: 0}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: effectSpawnPoint
+      value: 
+      objectReference: {fileID: 1259950925}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: griefShieldOnEffect
+      value: 
+      objectReference: {fileID: 1633385134506183751, guid: a0be464261358c04099ce1a761ee4f0f, type: 3}
+    - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: griefShieldUIIconPrefab
+      value: 
+      objectReference: {fileID: 1633385134506183751, guid: a0be464261358c04099ce1a761ee4f0f, type: 3}
     - target: {fileID: 7957836204586524786, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2481,6 +2549,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: {fileID: 1259950924}
   opponentHealth: {fileID: 441540125}
+  turnSystem: {fileID: 1701688429}
 --- !u!1 &1673909256
 GameObject:
   m_ObjectHideFlags: 0
@@ -3234,6 +3303,7 @@ Transform:
   - {fileID: 1984501196}
   - {fileID: 136158443}
   - {fileID: 1697599081}
+  - {fileID: 1183456621}
   m_Father: {fileID: 1249723709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1952251920

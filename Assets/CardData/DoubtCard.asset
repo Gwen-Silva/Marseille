@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DoubtCard
   m_EditorClassIdentifier: 
   cardValue: 0
-  cardEffect: 2
+  cardEffect: 3

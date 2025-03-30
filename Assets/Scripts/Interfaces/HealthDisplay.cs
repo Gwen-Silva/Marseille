@@ -33,7 +33,6 @@ public class HealthDisplay : MonoBehaviour
 	{
 		if (HasGriefShield && currentHealth - amount <= 0)
 		{
-			Debug.Log("[GriefShield] Dano letal evitado! Buff consumido.");
 			HasGriefShield = false;
 
 			if (griefShieldBreakEffect != null && effectSpawnPoint != null)

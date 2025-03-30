@@ -2431,6 +2431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97282f0c8755f0c4cae2ebcc47fd823d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floatTextPrefab: {fileID: 4976217442327110041, guid: 0652558dc5c65604fb3b2e740ba18b11, type: 3}
   healEffectPrefab: {fileID: 5361297683926766726, guid: 1cc6d06c0e06bdf4eb940bcb26ff5d83, type: 3}
   playerEffectPoint: {fileID: 1259950925}
   opponentEffectPoint: {fileID: 441540126}

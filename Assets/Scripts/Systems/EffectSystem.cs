@@ -26,9 +26,9 @@ public class EffectSystem : MonoBehaviour
 		int amount = 0;
 
 		if (value >= 1 && value <= 3) amount = 1;
-		else if (value >= 4 && value <= 6) amount = 3;
-		else if (value >= 7 && value <= 9) amount = 5;
-		else if (value == 10) amount = 10;
+		else if (value >= 4 && value <= 6) amount = 2;
+		else if (value >= 7 && value <= 9) amount = 3;
+		else if (value == 10) amount = 5;
 
 		if (amount > 0)
 		{

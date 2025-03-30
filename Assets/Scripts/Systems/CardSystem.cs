@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
 using System.Collections.Generic;
@@ -23,6 +23,7 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.AttachPerformer<FlipCardGA>(FlipCardPerformer);
 		ActionSystem.AttachPerformer<DrawInitialCardsGA>(DrawInitialCardsPerformer);
 		ActionSystem.AttachPerformer<ClearBoardGA>(ClearBoardPerformer);
+		ActionSystem.AttachPerformer<CardCombatAnimationGA>(CardCombatAnimationPerformer);
 	}
 
 	private void OnDisable()
@@ -37,6 +38,7 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<FlipCardGA>();
 		ActionSystem.DetachPerformer<DrawInitialCardsGA>();
 		ActionSystem.DetachPerformer<ClearBoardGA>();
+		ActionSystem.DetachPerformer<CardCombatAnimationGA>();
 	}
 
 	private IEnumerator DrawCardPerformer(DrawCardGA drawCardGA)
@@ -189,7 +191,7 @@ public class CardSystem : MonoBehaviour
 		if (card == null)
 			yield break;
 
-		Debug.Log($"[DestroyCardPerformer] Iniciando destruição da carta: {card.name}");
+		Debug.Log($"[DestroyCardPerformer] Iniciando destruiÃ§Ã£o da carta: {card.name}");
 
 		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
 		if (holder != null)
@@ -260,6 +262,96 @@ public class CardSystem : MonoBehaviour
 						dropZone.ResetSlot();
 				}
 			}
+		}
+
+		yield return null;
+	}
+
+	private IEnumerator CardCombatAnimationPerformer(CardCombatAnimationGA ga)
+	{
+		float attackDuration = 0.1f;
+		float returnDuration = 0.05f;
+		float tieReturnDuration = 0.2f;
+
+		float shakeDuration = 0.5f;
+		float shakeStrength = 50f;
+		int shakeVibrato = 10;
+		float shakeRandomness = 0f;
+
+		float contactOffset = 1.4f;
+		float tieContactOffset = 0.5f;
+
+		Transform attackerTransform = ga.attacker.cardVisual.transform;
+		Transform defenderTransform = ga.defender.cardVisual.transform;
+
+		Vector3 attackerStart = attackerTransform.position;
+		Vector3 defenderStart = defenderTransform.position;
+
+		Vector3 direction = (defenderStart - attackerStart).normalized;
+		Vector3 contactPoint = defenderStart - direction * contactOffset;
+		Vector3 midPoint = (attackerStart + defenderStart) / 2f;
+
+		switch (ga.result)
+		{
+			case CombatResult.AttackSuccess:
+				{
+					Tween moveAttack = attackerTransform.DOMove(contactPoint, attackDuration).SetEase(Ease.OutBack);
+					yield return moveAttack.WaitForCompletion();
+
+					Tween shakeDefender = defenderTransform
+						.DOShakePosition(shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness)
+						.SetEase(Ease.OutExpo);
+					yield return shakeDefender.WaitForCompletion();
+
+					Tween returnTween = attackerTransform.DOMove(attackerStart, returnDuration);
+					yield return returnTween.WaitForCompletion();
+					break;
+				}
+
+			case CombatResult.AttackBlocked:
+				{
+					Tween moveAttack = attackerTransform.DOMove(contactPoint, attackDuration).SetEase(Ease.InQuad);
+					yield return moveAttack.WaitForCompletion();
+
+					Tween shakeAttacker = attackerTransform
+						.DOShakePosition(shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness)
+						.SetEase(Ease.OutExpo);
+					yield return shakeAttacker.WaitForCompletion();
+
+					Tween returnTween = attackerTransform.DOMove(attackerStart, returnDuration);
+					yield return returnTween.WaitForCompletion();
+					break;
+				}
+
+			case CombatResult.Tie:
+				{
+					Vector3 attackerDirection = (midPoint - attackerStart).normalized;
+					Vector3 defenderDirection = (midPoint - defenderStart).normalized;
+
+					Vector3 attackerContact = attackerStart + attackerDirection * tieContactOffset;
+					Vector3 defenderContact = defenderStart + defenderDirection * tieContactOffset;
+
+					Sequence moveToContact = DOTween.Sequence();
+					moveToContact.Join(attackerTransform.DOMove(attackerContact, attackDuration).SetEase(Ease.OutQuad));
+					moveToContact.Join(defenderTransform.DOMove(defenderContact, attackDuration).SetEase(Ease.OutQuad));
+					yield return moveToContact.WaitForCompletion();
+
+					Sequence shakeBoth = DOTween.Sequence();
+					shakeBoth.Join(attackerTransform.DOShakePosition(
+						shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness
+					).SetEase(Ease.OutExpo));
+					shakeBoth.Join(defenderTransform.DOShakePosition(
+						shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness
+					).SetEase(Ease.OutExpo));
+					yield return shakeBoth.WaitForCompletion();
+
+					Sequence returnBoth = DOTween.Sequence();
+					returnBoth.Join(attackerTransform.DOMove(attackerStart, tieReturnDuration));
+					returnBoth.Join(defenderTransform.DOMove(defenderStart, tieReturnDuration));
+					yield return returnBoth.WaitForCompletion();
+
+					break;
+				}
 		}
 
 		yield return null;

@@ -81,8 +81,6 @@ public class EffectSystem : MonoBehaviour
 			target.ActiveShieldIcon = fx;
 		}
 
-		Debug.Log($"[GriefShield] Proteção contra dano letal aplicada em {(isPlayer ? "Jogador" : "Oponente")}");
-
 		yield return null;
 	}
 
@@ -103,12 +101,7 @@ public class EffectSystem : MonoBehaviour
 
 		if (targetTier <= tier)
 		{
-			Debug.Log($"[GriefNullify] Anulando efeito de tier {targetTier} com Grief tier {tier}");
 			card.cardData.cardEffect = CardEffect.None;
-		}
-		else
-		{
-			Debug.Log($"[GriefNullify] Tier do oponente ({targetTier}) é mais forte que Grief tier {tier}. Não anulado.");
 		}
 
 		yield return null;

@@ -44,6 +44,19 @@ public class ResolveRoundReactions : MonoBehaviour
 			TriggerEffect(playerEffectCard);
 		}
 
+		CombatResult result;
+		if (playerValue > opponentValue)
+			result = isPlayerAttacking ? CombatResult.AttackSuccess : CombatResult.AttackBlocked;
+		else if (playerValue < opponentValue)
+			result = isPlayerAttacking ? CombatResult.AttackBlocked : CombatResult.AttackSuccess;
+		else
+			result = CombatResult.Tie;
+
+		Card attacker = isPlayerAttacking ? playerCardComponent : opponentCardComponent;
+		Card defender = isPlayerAttacking ? opponentCardComponent : playerCardComponent;
+
+		ActionSystem.Instance.AddReaction(new CardCombatAnimationGA(attacker, defender, result));
+
 		int difference = isPlayerAttacking
 			? playerValue - opponentValue
 			: opponentValue - playerValue;

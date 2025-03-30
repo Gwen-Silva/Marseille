@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GriefCard
   m_EditorClassIdentifier: 
   cardValue: 0
-  cardEffect: 3
+  cardEffect: 4

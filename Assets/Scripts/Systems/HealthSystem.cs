@@ -4,6 +4,7 @@ using DG.Tweening;
 
 public class HealthSystem : MonoBehaviour
 {
+	[SerializeField] private GameObject floatTextPrefab;
 	[SerializeField] private GameObject healEffectPrefab;
 	[SerializeField] private Transform playerEffectPoint;
 	[SerializeField] private Transform opponentEffectPoint;
@@ -38,8 +39,17 @@ public class HealthSystem : MonoBehaviour
 			.SetEase(Ease.OutQuad)
 			.WaitForCompletion();
 
+		Transform effectPoint = ga.Target.isPlayerHealth ? playerEffectPoint : opponentEffectPoint;
+		if (floatTextPrefab != null && effectPoint != null)
+		{
+			GameObject obj = Instantiate(floatTextPrefab, effectPoint.position, Quaternion.identity, effectPoint);
+			var floatText = obj.GetComponent<FloatText>();
+			floatText.Initialize(ga.Amount, false);
+		}
+
 		yield return ga.Target.ReduceHealth(ga.Amount);
 	}
+
 	private IEnumerator HealHealthPerformer(HealHealthGA ga)
 	{
 		if (ga.Target == null)
@@ -65,8 +75,13 @@ public class HealthSystem : MonoBehaviour
 			Destroy(vfx, 2f);
 		}
 
+		if (floatTextPrefab != null && effectPoint != null)
+		{
+			GameObject obj = Instantiate(floatTextPrefab, effectPoint.position, Quaternion.identity, effectPoint);
+			var floatText = obj.GetComponent<FloatText>();
+			floatText.Initialize(ga.Amount, true);
+		}
+
 		yield return ga.Target.AddHealth(ga.Amount);
 	}
-
-
 }

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LoveCard
   m_EditorClassIdentifier: 
   cardValue: 0
-  cardEffect: 0
+  cardEffect: 1

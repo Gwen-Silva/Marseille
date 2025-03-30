@@ -2,10 +2,11 @@ using UnityEngine;
 
 public enum CardEffect
 {
-	Love,
-	Guilty,
-	Doubt,
-	Grief
+	None = 0,
+	Love = 1,
+	Guilty = 2,
+	Doubt = 3,
+	Grief = 4
 }
 
 [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card Data")]

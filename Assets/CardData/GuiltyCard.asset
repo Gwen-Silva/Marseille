@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GuiltyCard
   m_EditorClassIdentifier: 
   cardValue: 0
-  cardEffect: 1
+  cardEffect: 2

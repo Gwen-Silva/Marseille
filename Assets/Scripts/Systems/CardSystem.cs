@@ -105,8 +105,6 @@ public class CardSystem : MonoBehaviour
 
 		cardDisplay.transform.position = action.TargetSlot.transform.position;
 		cardDisplay.transform.rotation = action.TargetSlot.transform.rotation;
-		Vector3 boardScale = new Vector3(0.85f, 0.85f, 0.85f);
-		cardDisplay.transform.DOScale(boardScale, 0.2f).SetEase(Ease.OutQuad);
 
 		if (action.IsValueSlot)
 		{
@@ -123,7 +121,9 @@ public class CardSystem : MonoBehaviour
 		card.transform.SetParent(action.TargetSlot.transform);
 		card.transform.localPosition = Vector3.zero;
 
-		yield return null;
+		Vector3 boardScale = new Vector3(0.85f, 0.85f, 0.85f);
+		Tween scaleTween = cardDisplay.transform.DOScale(boardScale, 0.2f).SetEase(Ease.OutQuad);
+		yield return scaleTween.WaitForCompletion();
 	}
 
 	private IEnumerator SelectCardPerformer(SelectCardGA selectCardGA)
@@ -190,8 +190,6 @@ public class CardSystem : MonoBehaviour
 
 		if (card == null)
 			yield break;
-
-		Debug.Log($"[DestroyCardPerformer] Iniciando destruição da carta: {card.name}");
 
 		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
 		if (holder != null)

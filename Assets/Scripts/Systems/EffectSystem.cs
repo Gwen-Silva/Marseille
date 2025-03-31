@@ -1,3 +1,4 @@
+﻿using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
@@ -43,7 +44,14 @@ public class EffectSystem : MonoBehaviour
 		if (amount > 0)
 		{
 			HealthDisplay target = isPlayer ? playerHealth : opponentHealth;
-			ActionSystem.Instance.AddReaction(new HealHealthGA(target, amount));
+
+			if (target.CurrentHealth < target.MaxHealth)
+			{
+				Color loveColor = CardEffectUtils.GetEffectColor(CardEffect.Love);
+				ga.Card.cardVisual.PulseEffect(loveColor);
+
+				ActionSystem.Instance.AddReaction(new HealHealthGA(target, amount));
+			}
 		}
 
 		yield return null;
@@ -74,6 +82,10 @@ public class EffectSystem : MonoBehaviour
 		HealthDisplay target = isPlayer ? playerHealth : opponentHealth;
 
 		target.HasGriefShield = true;
+		Object.FindFirstObjectByType<HealthSystem>()?.ShowShieldText(target);
+
+		Color griefColor = CardEffectUtils.GetEffectColor(CardEffect.Grief);
+		ga.Card.cardVisual.PulseEffect(griefColor);
 
 		if (target.GriefShieldOnEffect != null && target.EffectSpawnPoint != null)
 		{
@@ -89,19 +101,28 @@ public class EffectSystem : MonoBehaviour
 		bool targetIsPlayer = ga.TargetIsPlayer;
 		int tier = ga.Tier;
 
-		Card card = targetIsPlayer
+		Card targetCard = targetIsPlayer
 			? turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>()
 			: turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
 
-		if (card == null)
+		Card griefCard = targetIsPlayer
+			? turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>()
+			: turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
+
+		if (targetCard == null || griefCard == null)
 			yield break;
 
-		int value = card.cardData.cardValue;
+		int value = targetCard.cardData.cardValue;
 		int targetTier = CardEffectUtils.GetTier(value);
 
 		if (targetTier <= tier)
 		{
-			card.cardData.cardEffect = CardEffect.None;
+			Color griefColor = CardEffectUtils.GetEffectColor(CardEffect.Grief);
+			griefCard.cardVisual.PulseEffect(griefColor);
+
+			targetCard.cardVisual.PulseNegativeEffect();
+			targetCard.cardVisual.GetComponent<CardDisplay>().ChangeToValueSprite();
+			targetCard.cardData.cardEffect = CardEffect.None;
 		}
 
 		yield return null;

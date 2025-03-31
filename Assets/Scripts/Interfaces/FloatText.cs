@@ -21,12 +21,6 @@ public class FloatText : MonoBehaviour
 
 	public void Initialize(int amount, bool isHeal)
 	{
-		if (text == null)
-		{
-			Debug.LogError("[FloatText] TMP_Text não atribuído.");
-			return;
-		}
-
 		text.text = (isHeal ? "+" : "-") + Mathf.Abs(amount).ToString();
 		text.color = isHeal ? Color.green : Color.red;
 
@@ -41,5 +35,24 @@ public class FloatText : MonoBehaviour
 		{
 			Destroy(gameObject);
 		});
+	}
+
+	public void InitializeCustom(string message, Color color, float fontSize = 50f)
+	{
+		text.text = message;
+		text.color = color;
+		text.fontSize = fontSize;
+
+		transform.localScale = Vector3.zero;
+
+		transform.DOScale(Vector3.one * scalePop, 0.3f).SetEase(Ease.OutBack);
+		transform.DOMoveY(transform.position.y + floatHeight, duration).SetEase(Ease.OutCubic);
+		canvasGroup.DOFade(0, fadeDuration)
+			.SetEase(Ease.InOutQuad)
+			.SetDelay(duration - fadeDuration)
+			.OnComplete(() =>
+			{
+				Destroy(gameObject);
+			});
 	}
 }

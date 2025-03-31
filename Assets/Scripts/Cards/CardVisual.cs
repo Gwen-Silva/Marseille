@@ -28,6 +28,7 @@ public class CardVisual : MonoBehaviour
 	[SerializeField] private Transform shakeParent;
 	[SerializeField] private Transform tiltParent;
 	[SerializeField] private GameObject flipParent;
+	[SerializeField] private Image auraImage;
 	public GameObject FlipParent => flipParent;
 
 	[Header("Follow Parameters")]
@@ -112,9 +113,15 @@ public class CardVisual : MonoBehaviour
 
 	private void HandPositioning()
 	{
-		curveYOffset = (curve.positioning.Evaluate(parentCard.NormalizedPosition()) * curve.positioningInfluence) * parentCard.SiblingAmount();
+		float normalizedIndex = parentCard.NormalizedPosition();
+		float curveX = parentCard.isPlayerCard ? normalizedIndex : 1f - normalizedIndex;
+
+		float baseYOffset = (curve.positioning.Evaluate(curveX) * curve.positioningInfluence) * parentCard.SiblingAmount();
+		curveYOffset = parentCard.isPlayerCard ? baseYOffset : -baseYOffset;
+
 		curveYOffset = parentCard.SiblingAmount() < 5 ? 0 : curveYOffset;
-		curveRotationOffset = curve.rotation.Evaluate(parentCard.NormalizedPosition());
+
+		curveRotationOffset = curve.rotation.Evaluate(curveX);
 	}
 
 	private void SmoothFollow()
@@ -222,5 +229,48 @@ public class CardVisual : MonoBehaviour
 
 		visualShadow.localPosition += (-Vector3.up * shadowOffset);
 		shadowCanvas.overrideSorting = false;
+	}
+
+	public void PulseEffect(Color color, float scaleIntensity = 0.15f, float duration = 0.5f)
+	{
+		Vector3 originalScale = transform.localScale;
+		Vector3 targetScale = originalScale * (1f + scaleIntensity);
+
+		DG.Tweening.Sequence scalePulse = DOTween.Sequence();
+		scalePulse.Append(transform.DOScale(targetScale, duration).SetEase(Ease.OutQuad));
+		scalePulse.Append(transform.DOScale(originalScale, duration).SetEase(Ease.InQuad));
+
+		if (auraImage != null)
+		{
+			auraImage.color = new Color(color.r, color.g, color.b, 0f);
+			auraImage.gameObject.SetActive(true);
+
+			DG.Tweening.Sequence auraPulse = DOTween.Sequence();
+			auraPulse.Append(auraImage.DOFade(0.6f, duration));
+			auraPulse.Append(auraImage.DOFade(0f, duration));
+			auraPulse.OnComplete(() => auraImage.gameObject.SetActive(false));
+		}
+	}
+
+	public void PulseNegativeEffect(float scaleIntensity = 0.15f, float duration = 0.5f)
+	{
+		Vector3 originalScale = transform.localScale;
+		Vector3 targetScale = originalScale * (1f - scaleIntensity);
+
+		DG.Tweening.Sequence scalePulse = DOTween.Sequence();
+		scalePulse.Append(transform.DOScale(targetScale, duration).SetEase(Ease.InQuad));
+		scalePulse.Append(transform.DOScale(originalScale, duration).SetEase(Ease.OutQuad));
+
+		if (auraImage != null)
+		{
+			Color color = new Color(0f, 0f, 0f, 0f);
+			auraImage.color = color;
+			auraImage.gameObject.SetActive(true);
+
+			DG.Tweening.Sequence auraPulse = DOTween.Sequence();
+			auraPulse.Append(auraImage.DOFade(0.6f, duration));
+			auraPulse.Append(auraImage.DOFade(0f, duration));
+			auraPulse.OnComplete(() => auraImage.gameObject.SetActive(false));
+		}
 	}
 }

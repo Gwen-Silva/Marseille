@@ -8,7 +8,6 @@ using System.Linq;
 
 public class HorizontalCardHolder : MonoBehaviour
 {
-
 	[SerializeField] private Card selectedCard;
 	[SerializeReference] private Card hoveredCard;
 

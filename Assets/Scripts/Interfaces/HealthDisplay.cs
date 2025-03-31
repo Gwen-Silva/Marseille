@@ -23,6 +23,8 @@ public class HealthDisplay : MonoBehaviour
 	public GameObject GriefShieldBreakEffect => griefShieldBreakEffect;
 	public GameObject GriefShieldUIIconPrefab => griefShieldUIIconPrefab;
 	public Transform EffectSpawnPoint => effectSpawnPoint;
+	public int CurrentHealth => currentHealth;
+	public int MaxHealth => maxHealth;
 
 	private void Start()
 	{

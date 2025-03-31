@@ -25,6 +25,14 @@ public class ResolveRoundReactions : MonoBehaviour
 		var playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
 		var opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
 
+		bool bothAreGriefAndNullifiable =
+			playerEffectCard != null &&
+			opponentEffectCard != null &&
+			playerEffectCard.cardData.cardEffect == CardEffect.Grief &&
+			opponentEffectCard.cardData.cardEffect == CardEffect.Grief &&
+			CardEffectUtils.GetTier(playerEffectCard.cardData.cardValue) <= 3 &&
+			CardEffectUtils.GetTier(opponentEffectCard.cardData.cardValue) <= 3;
+
 		var playerCard = playerCardComponent?.cardVisual?.GetComponent<CardDisplay>();
 		var opponentCard = opponentCardComponent?.cardVisual?.GetComponent<CardDisplay>();
 
@@ -35,13 +43,19 @@ public class ResolveRoundReactions : MonoBehaviour
 
 		if (isPlayerAttacking)
 		{
-			TriggerEffect(playerEffectCard);
-			TriggerEffect(opponentEffectCard);
+			if (!bothAreGriefAndNullifiable || playerEffectCard.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(playerEffectCard);
+
+			if (!bothAreGriefAndNullifiable || opponentEffectCard.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(opponentEffectCard);
 		}
 		else
 		{
-			TriggerEffect(opponentEffectCard);
-			TriggerEffect(playerEffectCard);
+			if (!bothAreGriefAndNullifiable || playerEffectCard.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(playerEffectCard);
+
+			if (!bothAreGriefAndNullifiable || opponentEffectCard.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(opponentEffectCard);
 		}
 
 		CombatResult result;
@@ -74,11 +88,7 @@ public class ResolveRoundReactions : MonoBehaviour
 		}
 		else if (difference < 0)
 		{
-			Debug.Log("[ResolveReaction] Nenhum dano aplicado (Defesa Bem Sucedida)");
-		}
-		else
-		{
-			Debug.Log("[ResolveReaction] Nenhum dano aplicado (Empate)");
+			
 		}
 
 		ActionSystem.Instance.AddReaction(new ClearBoardGA());

@@ -21,6 +21,20 @@ public class HealthSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<HealHealthGA>();
 	}
 
+	public void ShowShieldText(HealthDisplay target)
+	{
+		Transform effectPoint = target.isPlayerHealth ? playerEffectPoint : opponentEffectPoint;
+
+		if (floatTextPrefab != null && effectPoint != null)
+		{
+			GameObject obj = Instantiate(floatTextPrefab, effectPoint.position, Quaternion.identity, effectPoint);
+			var floatText = obj.GetComponent<FloatText>();
+
+			if (floatText != null)
+				floatText.InitializeCustom("Protegido", new Color32(0xA7, 0x92, 0xB5, 255));
+		}
+	}
+
 	private IEnumerator DealDamagePerformer(DealDamageGA ga)
 	{
 		if (ga.AttackerCard == null || ga.Target == null)

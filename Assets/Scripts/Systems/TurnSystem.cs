@@ -42,6 +42,9 @@ public class TurnSystem : MonoBehaviour
 	{
 		roundCount++;
 		SetupRound();
+		RoundAnnouncement announcer = FindFirstObjectByType<RoundAnnouncement>();
+		announcer?.ShowRound(roundCount);
+
 		yield return null;
 	}
 

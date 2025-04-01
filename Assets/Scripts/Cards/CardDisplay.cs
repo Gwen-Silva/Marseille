@@ -33,27 +33,11 @@ public class CardDisplay : MonoBehaviour
 	{
 		if (cardData == null) return;
 
-		cardTopValue.text = cardData.cardValue.ToString();
-		cardBottomValue.text = cardData.cardValue.ToString();
+		string value = cardData.cardValue.ToString();
+		cardTopValue.text = value;
+		cardBottomValue.text = value;
 
-		switch (cardData.cardEffect)
-		{
-			case CardEffect.Love:
-				cardImage.sprite = loveSprite;
-				break;
-			case CardEffect.Doubt:
-				cardImage.sprite = doubtSprite;
-				break;
-			case CardEffect.Grief:
-				cardImage.sprite = griefSprite;
-				break;
-			case CardEffect.Guilty:
-				cardImage.sprite = guiltySprite;
-				break;
-			default:
-				cardImage.sprite = valueOnlySprite;
-				break;
-		}
+		cardImage.sprite = GetSpriteForEffect(cardData.cardEffect);
 	}
 
 	public void ChangeToValueSprite()
@@ -65,5 +49,17 @@ public class CardDisplay : MonoBehaviour
 		cardTopValue.fontSize = 90;
 
 		cardBottomValue.gameObject.SetActive(false);
+	}
+
+	private Sprite GetSpriteForEffect(CardEffect effect)
+	{
+		return effect switch
+		{
+			CardEffect.Love => loveSprite,
+			CardEffect.Doubt => doubtSprite,
+			CardEffect.Grief => griefSprite,
+			CardEffect.Guilty => guiltySprite,
+			_ => valueOnlySprite
+		};
 	}
 }

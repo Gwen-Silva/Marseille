@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1e8d878b1f9f43047b270a4863b603dd
+guid: f542140632b77fb43aaace2b89d6718c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2695040125292652478
-    second: Icone Luto_0
+      213: -4719162281989853212
+    second: Icone Luto 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Icone Luto_0
+      name: Icone Luto 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eb72e7b07b4b66520800000000000000
-      internalID: 2695040125292652478
+      spriteID: 4efa29068ea228eb0800000000000000
+      internalID: -4719162281989853212
       vertices: []
       indices: 
       edges: []
@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Icone Luto 1_0: -4719162281989853212
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

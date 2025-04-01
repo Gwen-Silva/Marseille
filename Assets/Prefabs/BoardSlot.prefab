@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsPlayerSlot: 1
   isValueSlot: 0
-  gloweffect: {fileID: 9136963566849656716}
+  glowEffect: {fileID: 9136963566849656716}
   slotImage: {fileID: 6093782872945060388}
   valueSlotSprite: {fileID: -943405455880525219, guid: abafd43fdc0490b439e9baf5ba1a446e, type: 3}
   effectSlotSprite: {fileID: -6974418589067875543, guid: 9cfa7d6a3ace95247980af22619923d4, type: 3}

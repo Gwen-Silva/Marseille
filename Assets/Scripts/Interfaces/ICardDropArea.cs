@@ -1,5 +1,6 @@
-using UnityEngine;
-
+/// <summary>
+/// Represents a drop area where cards can be placed.
+/// </summary>
 public interface ICardDropArea
 {
 	void OnCardDropped(Card card);

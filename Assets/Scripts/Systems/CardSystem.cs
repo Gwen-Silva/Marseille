@@ -128,11 +128,11 @@ public class CardSystem : MonoBehaviour
 
 	private IEnumerator SelectCardPerformer(SelectCardGA selectCardGA)
 	{
-		selectCardGA.card.selected = !selectCardGA.card.selected;
-		selectCardGA.card.SelectEvent.Invoke(selectCardGA.card, selectCardGA.card.selected);
+		selectCardGA.card.Selected = !selectCardGA.card.Selected;
+		selectCardGA.card.SelectEvent.Invoke(selectCardGA.card, selectCardGA.card.Selected);
 
-		if (selectCardGA.card.selected)
-			selectCardGA.card.transform.localPosition += (selectCardGA.card.cardVisual.transform.up * selectCardGA.card.selectionOffset);
+		if (selectCardGA.card.Selected)
+			selectCardGA.card.transform.localPosition += (selectCardGA.card.cardVisual.transform.up * selectCardGA.card.SelectionOffset);
 		else
 			selectCardGA.card.transform.localPosition = Vector3.zero;
 
@@ -141,9 +141,9 @@ public class CardSystem : MonoBehaviour
 
 	private IEnumerator DeselectCardPerformer(DeselectCardGA deselectCardGA)
 	{
-		if (deselectCardGA.card.selected)
+		if (deselectCardGA.card.Selected)
 		{
-			deselectCardGA.card.selected = false;
+			deselectCardGA.card.Selected = false;
 			deselectCardGA.card.SelectEvent.Invoke(deselectCardGA.card, false);
 
 			if (deselectCardGA.card.cardVisual != null)
@@ -163,8 +163,8 @@ public class CardSystem : MonoBehaviour
 		Transform targetParent = swapCardGA.targetCard.transform.parent;
 
 		swapCardGA.targetCard.transform.SetParent(sourceParent);
-		swapCardGA.targetCard.transform.localPosition = swapCardGA.targetCard.selected
-			? new Vector3(0, swapCardGA.targetCard.selectionOffset, 0)
+		swapCardGA.targetCard.transform.localPosition = swapCardGA.targetCard.Selected
+			? new Vector3(0, swapCardGA.targetCard.SelectionOffset, 0)
 			: Vector3.zero;
 
 		swapCardGA.sourceCard.transform.SetParent(targetParent);

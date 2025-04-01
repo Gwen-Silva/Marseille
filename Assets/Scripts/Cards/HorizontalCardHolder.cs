@@ -1,38 +1,53 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
-using System.Linq;
+using System.Collections.Generic;
 
 public class HorizontalCardHolder : MonoBehaviour
 {
-	[SerializeField] private Card selectedCard;
-	[SerializeReference] private Card hoveredCard;
+	#region Constants
+	private const float SwapTweenDuration = 0.15f;
+	private const float FlipDuration = 0.25f;
+	#endregion
 
+	#region Serialized Fields
+	[SerializeField] private Card selectedCard;
+	[SerializeField] private Card hoveredCard;
 	[SerializeField] private Transform deck;
 	[SerializeField] private GameObject slotPrefab;
-	public HorizontalCardHolder targetHolder;
 	[SerializeField] private bool isPlayerCardHolder = true;
-	public GameObject SlotPrefab => slotPrefab;
-	public bool IsPlayerCardHolder => isPlayerCardHolder;
-	private RectTransform rect;
-
+	[SerializeField] private bool tweenCardReturn = true;
 	[Header("Spawn Settings")]
 	public List<Card> cards;
+	#endregion
 
-	bool isCrossing = false;
-	[SerializeField] private bool tweenCardReturn = true;
+	#region Public Properties
+	public HorizontalCardHolder targetHolder;
+	public GameObject SlotPrefab => slotPrefab;
+	public bool IsPlayerCardHolder => isPlayerCardHolder;
+	#endregion
 
+	#region Private Fields
+	private RectTransform rect;
+	private bool isCrossing = false;
+	#endregion
+
+	#region Unity Methods
 	protected virtual void Start()
 	{
 		rect = GetComponent<RectTransform>();
 	}
 
+	private void Update()
+	{
+		HandleCardShortcuts();
+		HandleCardSwapping();
+	}
+	#endregion
+
+	#region Public Methods
 	public void InstantiateSlotExternally()
 	{
-		GameObject slotGO = Instantiate(slotPrefab, transform);
+		Instantiate(slotPrefab, transform);
 	}
 
 	public void BeginDrag(Card card)
@@ -40,19 +55,19 @@ public class HorizontalCardHolder : MonoBehaviour
 		selectedCard = card;
 	}
 
-
 	public void EndDrag(Card card)
 	{
-		if (selectedCard == null)
-			return;
+		if (selectedCard == null) return;
 
-		selectedCard.transform.DOLocalMove(selectedCard.selected ? new Vector3(0, selectedCard.selectionOffset, 0) : Vector3.zero, tweenCardReturn ? .15f : 0).SetEase(Ease.OutBack);
+		selectedCard.transform.DOLocalMove(
+			selectedCard.Selected ? new Vector3(0, selectedCard.SelectionOffset, 0) : Vector3.zero,
+			tweenCardReturn ? SwapTweenDuration : 0f
+		).SetEase(Ease.OutBack);
 
 		rect.sizeDelta += Vector2.right;
 		rect.sizeDelta -= Vector2.right;
 
 		selectedCard = null;
-
 	}
 
 	public void CardPointerEnter(Card card)
@@ -64,41 +79,43 @@ public class HorizontalCardHolder : MonoBehaviour
 	{
 		hoveredCard = null;
 	}
+	#endregion
 
-	void Update()
+	#region Private Methods
+	private void HandleCardShortcuts()
 	{
-		if (Input.GetKeyDown(KeyCode.Delete))
+		if (Input.GetKeyDown(KeyCode.Delete) && hoveredCard != null && cards.Contains(hoveredCard))
 		{
-			if (hoveredCard != null && cards.Contains(hoveredCard))
-			{
-				ActionSystem.Instance.Perform(new DestroyCardGA(hoveredCard));
-			}
+			ActionSystem.Instance.Perform(new DestroyCardGA(hoveredCard));
 		}
 
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetKeyDown(KeyCode.Space) && hoveredCard != null)
 		{
-			if (hoveredCard != null)
-			{
-				ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard, 0.25f));
-			}
+			ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard, FlipDuration));
 		}
+	}
 
-		if (selectedCard == null || isCrossing)
-			return;
+	private void HandleCardSwapping()
+	{
+		if (selectedCard == null || isCrossing) return;
 
 		for (int i = 0; i < cards.Count; i++)
 		{
-			if (selectedCard.transform.position.x > cards[i].transform.position.x && selectedCard.ParentIndex() < cards[i].ParentIndex())
+			bool selectedLeftOfCard = selectedCard.transform.position.x > cards[i].transform.position.x;
+			bool selectedRightOfCard = selectedCard.transform.position.x < cards[i].transform.position.x;
+
+			if (selectedLeftOfCard && selectedCard.ParentIndex() < cards[i].ParentIndex())
 			{
 				ActionSystem.Instance.Perform(new SwapCardGA(selectedCard, cards[i], transform));
 				break;
 			}
 
-			if (selectedCard.transform.position.x < cards[i].transform.position.x && selectedCard.ParentIndex() > cards[i].ParentIndex())
+			if (selectedRightOfCard && selectedCard.ParentIndex() > cards[i].ParentIndex())
 			{
 				ActionSystem.Instance.Perform(new SwapCardGA(selectedCard, cards[i], transform));
 				break;
 			}
 		}
 	}
+	#endregion
 }

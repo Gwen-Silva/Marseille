@@ -2,22 +2,47 @@
 
 public class ResolveRoundReactions : MonoBehaviour
 {
+	#region Constants
+
+	private const int MAX_NULLIFIABLE_TIER = 3;
+
+	#endregion
+
+	#region Serialized Fields
+
 	[SerializeField] private TurnSystem turnSystem;
 	[SerializeField] private HealthDisplay playerHealth;
 	[SerializeField] private HealthDisplay opponentHealth;
 
+	#endregion
+
+	#region Unity Events
+
+	/// <summary>
+	/// Subscribes to ResolveRoundGA reactions.
+	/// </summary>
 	private void OnEnable()
 	{
 		ActionSystem.SubscribeReaction<ResolveRoundGA>(GriefNullifyBeforeResolve, ReactionTiming.PRE);
 		ActionSystem.SubscribeReaction<ResolveRoundGA>(ResolveRoundReaction, ReactionTiming.POST);
 	}
 
+	/// <summary>
+	/// Unsubscribes from ResolveRoundGA reactions.
+	/// </summary>
 	private void OnDisable()
 	{
 		ActionSystem.UnsubscribeReaction<ResolveRoundGA>(GriefNullifyBeforeResolve, ReactionTiming.PRE);
 		ActionSystem.UnsubscribeReaction<ResolveRoundGA>(ResolveRoundReaction, ReactionTiming.POST);
 	}
 
+	#endregion
+
+	#region Reactions
+
+	/// <summary>
+	/// Executes the reaction to resolve the round, including card effects, combat resolution, and damage application.
+	/// </summary>
 	private void ResolveRoundReaction(ResolveRoundGA ga)
 	{
 		var playerCardComponent = turnSystem.PlayerValueSlot.GetComponentInChildren<Card>();
@@ -25,13 +50,7 @@ public class ResolveRoundReactions : MonoBehaviour
 		var playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
 		var opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
 
-		bool bothAreGriefAndNullifiable =
-			playerEffectCard != null &&
-			opponentEffectCard != null &&
-			playerEffectCard.cardData.cardEffect == CardEffect.Grief &&
-			opponentEffectCard.cardData.cardEffect == CardEffect.Grief &&
-			CardEffectUtils.GetTier(playerEffectCard.cardData.cardValue) <= 3 &&
-			CardEffectUtils.GetTier(opponentEffectCard.cardData.cardValue) <= 3;
+		bool bothAreGriefAndNullifiable = AreBothGriefAndNullifiable(playerEffectCard, opponentEffectCard);
 
 		var playerCard = playerCardComponent?.cardVisual?.GetComponent<CardDisplay>();
 		var opponentCard = opponentCardComponent?.cardVisual?.GetComponent<CardDisplay>();
@@ -41,59 +60,122 @@ public class ResolveRoundReactions : MonoBehaviour
 
 		bool isPlayerAttacking = turnSystem.IsPlayerStarting;
 
-		if (isPlayerAttacking)
-		{
-			if (!bothAreGriefAndNullifiable || playerEffectCard.cardData.cardEffect != CardEffect.Grief)
-				TriggerEffect(playerEffectCard);
+		PlayEffectsWithConditions(playerEffectCard, opponentEffectCard, isPlayerAttacking, bothAreGriefAndNullifiable);
 
-			if (!bothAreGriefAndNullifiable || opponentEffectCard.cardData.cardEffect != CardEffect.Grief)
-				TriggerEffect(opponentEffectCard);
-		}
-		else
-		{
-			if (!bothAreGriefAndNullifiable || playerEffectCard.cardData.cardEffect != CardEffect.Grief)
-				TriggerEffect(playerEffectCard);
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
 
-			if (!bothAreGriefAndNullifiable || opponentEffectCard.cardData.cardEffect != CardEffect.Grief)
-				TriggerEffect(opponentEffectCard);
-		}
-
-		CombatResult result;
-		if (playerValue > opponentValue)
-			result = isPlayerAttacking ? CombatResult.AttackSuccess : CombatResult.AttackBlocked;
-		else if (playerValue < opponentValue)
-			result = isPlayerAttacking ? CombatResult.AttackBlocked : CombatResult.AttackSuccess;
-		else
-			result = CombatResult.Tie;
+		CombatResult result = DetermineCombatResult(playerValue, opponentValue, isPlayerAttacking);
 
 		Card attacker = isPlayerAttacking ? playerCardComponent : opponentCardComponent;
 		Card defender = isPlayerAttacking ? opponentCardComponent : playerCardComponent;
 
 		ActionSystem.Instance.AddReaction(new CardCombatAnimationGA(attacker, defender, result));
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
 
 		int difference = isPlayerAttacking
 			? playerValue - opponentValue
 			: opponentValue - playerValue;
 
-		if (difference > 0)
+		if (result == CombatResult.AttackSuccess && difference > 0)
 		{
-			if (isPlayerAttacking)
-			{
-				ActionSystem.Instance.AddReaction(new DealDamageGA(playerCard, opponentCard, opponentHealth, difference));
-			}
-			else
-			{
-				ActionSystem.Instance.AddReaction(new DealDamageGA(opponentCard, playerCard, playerHealth, difference));
-			}
-		}
-		else if (difference < 0)
-		{
-			
+			ApplyDamage(playerCard, opponentCard, difference, isPlayerAttacking);
+			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		}
 
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		ActionSystem.Instance.AddReaction(new ClearBoardGA());
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		ActionSystem.Instance.AddReaction(new ToggleTurnOwnerGA());
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		ActionSystem.Instance.AddReaction(new StartGameGA());
+	}
+
+	/// <summary>
+	/// Executes the Grief nullification reaction before the round is resolved.
+	/// </summary>
+	private void GriefNullifyBeforeResolve(ResolveRoundGA ga)
+	{
+		var playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
+		var opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
+
+		if (turnSystem.IsPlayerStarting)
+		{
+			TryAddGriefNullify(playerEffectCard, false);
+			TryAddGriefNullify(opponentEffectCard, true);
+		}
+		else
+		{
+			TryAddGriefNullify(opponentEffectCard, true);
+			TryAddGriefNullify(playerEffectCard, false);
+		}
+	}
+
+	#endregion
+
+	#region Helpers
+
+	private bool AreBothGriefAndNullifiable(Card cardA, Card cardB)
+	{
+		return cardA != null && cardB != null &&
+			   cardA.cardData.cardEffect == CardEffect.Grief &&
+			   cardB.cardData.cardEffect == CardEffect.Grief &&
+			   CardEffectUtils.GetTier(cardA.cardData.cardValue) <= MAX_NULLIFIABLE_TIER &&
+			   CardEffectUtils.GetTier(cardB.cardData.cardValue) <= MAX_NULLIFIABLE_TIER;
+	}
+
+	private void PlayEffectsWithConditions(Card playerEffect, Card opponentEffect, bool isPlayerFirst, bool skipEffects)
+	{
+		if (isPlayerFirst)
+		{
+			if (!skipEffects || playerEffect?.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(playerEffect);
+
+			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+
+			if (!skipEffects || opponentEffect?.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(opponentEffect);
+		}
+		else
+		{
+			if (!skipEffects || opponentEffect?.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(opponentEffect);
+
+			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+
+			if (!skipEffects || playerEffect?.cardData.cardEffect != CardEffect.Grief)
+				TriggerEffect(playerEffect);
+		}
+	}
+
+	private CombatResult DetermineCombatResult(int playerVal, int opponentVal, bool isPlayerAtk)
+	{
+		if (playerVal > opponentVal)
+			return isPlayerAtk ? CombatResult.AttackSuccess : CombatResult.AttackBlocked;
+		if (playerVal < opponentVal)
+			return isPlayerAtk ? CombatResult.AttackBlocked : CombatResult.AttackSuccess;
+		return CombatResult.Tie;
+	}
+
+	private void ApplyDamage(CardDisplay playerCard, CardDisplay opponentCard, int dmg, bool playerIsAttacking)
+	{
+		if (playerIsAttacking)
+		{
+			ActionSystem.Instance.AddReaction(new DealDamageGA(playerCard, opponentCard, opponentHealth, dmg));
+		}
+		else
+		{
+			ActionSystem.Instance.AddReaction(new DealDamageGA(opponentCard, playerCard, playerHealth, dmg));
+		}
+	}
+
+	private void TryAddGriefNullify(Card card, bool targetIsPlayer)
+	{
+		if (card != null && card.cardData.cardEffect == CardEffect.Grief)
+		{
+			int tier = CardEffectUtils.GetTier(card.cardData.cardValue);
+			if (tier >= 1 && tier <= MAX_NULLIFIABLE_TIER)
+				ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer));
+		}
 	}
 
 	private void TriggerEffect(Card effectCard)
@@ -112,43 +194,6 @@ public class ResolveRoundReactions : MonoBehaviour
 		}
 	}
 
-	private void GriefNullifyBeforeResolve(ResolveRoundGA ga)
-	{
-		var playerEffectCard = turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
-		var opponentEffectCard = turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>();
-
-		if (turnSystem.IsPlayerStarting)
-		{
-			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Grief)
-			{
-				int tier = CardEffectUtils.GetTier(playerEffectCard.cardData.cardValue);
-				if (tier >= 1 && tier <= 3)
-					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: false));
-			}
-			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Grief)
-			{
-				int tier = CardEffectUtils.GetTier(opponentEffectCard.cardData.cardValue);
-				if (tier >= 1 && tier <= 3)
-					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: true));
-			}
-		}
-		else
-		{
-			if (opponentEffectCard != null && opponentEffectCard.cardData.cardEffect == CardEffect.Grief)
-			{
-				int tier = CardEffectUtils.GetTier(opponentEffectCard.cardData.cardValue);
-				if (tier >= 1 && tier <= 3)
-					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: true));
-			}
-			if (playerEffectCard != null && playerEffectCard.cardData.cardEffect == CardEffect.Grief)
-			{
-				int tier = CardEffectUtils.GetTier(playerEffectCard.cardData.cardValue);
-				if (tier >= 1 && tier <= 3)
-					ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer: false));
-			}
-		}
-	}
-
 	private int GetCardValue(CardDisplay display)
 	{
 		if (display == null || string.IsNullOrEmpty(display.cardTopValue.text))
@@ -157,4 +202,6 @@ public class ResolveRoundReactions : MonoBehaviour
 		int.TryParse(display.cardTopValue.text, out int value);
 		return value;
 	}
+
+	#endregion
 }

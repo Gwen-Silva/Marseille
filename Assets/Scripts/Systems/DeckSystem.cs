@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class DeckSystem : MonoBehaviour
 {
+	#region Fields
+
 	[Header("Deck Settings")]
 	public List<CardData> allCardTemplates;
 	public List<CardData> playerDeck = new();
 	public List<CardData> opponentDeck = new();
 
 	public int cardsPerSuit = 10;
+
+	#endregion
+
+	#region Unity Events
 
 	private void OnEnable()
 	{
@@ -23,6 +29,13 @@ public class DeckSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<ShuffleDeckGA>();
 	}
 
+	#endregion
+
+	#region Public Methods
+
+	/// <summary>
+	/// Draws and removes the top card from the player deck.
+	/// </summary>
 	public CardData DrawFromPlayerDeck()
 	{
 		if (playerDeck.Count == 0) return null;
@@ -32,6 +45,9 @@ public class DeckSystem : MonoBehaviour
 		return card;
 	}
 
+	/// <summary>
+	/// Draws and removes the top card from the opponent deck.
+	/// </summary>
 	public CardData DrawFromOpponentDeck()
 	{
 		if (opponentDeck.Count == 0) return null;
@@ -41,7 +57,14 @@ public class DeckSystem : MonoBehaviour
 		return card;
 	}
 
-	private IEnumerator GenerateDecksPerformer(GenerateDecksGA generateDecksGA)
+	#endregion
+
+	#region Performers
+
+	/// <summary>
+	/// Instantiates the decks for both players based on template and cards per suit.
+	/// </summary>
+	private IEnumerator GenerateDecksPerformer(GenerateDecksGA ga)
 	{
 		playerDeck.Clear();
 		opponentDeck.Clear();
@@ -59,17 +82,23 @@ public class DeckSystem : MonoBehaviour
 				opponentDeck.Add(opponentCard);
 			}
 		}
+
 		yield return null;
 	}
 
-	private IEnumerator ShuffleDeckPerformer(ShuffleDeckGA shuffleDeckGA)
+	/// <summary>
+	/// Shuffles the given deck using Fisher-Yates algorithm.
+	/// </summary>
+	private IEnumerator ShuffleDeckPerformer(ShuffleDeckGA ga)
 	{
-		List<CardData> deck = shuffleDeckGA.deck;
+		List<CardData> deck = ga.deck;
 		for (int i = deck.Count - 1; i > 0; i--)
 		{
 			int randIndex = Random.Range(0, i + 1);
 			(deck[i], deck[randIndex]) = (deck[randIndex], deck[i]);
 		}
+
 		yield return null;
 	}
 }
+#endregion

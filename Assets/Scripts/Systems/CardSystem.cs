@@ -1,16 +1,54 @@
 ﻿using UnityEngine;
-using System.Collections;
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class CardSystem : MonoBehaviour
 {
+	#region Constants
+
+	// ───── Draw Logic ─────────────────────────────
+	private const float DRAW_CARD_DELAY = 0.1f;
+	private const float RESPAWN_DELAY = 0.1f;
+
+	// ───── Card Visuals ───────────────────────────
+	private const float SCALE_TWEEN_DURATION = 0.2f;
+	private const float CARD_SCALE = 0.85f;
+	private static readonly Vector3 CARD_SCALE_VECTOR = new(CARD_SCALE, CARD_SCALE, CARD_SCALE);
+	private const float FLIP_ANGLE = 180f;
+
+	// ───── Combat Animation ───────────────────────
+	private const float ATTACK_DURATION = 0.1f;
+	private const float RETURN_DURATION = 0.05f;
+	private const float TIE_RETURN_DURATION = 0.2f;
+
+	private const float SHAKE_DURATION = 0.5f;
+	private const float SHAKE_STRENGTH = 50f;
+	private const int SHAKE_VIBRATO = 10;
+	private const float SHAKE_RANDOMNESS = 0f;
+
+	private const float CONTACT_OFFSET = 1.4f;
+	private const float TIE_CONTACT_OFFSET = 0.5f;
+
+	#endregion
+
+	#region Serialized Fields
+
 	[SerializeField] private Transform discardPoint;
 	[SerializeField] private HorizontalCardHolder playerHand;
 	[SerializeField] private HorizontalCardHolder opponentHand;
+
+	#endregion
+
+	#region Properties
+
 	public HorizontalCardHolder PlayerCardHolder => playerHand;
 	public HorizontalCardHolder OpponentCardHolder => opponentHand;
+
+	#endregion
+
+	#region Unity Events
 
 	private void OnEnable()
 	{
@@ -33,7 +71,6 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<DeselectCardGA>();
 		ActionSystem.DetachPerformer<SwapCardGA>();
 		ActionSystem.DetachPerformer<DestroyCardGA>();
-		ActionSystem.DetachPerformer<DrawCardGA>();
 		ActionSystem.DetachPerformer<PlayCardGA>();
 		ActionSystem.DetachPerformer<FlipCardGA>();
 		ActionSystem.DetachPerformer<DrawInitialCardsGA>();
@@ -41,161 +78,149 @@ public class CardSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<CardCombatAnimationGA>();
 	}
 
-	private IEnumerator DrawCardPerformer(DrawCardGA drawCardGA)
+	#endregion
+
+	#region Performers
+
+	/// <summary>Draws cards from the deck into the given card holder.</summary>
+	private IEnumerator DrawCardPerformer(DrawCardGA ga)
 	{
 		DeckSystem deckSystem = FindFirstObjectByType<DeckSystem>();
 		List<Card> spawnedCards = new();
 
-		for (int i = 0; i < drawCardGA.amount; i++)
+		for (int i = 0; i < ga.amount; i++)
 		{
-			CardData data = drawCardGA.targetHolder.IsPlayerCardHolder
+			CardData data = ga.targetHolder.IsPlayerCardHolder
 				? deckSystem.DrawFromPlayerDeck()
 				: deckSystem.DrawFromOpponentDeck();
 
-			GameObject slotGO = Instantiate(drawCardGA.targetHolder.SlotPrefab, drawCardGA.targetHolder.transform);
+			GameObject slotGO = Instantiate(ga.targetHolder.SlotPrefab, ga.targetHolder.transform);
 			Card card = slotGO.GetComponentInChildren<Card>();
 
-			card.isPlayerCard = drawCardGA.targetHolder.IsPlayerCardHolder;
+			card.isPlayerCard = ga.targetHolder.IsPlayerCardHolder;
 			card.cardData = data;
 
-			CardDisplay display = card.GetComponentInChildren<CardDisplay>();
-
-			drawCardGA.targetHolder.cards.Add(card);
+			ga.targetHolder.cards.Add(card);
 			spawnedCards.Add(card);
 
-			card.PointerEnterEvent.AddListener(drawCardGA.targetHolder.CardPointerEnter);
-			card.PointerExitEvent.AddListener(drawCardGA.targetHolder.CardPointerExit);
-			card.BeginDragEvent.AddListener(drawCardGA.targetHolder.BeginDrag);
-			card.EndDragEvent.AddListener(drawCardGA.targetHolder.EndDrag);
-			card.name = drawCardGA.targetHolder.cards.Count.ToString();
+			card.name = ga.targetHolder.cards.Count.ToString();
 
-			yield return new WaitForSeconds(0.1f);
+			card.PointerEnterEvent.AddListener(ga.targetHolder.CardPointerEnter);
+			card.PointerExitEvent.AddListener(ga.targetHolder.CardPointerExit);
+			card.BeginDragEvent.AddListener(ga.targetHolder.BeginDrag);
+			card.EndDragEvent.AddListener(ga.targetHolder.EndDrag);
+
+			yield return new WaitForSeconds(DRAW_CARD_DELAY);
 		}
 
-		yield return new WaitForSecondsRealtime(0.1f);
+		yield return new WaitForSecondsRealtime(RESPAWN_DELAY);
 
-		for (int i = 0; i < drawCardGA.targetHolder.cards.Count; i++)
+		for (int i = 0; i < ga.targetHolder.cards.Count; i++)
 		{
-			if (drawCardGA.targetHolder.cards[i].cardVisual != null)
-				drawCardGA.targetHolder.cards[i].cardVisual.UpdateIndex(drawCardGA.targetHolder.transform.childCount);
+			if (ga.targetHolder.cards[i].cardVisual != null)
+				ga.targetHolder.cards[i].cardVisual.UpdateIndex(ga.targetHolder.transform.childCount);
 		}
 
-		drawCardGA.spawnedCards = spawnedCards;
+		ga.spawnedCards = spawnedCards;
 	}
 
+	/// <summary>Triggers the drawing of both players' initial cards and starts the game.</summary>
 	private IEnumerator DrawInitialCardsPerformer(DrawInitialCardsGA ga)
 	{
-		var drawPlayer = new DrawCardGA(ga.playerHand, ga.amount);
-		var drawOpponent = new DrawCardGA(ga.opponentHand, ga.amount);
-
-		ActionSystem.Instance.AddReaction(drawPlayer);
-		ActionSystem.Instance.AddReaction(drawOpponent);
-
+		ActionSystem.Instance.AddReaction(new DrawCardGA(ga.playerHand, ga.amount));
+		ActionSystem.Instance.AddReaction(new DrawCardGA(ga.opponentHand, ga.amount));
 		ActionSystem.Instance.AddReaction(new StartGameGA());
-
 		yield return null;
 	}
 
+	/// <summary>Plays a card from the hand to the board.</summary>
 	private IEnumerator PlayCardPerformer(PlayCardGA action)
 	{
-		CardDisplay cardDisplay = action.Card;
-		Card card = cardDisplay.OwnerCard;
+		CardDisplay display = action.Card;
+		Card card = display.OwnerCard;
 
 		card.DisableInteraction();
-
-		cardDisplay.transform.position = action.TargetSlot.transform.position;
-		cardDisplay.transform.rotation = action.TargetSlot.transform.rotation;
+		display.transform.position = action.TargetSlot.transform.position;
+		display.transform.rotation = action.TargetSlot.transform.rotation;
 
 		if (action.IsValueSlot)
-		{
-			cardDisplay.ChangeToValueSprite();
-		}
+			display.ChangeToValueSprite();
 
 		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
-		if (holder != null)
-		{
-			holder.cards.Remove(card);
-		}
+		holder?.cards.Remove(card);
+
 		Destroy(card.transform.parent.gameObject);
 
 		card.transform.SetParent(action.TargetSlot.transform);
 		card.transform.localPosition = Vector3.zero;
 
-		Vector3 boardScale = new Vector3(0.85f, 0.85f, 0.85f);
-		Tween scaleTween = cardDisplay.transform.DOScale(boardScale, 0.2f).SetEase(Ease.OutQuad);
+		Tween scaleTween = display.transform.DOScale(CARD_SCALE_VECTOR, SCALE_TWEEN_DURATION).SetEase(Ease.OutQuad);
 		yield return scaleTween.WaitForCompletion();
 	}
 
-	private IEnumerator SelectCardPerformer(SelectCardGA selectCardGA)
+	/// <summary>Selects or deselects a card.</summary>
+	private IEnumerator SelectCardPerformer(SelectCardGA ga)
 	{
-		selectCardGA.card.Selected = !selectCardGA.card.Selected;
-		selectCardGA.card.SelectEvent.Invoke(selectCardGA.card, selectCardGA.card.Selected);
+		ga.card.Selected = !ga.card.Selected;
+		ga.card.SelectEvent.Invoke(ga.card, ga.card.Selected);
 
-		if (selectCardGA.card.Selected)
-			selectCardGA.card.transform.localPosition += (selectCardGA.card.cardVisual.transform.up * selectCardGA.card.SelectionOffset);
-		else
-			selectCardGA.card.transform.localPosition = Vector3.zero;
-
-		yield return null;
-	}
-
-	private IEnumerator DeselectCardPerformer(DeselectCardGA deselectCardGA)
-	{
-		if (deselectCardGA.card.Selected)
-		{
-			deselectCardGA.card.Selected = false;
-			deselectCardGA.card.SelectEvent.Invoke(deselectCardGA.card, false);
-
-			if (deselectCardGA.card.cardVisual != null)
-				deselectCardGA.card.transform.localPosition = Vector3.zero;
-		}
-		else
-		{
-			deselectCardGA.card.transform.localPosition = Vector3.zero;
-		}
-
-		yield return null;
-	}
-
-	private IEnumerator SwapCardPerformer(SwapCardGA swapCardGA)
-	{
-		Transform sourceParent = swapCardGA.sourceCard.transform.parent;
-		Transform targetParent = swapCardGA.targetCard.transform.parent;
-
-		swapCardGA.targetCard.transform.SetParent(sourceParent);
-		swapCardGA.targetCard.transform.localPosition = swapCardGA.targetCard.Selected
-			? new Vector3(0, swapCardGA.targetCard.SelectionOffset, 0)
+		ga.card.transform.localPosition = ga.card.Selected
+			? ga.card.cardVisual.transform.up * ga.card.SelectionOffset
 			: Vector3.zero;
 
-		swapCardGA.sourceCard.transform.SetParent(targetParent);
+		yield return null;
+	}
 
-		if (swapCardGA.targetCard.cardVisual != null)
+	/// <summary>Forces a card to be deselected if it's selected.</summary>
+	private IEnumerator DeselectCardPerformer(DeselectCardGA ga)
+	{
+		if (ga.card.Selected)
 		{
-			bool swapIsRight = swapCardGA.targetCard.ParentIndex() > swapCardGA.sourceCard.ParentIndex();
-			swapCardGA.targetCard.cardVisual.Swap(swapIsRight ? -1 : 1);
+			ga.card.Selected = false;
+			ga.card.SelectEvent.Invoke(ga.card, false);
 		}
 
-		foreach (Card card in swapCardGA.parent.GetComponentsInChildren<Card>())
+		if (ga.card.cardVisual != null)
+			ga.card.transform.localPosition = Vector3.zero;
+
+		yield return null;
+	}
+
+	/// <summary>Swaps the positions of two cards visually and logically.</summary>
+	private IEnumerator SwapCardPerformer(SwapCardGA ga)
+	{
+		Transform src = ga.sourceCard.transform.parent;
+		Transform tgt = ga.targetCard.transform.parent;
+
+		ga.targetCard.transform.SetParent(src);
+		ga.targetCard.transform.localPosition = ga.targetCard.Selected
+			? new Vector3(0, ga.targetCard.SelectionOffset, 0)
+			: Vector3.zero;
+
+		ga.sourceCard.transform.SetParent(tgt);
+
+		if (ga.targetCard.cardVisual != null)
 		{
-			if (card.cardVisual != null)
-				card.cardVisual.UpdateIndex(swapCardGA.parent.childCount);
+			bool swapRight = ga.targetCard.ParentIndex() > ga.sourceCard.ParentIndex();
+			ga.targetCard.cardVisual.Swap(swapRight ? -1 : 1);
+		}
+
+		foreach (Card card in ga.parent.GetComponentsInChildren<Card>())
+		{
+			card.cardVisual?.UpdateIndex(ga.parent.childCount);
 		}
 
 		yield return null;
 	}
 
-	private IEnumerator DestroyCardPerformer(DestroyCardGA destroyCardGA)
+	/// <summary>Destroys a card and its visual representation.</summary>
+	private IEnumerator DestroyCardPerformer(DestroyCardGA ga)
 	{
-		Card card = destroyCardGA.card;
-
-		if (card == null)
-			yield break;
+		Card card = ga.card;
+		if (card == null) yield break;
 
 		HorizontalCardHolder holder = card.GetComponentInParent<HorizontalCardHolder>();
-		if (holder != null)
-		{
-			holder.cards.Remove(card);
-		}
+		holder?.cards.Remove(card);
 
 		if (card.cardVisual != null)
 		{
@@ -203,155 +228,112 @@ public class CardSystem : MonoBehaviour
 			Destroy(card.cardVisual.gameObject);
 		}
 
-		Transform slot = card.transform.parent;
-		DOTween.Kill(slot);
-		Destroy(slot.gameObject);
-
+		DOTween.Kill(card.transform.parent);
+		Destroy(card.transform.parent.gameObject);
 		yield return null;
 	}
 
-	private IEnumerator FlipCardPerformer(FlipCardGA flipCardGA)
+	/// <summary>Flips a card face up or down with animation.</summary>
+	private IEnumerator FlipCardPerformer(FlipCardGA ga)
 	{
-		CardVisual visual = flipCardGA.card.cardVisual;
-		if (visual == null)
-			yield break;
+		CardVisual visual = ga.card.cardVisual;
+		if (visual == null) yield break;
 
 		visual.isFlipped = !visual.isFlipped;
+		float angle = visual.isFlipped ? FLIP_ANGLE : 0f;
 
-		float angle = visual.isFlipped ? 180f : 0f;
-		float duration = flipCardGA.duration;
-
-		visual.FlipParent.transform.DOLocalRotate(new Vector3(0f, angle, 0f), duration);
-
-		yield return new WaitForSeconds(duration);
+		visual.FlipParent.transform.DOLocalRotate(new Vector3(0f, angle, 0f), ga.duration);
+		yield return new WaitForSeconds(ga.duration);
 	}
 
-	private IEnumerator ClearBoardPerformer(ClearBoardGA action)
+	/// <summary>Clears all board slots and discards the cards with animation.</summary>
+	private IEnumerator ClearBoardPerformer(ClearBoardGA ga)
 	{
-		var boardSlots = GameObject.FindObjectsByType<CardDropZone>(FindObjectsSortMode.None)
+		var slots = GameObject.FindObjectsByType<CardDropZone>(FindObjectsSortMode.None)
 			.Where(slot => slot.CompareTag("BoardSlot"))
 			.ToList();
 
-		foreach (var slot in boardSlots)
+		foreach (var slot in slots)
 		{
-			if (slot.transform.childCount > 0)
+			if (slot.transform.childCount <= 0) continue;
+
+			Card card = slot.GetComponentInChildren<Card>();
+			if (card == null) continue;
+
+			card.DisableInteraction();
+
+			Sequence seq = DOTween.Sequence();
+			seq.Append(card.transform.DOMove(discardPoint.position, 0.2f).SetEase(Ease.InOutQuad));
+			seq.OnComplete(() =>
 			{
-				Card card = slot.GetComponentInChildren<Card>();
-				if (card != null)
-				{
-					card.DisableInteraction();
+				if (card.cardVisual != null)
+					Destroy(card.cardVisual.gameObject);
 
-					Sequence discardSequence = DOTween.Sequence();
+				Destroy(card.gameObject);
+			});
 
-					discardSequence.Append(card.transform.DOMove(discardPoint.position, 0.2f).SetEase(Ease.InOutQuad));
+			yield return seq.WaitForCompletion();
 
-					discardSequence.OnComplete(() =>
-					{
-						if (card.cardVisual != null)
-							Destroy(card.cardVisual.gameObject);
-
-						Destroy(card.gameObject);
-					});
-
-					yield return discardSequence.WaitForCompletion();
-
-					CardDropZone dropZone = slot.GetComponent<CardDropZone>();
-					if (dropZone != null)
-						dropZone.ResetSlot();
-				}
-			}
+			slot.GetComponent<CardDropZone>()?.ResetSlot();
 		}
 
 		yield return null;
 	}
 
+	/// <summary>Animates card combat based on the combat result.</summary>
 	private IEnumerator CardCombatAnimationPerformer(CardCombatAnimationGA ga)
 	{
-		float attackDuration = 0.1f;
-		float returnDuration = 0.05f;
-		float tieReturnDuration = 0.2f;
+		Transform atk = ga.attacker.cardVisual.transform;
+		Transform def = ga.defender.cardVisual.transform;
 
-		float shakeDuration = 0.5f;
-		float shakeStrength = 50f;
-		int shakeVibrato = 10;
-		float shakeRandomness = 0f;
-
-		float contactOffset = 1.4f;
-		float tieContactOffset = 0.5f;
-
-		Transform attackerTransform = ga.attacker.cardVisual.transform;
-		Transform defenderTransform = ga.defender.cardVisual.transform;
-
-		Vector3 attackerStart = attackerTransform.position;
-		Vector3 defenderStart = defenderTransform.position;
-
-		Vector3 direction = (defenderStart - attackerStart).normalized;
-		Vector3 contactPoint = defenderStart - direction * contactOffset;
-		Vector3 midPoint = (attackerStart + defenderStart) / 2f;
+		Vector3 atkStart = atk.position;
+		Vector3 defStart = def.position;
+		Vector3 dir = (defStart - atkStart).normalized;
+		Vector3 contact = defStart - dir * CONTACT_OFFSET;
+		Vector3 mid = (atkStart + defStart) / 2f;
 
 		switch (ga.result)
 		{
 			case CombatResult.AttackSuccess:
-				{
-					Tween moveAttack = attackerTransform.DOMove(contactPoint, attackDuration).SetEase(Ease.OutBack);
-					yield return moveAttack.WaitForCompletion();
-
-					Tween shakeDefender = defenderTransform
-						.DOShakePosition(shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness)
-						.SetEase(Ease.OutExpo);
-					yield return shakeDefender.WaitForCompletion();
-
-					Tween returnTween = attackerTransform.DOMove(attackerStart, returnDuration);
-					yield return returnTween.WaitForCompletion();
-					break;
-				}
+				yield return atk.DOMove(contact, ATTACK_DURATION).SetEase(Ease.OutBack).WaitForCompletion();
+				yield return def.DOShakePosition(SHAKE_DURATION, new Vector3(SHAKE_STRENGTH, 0f, 0f), SHAKE_VIBRATO, SHAKE_RANDOMNESS)
+					.SetEase(Ease.OutExpo).WaitForCompletion();
+				yield return atk.DOMove(atkStart, RETURN_DURATION).WaitForCompletion();
+				break;
 
 			case CombatResult.AttackBlocked:
-				{
-					Tween moveAttack = attackerTransform.DOMove(contactPoint, attackDuration).SetEase(Ease.InQuad);
-					yield return moveAttack.WaitForCompletion();
-
-					Tween shakeAttacker = attackerTransform
-						.DOShakePosition(shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness)
-						.SetEase(Ease.OutExpo);
-					yield return shakeAttacker.WaitForCompletion();
-
-					Tween returnTween = attackerTransform.DOMove(attackerStart, returnDuration);
-					yield return returnTween.WaitForCompletion();
-					break;
-				}
+				yield return atk.DOMove(contact, ATTACK_DURATION).SetEase(Ease.InQuad).WaitForCompletion();
+				yield return atk.DOShakePosition(SHAKE_DURATION, new Vector3(SHAKE_STRENGTH, 0f, 0f), SHAKE_VIBRATO, SHAKE_RANDOMNESS)
+					.SetEase(Ease.OutExpo).WaitForCompletion();
+				yield return atk.DOMove(atkStart, RETURN_DURATION).WaitForCompletion();
+				break;
 
 			case CombatResult.Tie:
-				{
-					Vector3 attackerDirection = (midPoint - attackerStart).normalized;
-					Vector3 defenderDirection = (midPoint - defenderStart).normalized;
+				Vector3 atkDir = (mid - atkStart).normalized;
+				Vector3 defDir = (mid - defStart).normalized;
 
-					Vector3 attackerContact = attackerStart + attackerDirection * tieContactOffset;
-					Vector3 defenderContact = defenderStart + defenderDirection * tieContactOffset;
+				Vector3 atkContact = atkStart + atkDir * TIE_CONTACT_OFFSET;
+				Vector3 defContact = defStart + defDir * TIE_CONTACT_OFFSET;
 
-					Sequence moveToContact = DOTween.Sequence();
-					moveToContact.Join(attackerTransform.DOMove(attackerContact, attackDuration).SetEase(Ease.OutQuad));
-					moveToContact.Join(defenderTransform.DOMove(defenderContact, attackDuration).SetEase(Ease.OutQuad));
-					yield return moveToContact.WaitForCompletion();
+				yield return DOTween.Sequence()
+					.Join(atk.DOMove(atkContact, ATTACK_DURATION).SetEase(Ease.OutQuad))
+					.Join(def.DOMove(defContact, ATTACK_DURATION).SetEase(Ease.OutQuad))
+					.WaitForCompletion();
 
-					Sequence shakeBoth = DOTween.Sequence();
-					shakeBoth.Join(attackerTransform.DOShakePosition(
-						shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness
-					).SetEase(Ease.OutExpo));
-					shakeBoth.Join(defenderTransform.DOShakePosition(
-						shakeDuration, new Vector3(shakeStrength, 0f, 0f), shakeVibrato, shakeRandomness
-					).SetEase(Ease.OutExpo));
-					yield return shakeBoth.WaitForCompletion();
+				yield return DOTween.Sequence()
+					.Join(atk.DOShakePosition(SHAKE_DURATION, new Vector3(SHAKE_STRENGTH, 0f, 0f), SHAKE_VIBRATO, SHAKE_RANDOMNESS).SetEase(Ease.OutExpo))
+					.Join(def.DOShakePosition(SHAKE_DURATION, new Vector3(SHAKE_STRENGTH, 0f, 0f), SHAKE_VIBRATO, SHAKE_RANDOMNESS).SetEase(Ease.OutExpo))
+					.WaitForCompletion();
 
-					Sequence returnBoth = DOTween.Sequence();
-					returnBoth.Join(attackerTransform.DOMove(attackerStart, tieReturnDuration));
-					returnBoth.Join(defenderTransform.DOMove(defenderStart, tieReturnDuration));
-					yield return returnBoth.WaitForCompletion();
-
-					break;
-				}
+				yield return DOTween.Sequence()
+					.Join(atk.DOMove(atkStart, TIE_RETURN_DURATION))
+					.Join(def.DOMove(defStart, TIE_RETURN_DURATION))
+					.WaitForCompletion();
+				break;
 		}
 
 		yield return null;
 	}
+
+	#endregion
 }

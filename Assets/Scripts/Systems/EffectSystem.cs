@@ -2,11 +2,20 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Handles the visual and gameplay effects triggered by card actions such as healing or grief mechanics.
+/// </summary>
 public class EffectSystem : MonoBehaviour
 {
+	#region Serialized Fields
+
 	[SerializeField] private HealthDisplay playerHealth;
 	[SerializeField] private HealthDisplay opponentHealth;
 	[SerializeField] private TurnSystem turnSystem;
+
+	#endregion
+
+	#region Unity Events
 
 	private void OnEnable()
 	{
@@ -24,6 +33,13 @@ public class EffectSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<GriefNullifyEffectGA>();
 	}
 
+	#endregion
+
+	#region Performers
+
+	/// <summary>
+	/// Heals the appropriate target based on the Love card value.
+	/// </summary>
 	private IEnumerator LovePerformer(LoveGA ga)
 	{
 		if (ga.Card == null)
@@ -31,17 +47,17 @@ public class EffectSystem : MonoBehaviour
 
 		int value = ga.Card.cardData.cardValue;
 		bool isPlayer = ga.Card.isPlayerCard;
-		int amount = 0;
+		int healAmount = 0;
 
 		switch (CardEffectUtils.GetTier(value))
 		{
-			case 1: amount = 1; break;
-			case 2: amount = 2; break;
-			case 3: amount = 3; break;
-			case 4: amount = 5; break;
+			case 1: healAmount = 1; break;
+			case 2: healAmount = 2; break;
+			case 3: healAmount = 3; break;
+			case 4: healAmount = 5; break;
 		}
 
-		if (amount > 0)
+		if (healAmount > 0)
 		{
 			HealthDisplay target = isPlayer ? playerHealth : opponentHealth;
 
@@ -50,13 +66,16 @@ public class EffectSystem : MonoBehaviour
 				Color loveColor = CardEffectUtils.GetEffectColor(CardEffect.Love);
 				ga.Card.cardVisual.PulseEffect(loveColor);
 
-				ActionSystem.Instance.AddReaction(new HealHealthGA(target, amount));
+				ActionSystem.Instance.AddReaction(new HealHealthGA(target, healAmount));
 			}
 		}
 
 		yield return null;
 	}
 
+	/// <summary>
+	/// Applies Grief behavior based on card tier. Tier 4 gives a shield.
+	/// </summary>
 	private IEnumerator GriefPerformer(GriefGA ga)
 	{
 		if (ga.Card == null)
@@ -73,6 +92,9 @@ public class EffectSystem : MonoBehaviour
 		yield return null;
 	}
 
+	/// <summary>
+	/// Applies a Grief shield to the appropriate health display.
+	/// </summary>
 	private IEnumerator GriefApplyShieldPerformer(GriefApplyShieldGA ga)
 	{
 		if (ga.Card == null)
@@ -89,13 +111,21 @@ public class EffectSystem : MonoBehaviour
 
 		if (target.GriefShieldOnEffect != null && target.EffectSpawnPoint != null)
 		{
-			GameObject fx = Instantiate(target.GriefShieldOnEffect, target.EffectSpawnPoint.position, Quaternion.identity, target.transform);
+			GameObject fx = Instantiate(
+				target.GriefShieldOnEffect,
+				target.EffectSpawnPoint.position,
+				Quaternion.identity,
+				target.transform
+			);
 			target.ActiveShieldIcon = fx;
 		}
 
 		yield return null;
 	}
 
+	/// <summary>
+	/// Nullifies an opponent’s effect if their card tier is less than or equal to this card's tier.
+	/// </summary>
 	private IEnumerator GriefNullifyEffectPerformer(GriefNullifyEffectGA ga)
 	{
 		bool targetIsPlayer = ga.TargetIsPlayer;
@@ -127,4 +157,6 @@ public class EffectSystem : MonoBehaviour
 
 		yield return null;
 	}
+
+	#endregion
 }

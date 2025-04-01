@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static ExtensionMethods;
 
 public class ResolveRoundReactions : MonoBehaviour
 {
@@ -46,6 +47,8 @@ public class ResolveRoundReactions : MonoBehaviour
 			if (!bothAreGriefAndNullifiable || playerEffectCard.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(playerEffectCard);
 
+			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+
 			if (!bothAreGriefAndNullifiable || opponentEffectCard.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(opponentEffectCard);
 		}
@@ -54,9 +57,13 @@ public class ResolveRoundReactions : MonoBehaviour
 			if (!bothAreGriefAndNullifiable || playerEffectCard.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(playerEffectCard);
 
+			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+
 			if (!bothAreGriefAndNullifiable || opponentEffectCard.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(opponentEffectCard);
 		}
+
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
 
 		CombatResult result;
 		if (playerValue > opponentValue)
@@ -70,6 +77,7 @@ public class ResolveRoundReactions : MonoBehaviour
 		Card defender = isPlayerAttacking ? opponentCardComponent : playerCardComponent;
 
 		ActionSystem.Instance.AddReaction(new CardCombatAnimationGA(attacker, defender, result));
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
 
 		int difference = isPlayerAttacking
 			? playerValue - opponentValue
@@ -85,14 +93,14 @@ public class ResolveRoundReactions : MonoBehaviour
 			{
 				ActionSystem.Instance.AddReaction(new DealDamageGA(opponentCard, playerCard, playerHealth, difference));
 			}
-		}
-		else if (difference < 0)
-		{
-			
+			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		}
 
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		ActionSystem.Instance.AddReaction(new ClearBoardGA());
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		ActionSystem.Instance.AddReaction(new ToggleTurnOwnerGA());
+		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
 		ActionSystem.Instance.AddReaction(new StartGameGA());
 	}
 

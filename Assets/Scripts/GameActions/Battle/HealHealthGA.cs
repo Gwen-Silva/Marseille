@@ -4,15 +4,15 @@
 public class HealHealthGA : GameAction
 {
 	#region Public Fields
-	public HealthDisplay target;
-	public int amount;
+	public HealthDisplay Target;
+	public int Amount;
 	#endregion
 
 	#region Constructor
 	public HealHealthGA(HealthDisplay target, int amount)
 	{
-		this.target = target;
-		this.amount = amount;
+		Target = target;
+		Amount = amount;
 	}
 	#endregion
 }

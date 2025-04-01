@@ -4,19 +4,19 @@
 public class DealDamageGA : GameAction
 {
 	#region Public Fields
-	public CardDisplay attackerCard;
-	public CardDisplay defenderCard;
-	public HealthDisplay target;
-	public int amount;
+	public CardDisplay AttackerCard;
+	public CardDisplay DefenderCard;
+	public HealthDisplay Target;
+	public int Amount;
 	#endregion
 
 	#region Constructor
 	public DealDamageGA(CardDisplay attackerCard, CardDisplay defenderCard, HealthDisplay target, int amount)
 	{
-		this.attackerCard = attackerCard;
-		this.defenderCard = defenderCard;
-		this.target = target;
-		this.amount = amount;
+		AttackerCard = attackerCard;
+		DefenderCard = defenderCard;
+		Target = target;
+		Amount = amount;
 	}
 	#endregion
 }

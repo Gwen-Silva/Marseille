@@ -1,11 +1,16 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayCardReactions : MonoBehaviour
 {
+	#region Serialized Fields
+
 	[SerializeField] private HealthDisplay playerHealth;
 	[SerializeField] private HealthDisplay opponentHealth;
 	[SerializeField] private TurnSystem turnSystem;
+
+	#endregion
+
+	#region Unity Events
 
 	private void OnEnable()
 	{
@@ -17,6 +22,14 @@ public class PlayCardReactions : MonoBehaviour
 		ActionSystem.UnsubscribeReaction<PlayCardGA>(PlayCardReactionPOST, ReactionTiming.POST);
 	}
 
+	#endregion
+
+	#region Reactions
+
+	/// <summary>
+	/// Reaction executed after a card is played; handles the advancement of the turn.
+	/// </summary>
+	/// <param name="action">The action containing details of the played card.</param>
 	private void PlayCardReactionPOST(PlayCardGA action)
 	{
 		if (action.Card == null)
@@ -24,7 +37,6 @@ public class PlayCardReactions : MonoBehaviour
 
 		CardDisplay cardDisplay = action.Card;
 		Card card = cardDisplay.OwnerCard;
-		bool isPlayerCard = card.isPlayerCard;
 
 		if (action.IsValueSlot)
 		{
@@ -33,4 +45,6 @@ public class PlayCardReactions : MonoBehaviour
 
 		ActionSystem.Instance.AddReaction(new AdvanceTurnGA());
 	}
+
+	#endregion
 }

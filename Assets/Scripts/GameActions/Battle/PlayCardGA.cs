@@ -4,12 +4,16 @@
 public class PlayCardGA : GameAction
 {
 	#region Public Fields
-	public CardDisplay card;
-	public CardDropZone targetSlot;
-	public bool isValueSlot;
+
+	public CardDisplay Card;
+	public CardDropZone TargetSlot;
+	public bool IsValueSlot;
+
 	#endregion
 
 	#region Constructor
+
 	public PlayCardGA() { }
+
 	#endregion
 }

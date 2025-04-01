@@ -3,12 +3,14 @@ using UnityEngine.UI;
 
 public class CardDropZone : MonoBehaviour, ICardDropArea
 {
+	#region Serialized Fields
+
+	[Header("Slot Configuration")]
 	public bool IsPlayerSlot = true;
-	private bool cardPlaced = false;
 	public bool isValueSlot;
 
-	[Header("References")]
-	[SerializeField] private GameObject gloweffect;
+	[Header("Visual References")]
+	[SerializeField] private GameObject glowEffect;
 	[SerializeField] private Image slotImage;
 	[SerializeField] private Sprite valueSlotSprite;
 	[SerializeField] private Sprite effectSlotSprite;
@@ -16,6 +18,15 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 	[Header("Dependencies")]
 	[SerializeField] private TurnSystem turnSystem;
 
+	#endregion
+
+	#region Private Fields
+
+	private bool cardPlaced = false;
+
+	#endregion
+
+	#region Unity Methods
 
 	private void Start()
 	{
@@ -23,35 +34,28 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 		UpdateSlotSprite();
 	}
 
-	private void UpdateSlotSprite()
-	{
-		if (slotImage != null)
-		{
-			slotImage.sprite = isValueSlot ? valueSlotSprite : effectSlotSprite;
-		}
-	}
+	#endregion
 
+	#region Public Methods
+
+	/// <summary>
+	/// Enables or disables the visual highlight around the slot.
+	/// </summary>
 	public void ToggleHighlight(bool state)
 	{
-		if (gloweffect != null)
-		{
-			gloweffect.SetActive(state);
-		}
+		if (glowEffect != null)
+			glowEffect.SetActive(state);
 	}
 
+	/// <summary>
+	/// Called when a card is dropped onto this slot.
+	/// </summary>
 	public void OnCardDropped(Card card)
 	{
-		if (cardPlaced || card == null)
+		if (cardPlaced || card == null || turnSystem.CurrentActiveSlot != this)
 			return;
 
-		if (turnSystem.CurrentActiveSlot != this)
-		{
-			return;
-		}
-
-		bool isCardFromPlayer = card.isPlayerCard;
-
-		if (isCardFromPlayer != IsPlayerSlot)
+		if (card.isPlayerCard != IsPlayerSlot)
 			return;
 
 		var cardDisplay = card.cardVisual.GetComponent<CardDisplay>();
@@ -67,8 +71,23 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 		ToggleHighlight(false);
 	}
 
+	/// <summary>
+	/// Resets the slot to be ready for a new card.
+	/// </summary>
 	public void ResetSlot()
 	{
 		cardPlaced = false;
 	}
+
+	#endregion
+
+	#region Private Methods
+
+	private void UpdateSlotSprite()
+	{
+		if (slotImage != null)
+			slotImage.sprite = isValueSlot ? valueSlotSprite : effectSlotSprite;
+	}
+
+	#endregion
 }

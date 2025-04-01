@@ -1,73 +1,78 @@
-using System;
 using UnityEngine;
-using DG.Tweening;
-using System.Collections;
-using UnityEngine.EventSystems;
-using Unity.Collections;
 using UnityEngine.UI;
-using Unity.VisualScripting;
-using TMPro;
+using DG.Tweening;
 
 public class CardVisual : MonoBehaviour
 {
-	private bool initalize = false;
+	#region Constants
+	private const float ShadowOffset = 20f;
+	private const float IndexTiltScale = 0.2f;
+	private const float RotationClamp = 60f;
+	private const float RotationLerpSpeed = 25f;
+	private const float ShadowFadeAlpha = 0.6f;
+	private const float PulseScaleIntensity = 0.15f;
+	private const float PulseDuration = 0.5f;
+	#endregion
 
+	#region Serialized Fields
 	[Header("Card")]
 	public Card parentCard;
-	private Transform cardTransform;
-	private Vector3 rotationDelta;
-	private int savedIndex;
-	Vector3 movementDelta;
-	private Canvas canvas;
 
 	[Header("References")]
-	public Transform visualShadow;
-	private float shadowOffset = 20;
-	private Vector2 shadowDistance;
-	private Canvas shadowCanvas;
 	[SerializeField] private Transform shakeParent;
 	[SerializeField] private Transform tiltParent;
 	[SerializeField] private GameObject flipParent;
 	[SerializeField] private Image auraImage;
-	public GameObject FlipParent => flipParent;
+	[SerializeField] private Transform visualShadow;
 
 	[Header("Follow Parameters")]
-	[SerializeField] private float followSpeed = 30;
+	[SerializeField] private float followSpeed = 30f;
 
 	[Header("Rotation Parameters")]
-	[SerializeField] private float rotationAmount = 20;
-	[SerializeField] private float rotationSpeed = 20;
-	[SerializeField] private float autoTiltAmount = 30;
-	[SerializeField] private float manualTiltAmount = 20;
-	[SerializeField] private float tiltSpeed = 20;
+	[SerializeField] private float rotationAmount = 20f;
+	[SerializeField] private float rotationSpeed = 20f;
+	[SerializeField] private float autoTiltAmount = 30f;
+	[SerializeField] private float manualTiltAmount = 20f;
+	[SerializeField] private float tiltSpeed = 20f;
 
 	[Header("Scale Parameters")]
 	[SerializeField] private bool scaleAnimations = true;
 	[SerializeField] private float scaleOnHover = 1.15f;
 	[SerializeField] private float scaleOnSelect = 1.25f;
-	[SerializeField] private float scaleTransition = .15f;
+	[SerializeField] private float scaleTransition = 0.15f;
 	[SerializeField] private Ease scaleEase = Ease.OutBack;
 
 	[Header("Select Parameters")]
-	[SerializeField] private float selectPunchAmount = 20;
+	[SerializeField] private float selectPunchAmount = 20f;
 
-	[Header("Hober Parameters")]
-	[SerializeField] private float hoverPunchAngle = 5;
-	[SerializeField] private float hoverTransition = .15f;
+	[Header("Hover Parameters")]
+	[SerializeField] private float hoverPunchAngle = 5f;
+	[SerializeField] private float hoverTransition = 0.15f;
 
 	[Header("Swap Parameters")]
 	[SerializeField] private bool swapAnimations = true;
-	[SerializeField] private float swapRotationAngle = 30;
-	[SerializeField] private float swapTransition = .15f;
+	[SerializeField] private float swapRotationAngle = 30f;
+	[SerializeField] private float swapTransition = 0.15f;
 	[SerializeField] private int swapVibrato = 5;
 
 	[Header("Curve")]
 	[SerializeField] private CurveParameters curve;
+	#endregion
 
-	private float curveYOffset;
-	private float curveRotationOffset;
-	private Coroutine pressCoroutine;
+	#region Private Fields
+	private bool initialized;
+	private Vector3 rotationDelta;
+	private int savedIndex;
+	private Vector3 movementDelta;
+	private Canvas canvas;
+	private Canvas shadowCanvas;
+	private Vector2 shadowDistance;
+	#endregion
+
+	#region Properties
+	public GameObject FlipParent => flipParent;
 	public bool isFlipped = false;
+	#endregion
 
 	private void Start()
 	{
@@ -76,13 +81,10 @@ public class CardVisual : MonoBehaviour
 
 	public void Initialize(Card target, int index = 0)
 	{
-		//Declarations
 		parentCard = target;
-		cardTransform = target.transform;
 		canvas = GetComponent<Canvas>();
 		shadowCanvas = visualShadow.GetComponent<Canvas>();
 
-		//Event Listening
 		parentCard.PointerEnterEvent.AddListener(PointerEnter);
 		parentCard.PointerExitEvent.AddListener(PointerExit);
 		parentCard.BeginDragEvent.AddListener(BeginDrag);
@@ -91,8 +93,7 @@ public class CardVisual : MonoBehaviour
 		parentCard.PointerUpEvent.AddListener(PointerUp);
 		parentCard.SelectEvent.AddListener(Select);
 
-		//Initialization
-		initalize = true;
+		initialized = true;
 	}
 
 	public void UpdateIndex(int length)
@@ -100,15 +101,14 @@ public class CardVisual : MonoBehaviour
 		transform.SetSiblingIndex(parentCard.transform.parent.GetSiblingIndex());
 	}
 
-	void Update()
+	private void Update()
 	{
-		if (!initalize || parentCard == null) return;
+		if (!initialized || parentCard == null) return;
 
 		HandPositioning();
 		SmoothFollow();
 		FollowRotation();
 		CardTilt();
-
 	}
 
 	private void HandPositioning()
@@ -117,42 +117,42 @@ public class CardVisual : MonoBehaviour
 		float curveX = parentCard.isPlayerCard ? normalizedIndex : 1f - normalizedIndex;
 
 		float baseYOffset = (curve.positioning.Evaluate(curveX) * curve.positioningInfluence) * parentCard.SiblingAmount();
-		curveYOffset = parentCard.isPlayerCard ? baseYOffset : -baseYOffset;
+		float curveYOffset = parentCard.SiblingAmount() < 5 ? 0 : baseYOffset;
+		curveYOffset = parentCard.isPlayerCard ? curveYOffset : -curveYOffset;
 
-		curveYOffset = parentCard.SiblingAmount() < 5 ? 0 : curveYOffset;
-
-		curveRotationOffset = curve.rotation.Evaluate(curveX);
+		movementDelta.y = curveYOffset;
+		rotationDelta.z = curve.rotation.Evaluate(curveX);
 	}
 
 	private void SmoothFollow()
 	{
-		Vector3 verticalOffset = (Vector3.up * (parentCard.isDragging ? 0 : curveYOffset));
-		transform.position = Vector3.Lerp(transform.position, cardTransform.position + verticalOffset, followSpeed * Time.deltaTime);
+		Vector3 verticalOffset = Vector3.up * (parentCard.isDragging ? 0 : movementDelta.y);
+		transform.position = Vector3.Lerp(transform.position, parentCard.transform.position + verticalOffset, followSpeed * Time.deltaTime);
 	}
 
 	private void FollowRotation()
 	{
-		Vector3 movement = (transform.position - cardTransform.position);
-		movementDelta = Vector3.Lerp(movementDelta, movement, 25 * Time.deltaTime);
+		Vector3 movement = transform.position - parentCard.transform.position;
+		movementDelta = Vector3.Lerp(movementDelta, movement, RotationLerpSpeed * Time.deltaTime);
 		Vector3 movementRotation = (parentCard.isDragging ? movementDelta : movement) * rotationAmount;
 		rotationDelta = Vector3.Lerp(rotationDelta, movementRotation, rotationSpeed * Time.deltaTime);
-		transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Clamp(rotationDelta.x, -60, 60));
+		transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Clamp(rotationDelta.x, -RotationClamp, RotationClamp));
 	}
 
 	private void CardTilt()
 	{
 		savedIndex = parentCard.isDragging ? savedIndex : parentCard.ParentIndex();
-		float sine = Mathf.Sin(Time.time + savedIndex) * (parentCard.isHovering ? .2f : 1);
-		float cosine = Mathf.Cos(Time.time + savedIndex) * (parentCard.isHovering ? .2f : 1);
+		float sine = Mathf.Sin(Time.time + savedIndex) * (parentCard.isHovering ? IndexTiltScale : 1);
+		float cosine = Mathf.Cos(Time.time + savedIndex) * (parentCard.isHovering ? IndexTiltScale : 1);
 
 		Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		float tiltX = parentCard.isHovering ? ((offset.y * -1) * manualTiltAmount) : 0;
-		float tiltY = parentCard.isHovering ? ((offset.x) * manualTiltAmount) : 0;
-		float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : (curveRotationOffset * (curve.rotationInfluence * parentCard.SiblingAmount()));
+		float tiltX = parentCard.isHovering ? (offset.y * -manualTiltAmount) : 0;
+		float tiltY = parentCard.isHovering ? (offset.x * manualTiltAmount) : 0;
+		float tiltZ = parentCard.isDragging ? tiltParent.eulerAngles.z : (rotationDelta.z * (curve.rotationInfluence * parentCard.SiblingAmount()));
 
 		float lerpX = Mathf.LerpAngle(tiltParent.eulerAngles.x, tiltX + (sine * autoTiltAmount), tiltSpeed * Time.deltaTime);
 		float lerpY = Mathf.LerpAngle(tiltParent.eulerAngles.y, tiltY + (cosine * autoTiltAmount), tiltSpeed * Time.deltaTime);
-		float lerpZ = Mathf.LerpAngle(tiltParent.eulerAngles.z, tiltZ, tiltSpeed / 2 * Time.deltaTime);
+		float lerpZ = Mathf.LerpAngle(tiltParent.eulerAngles.z, tiltZ, (tiltSpeed / 2f) * Time.deltaTime);
 
 		Vector3 newRotation = new Vector3(lerpX, lerpY, lerpZ);
 
@@ -165,22 +165,19 @@ public class CardVisual : MonoBehaviour
 	private void Select(Card card, bool state)
 	{
 		DOTween.Kill(2, true);
-		float dir = state ? 1 : 0;
-		shakeParent.DOPunchPosition(shakeParent.up * selectPunchAmount * dir, scaleTransition, 10, 1);
+		shakeParent.DOPunchPosition(shakeParent.up * selectPunchAmount * (state ? 1 : 0), scaleTransition, 10, 1);
 		shakeParent.DOPunchRotation(Vector3.forward * (hoverPunchAngle / 2), hoverTransition, 20, 1).SetId(2);
 
 		if (scaleAnimations)
 			transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
-
 	}
 
-	public void Swap(float dir = 1)
+	public void Swap(float dir = 1f)
 	{
-		if (!swapAnimations)
-			return;
+		if (!swapAnimations) return;
 
 		DOTween.Kill(2, true);
-		shakeParent.DOPunchRotation((Vector3.forward * swapRotationAngle) * dir, swapTransition, swapVibrato, 1).SetId(3);
+		shakeParent.DOPunchRotation(Vector3.forward * swapRotationAngle * dir, swapTransition, swapVibrato, 1).SetId(3);
 	}
 
 	private void BeginDrag(Card card)
@@ -194,7 +191,7 @@ public class CardVisual : MonoBehaviour
 	private void EndDrag(Card card)
 	{
 		canvas.overrideSorting = false;
-		transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+		transform.DOScale(1f, scaleTransition).SetEase(scaleEase);
 	}
 
 	private void PointerEnter(Card card)
@@ -209,15 +206,15 @@ public class CardVisual : MonoBehaviour
 	private void PointerExit(Card card)
 	{
 		if (!parentCard.wasDragged)
-			transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+			transform.DOScale(1f, scaleTransition).SetEase(scaleEase);
 	}
 
 	private void PointerUp(Card card, bool longPress)
 	{
 		if (scaleAnimations)
 			transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
-		canvas.overrideSorting = false;
 
+		canvas.overrideSorting = false;
 		visualShadow.localPosition = shadowDistance;
 		shadowCanvas.overrideSorting = true;
 	}
@@ -227,49 +224,48 @@ public class CardVisual : MonoBehaviour
 		if (scaleAnimations)
 			transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
 
-		visualShadow.localPosition += (-Vector3.up * shadowOffset);
+		visualShadow.localPosition += -Vector3.up * ShadowOffset;
 		shadowCanvas.overrideSorting = false;
 	}
 
-	public void PulseEffect(Color color, float scaleIntensity = 0.15f, float duration = 0.5f)
+	public void PulseEffect(Color color)
 	{
 		Vector3 originalScale = transform.localScale;
-		Vector3 targetScale = originalScale * (1f + scaleIntensity);
+		Vector3 targetScale = originalScale * (1f + PulseScaleIntensity);
 
-		DG.Tweening.Sequence scalePulse = DOTween.Sequence();
-		scalePulse.Append(transform.DOScale(targetScale, duration).SetEase(Ease.OutQuad));
-		scalePulse.Append(transform.DOScale(originalScale, duration).SetEase(Ease.InQuad));
+		Sequence scalePulse = DOTween.Sequence();
+		scalePulse.Append(transform.DOScale(targetScale, PulseDuration).SetEase(Ease.OutQuad));
+		scalePulse.Append(transform.DOScale(originalScale, PulseDuration).SetEase(Ease.InQuad));
 
 		if (auraImage != null)
 		{
 			auraImage.color = new Color(color.r, color.g, color.b, 0f);
 			auraImage.gameObject.SetActive(true);
 
-			DG.Tweening.Sequence auraPulse = DOTween.Sequence();
-			auraPulse.Append(auraImage.DOFade(0.6f, duration));
-			auraPulse.Append(auraImage.DOFade(0f, duration));
+			Sequence auraPulse = DOTween.Sequence();
+			auraPulse.Append(auraImage.DOFade(ShadowFadeAlpha, PulseDuration));
+			auraPulse.Append(auraImage.DOFade(0f, PulseDuration));
 			auraPulse.OnComplete(() => auraImage.gameObject.SetActive(false));
 		}
 	}
 
-	public void PulseNegativeEffect(float scaleIntensity = 0.15f, float duration = 0.5f)
+	public void PulseNegativeEffect()
 	{
 		Vector3 originalScale = transform.localScale;
-		Vector3 targetScale = originalScale * (1f - scaleIntensity);
+		Vector3 targetScale = originalScale * (1f - PulseScaleIntensity);
 
-		DG.Tweening.Sequence scalePulse = DOTween.Sequence();
-		scalePulse.Append(transform.DOScale(targetScale, duration).SetEase(Ease.InQuad));
-		scalePulse.Append(transform.DOScale(originalScale, duration).SetEase(Ease.OutQuad));
+		Sequence scalePulse = DOTween.Sequence();
+		scalePulse.Append(transform.DOScale(targetScale, PulseDuration).SetEase(Ease.InQuad));
+		scalePulse.Append(transform.DOScale(originalScale, PulseDuration).SetEase(Ease.OutQuad));
 
 		if (auraImage != null)
 		{
-			Color color = new Color(0f, 0f, 0f, 0f);
-			auraImage.color = color;
+			auraImage.color = new Color(0f, 0f, 0f, 0f);
 			auraImage.gameObject.SetActive(true);
 
-			DG.Tweening.Sequence auraPulse = DOTween.Sequence();
-			auraPulse.Append(auraImage.DOFade(0.6f, duration));
-			auraPulse.Append(auraImage.DOFade(0f, duration));
+			Sequence auraPulse = DOTween.Sequence();
+			auraPulse.Append(auraImage.DOFade(ShadowFadeAlpha, PulseDuration));
+			auraPulse.Append(auraImage.DOFade(0f, PulseDuration));
 			auraPulse.OnComplete(() => auraImage.gameObject.SetActive(false));
 		}
 	}

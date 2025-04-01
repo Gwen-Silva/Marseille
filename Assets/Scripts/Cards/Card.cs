@@ -43,19 +43,12 @@ public class Card : MonoBehaviour,
 	#endregion
 
 	#region Events
-	/// <summary>Triggered when pointer enters the card area.</summary>
 	[HideInInspector] public UnityEvent<Card> PointerEnterEvent;
-	/// <summary>Triggered when pointer exits the card area.</summary>
 	[HideInInspector] public UnityEvent<Card> PointerExitEvent;
-	/// <summary>Triggered when pointer is released.</summary>
 	[HideInInspector] public UnityEvent<Card, bool> PointerUpEvent;
-	/// <summary>Triggered when pointer is pressed down.</summary>
 	[HideInInspector] public UnityEvent<Card> PointerDownEvent;
-	/// <summary>Triggered when drag begins.</summary>
 	[HideInInspector] public UnityEvent<Card> BeginDragEvent;
-	/// <summary>Triggered when drag ends.</summary>
 	[HideInInspector] public UnityEvent<Card> EndDragEvent;
-	/// <summary>Triggered when the card is selected or deselected.</summary>
 	[HideInInspector] public UnityEvent<Card, bool> SelectEvent;
 	#endregion
 

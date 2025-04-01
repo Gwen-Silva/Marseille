@@ -1,13 +1,18 @@
-using UnityEngine;
-
+/// <summary>
+/// Represents a GameAction where health is restored to a target.
+/// </summary>
 public class HealHealthGA : GameAction
 {
-	public HealthDisplay Target;
-	public int Amount;
+	#region Public Fields
+	public HealthDisplay target;
+	public int amount;
+	#endregion
 
+	#region Constructor
 	public HealHealthGA(HealthDisplay target, int amount)
 	{
-		Target = target;
-		Amount = amount;
+		this.target = target;
+		this.amount = amount;
 	}
+	#endregion
 }

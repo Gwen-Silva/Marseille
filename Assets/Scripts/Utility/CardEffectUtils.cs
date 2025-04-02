@@ -15,7 +15,7 @@ public static class CardEffectUtils
 	#region Constants - Colors
 	public static readonly Color LoveColor = new Color(1f, 0.53f, 0.76f); // pink
 	public static readonly Color GriefColor = new Color(0.54f, 0.39f, 0.82f); // lavender
-	public static readonly Color GuiltyColor = new Color(0.69f, 0.28f, 0.28f); // dark red
+	public static readonly Color GuiltyColor = new Color(0.1f, 0.2f, 0.4f); // dark blue
 	public static readonly Color DoubtColor = new Color(0.27f, 0.83f, 1f); // cyan
 	public static readonly Color DefaultColor = Color.white;
 	#endregion
@@ -67,6 +67,15 @@ public static class CardEffectUtils
 					2 => "Anula efeitos Médios ou menores",
 					3 => "Anula efeitos Fortes ou menores",
 					4 => "Recebe um Escudo que Anula o próximo Dano Letal",
+					_ => "Sem Efeito"
+				};
+			case CardEffect.Guilt:
+				return tier switch
+				{
+					1 => "Reduz em 1 o Valor do Argumento do Oponente",
+					2 => "Reduz em 2 o Valor do Argumento do Oponente",
+					3 => "Reduz em 3 o Valor do Argumento do Oponente",
+					4 => "Reduz em 5 o Valor do Argumento do Oponente",
 					_ => "Sem Efeito"
 				};
 			default: return "Sem Efeito";

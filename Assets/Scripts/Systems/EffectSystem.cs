@@ -23,6 +23,8 @@ public class EffectSystem : MonoBehaviour
 		ActionSystem.AttachPerformer<GriefGA>(GriefPerformer);
 		ActionSystem.AttachPerformer<GriefApplyShieldGA>(GriefApplyShieldPerformer);
 		ActionSystem.AttachPerformer<GriefNullifyEffectGA>(GriefNullifyEffectPerformer);
+		ActionSystem.AttachPerformer<GuiltGA>(GuiltPerformer);
+		ActionSystem.AttachPerformer<GuiltApplyDebuffGA>(GuiltApplyDebuffPerformer);
 	}
 
 	private void OnDisable()
@@ -31,6 +33,8 @@ public class EffectSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<GriefGA>();
 		ActionSystem.DetachPerformer<GriefApplyShieldGA>();
 		ActionSystem.DetachPerformer<GriefNullifyEffectGA>();
+		ActionSystem.DetachPerformer<GuiltGA>();
+		ActionSystem.DetachPerformer<GuiltApplyDebuffGA>();
 	}
 
 	#endregion
@@ -153,6 +157,63 @@ public class EffectSystem : MonoBehaviour
 			targetCard.cardVisual.PulseNegativeEffect();
 			targetCard.cardVisual.GetComponent<CardDisplay>().ChangeToValueSprite();
 			targetCard.cardData.cardEffect = CardEffect.None;
+		}
+
+		yield return null;
+	}
+
+	private IEnumerator GuiltPerformer(GuiltGA ga)
+	{
+		if (ga.Card == null)
+			yield break;
+
+		int value = ga.Card.cardData.cardValue;
+		int tier = CardEffectUtils.GetTier(value);
+		bool isPlayer = ga.Card.isPlayerCard;
+
+		Color guiltColor = CardEffectUtils.GetEffectColor(CardEffect.Guilt);
+
+		yield return null;
+	}
+
+	private IEnumerator GuiltApplyDebuffPerformer(GuiltApplyDebuffGA ga)
+	{
+		Card targetCard = ga.TargetIsPlayer
+			? turnSystem.PlayerValueSlot.GetComponentInChildren<Card>()
+			: turnSystem.OpponentValueSlot.GetComponentInChildren<Card>();
+
+		Card guiltCard = ga.TargetIsPlayer
+			? turnSystem.OpponentEffectSlot.GetComponentInChildren<Card>()
+			: turnSystem.PlayerEffectSlot.GetComponentInChildren<Card>();
+
+		if (targetCard == null || guiltCard == null)
+			yield break;
+
+		if (guiltCard.cardData.cardEffect != CardEffect.Guilt)
+			yield break;
+
+		Color guiltColor = CardEffectUtils.GetEffectColor(CardEffect.Guilt);
+		guiltCard.cardVisual.PulseEffect(guiltColor);
+
+		int reduction = ga.Tier switch
+		{
+			1 => 1,
+			2 => 2,
+			3 => 3,
+			4 => 5,
+			_ => 0
+		};
+
+		targetCard.cardData.cardValue = Mathf.Max(0, targetCard.cardData.cardValue - reduction);
+
+		targetCard.cardVisual.PulseNegativeEffect();
+
+		CardDisplay display = targetCard.cardVisual.GetComponent<CardDisplay>();
+		if (display != null)
+		{
+			string newValue = targetCard.cardData.cardValue.ToString();
+			display.cardTopValue.text = newValue;
+			display.cardBottomValue.text = newValue;
 		}
 
 		yield return null;

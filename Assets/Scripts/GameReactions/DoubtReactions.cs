@@ -54,18 +54,33 @@ public class DoubtReactions : MonoBehaviour
 
 	private void DoubtReaction(DoubtSwapCardsGA ga)
 	{
+		if (ga.cardsToSwap == null || ga.cardsToSwap.Count == 0)
+			return;
+
 		CardSystem cardSystem = FindFirstObjectByType<CardSystem>();
+		DeckSystem deck = FindFirstObjectByType<DeckSystem>();
 
 		HorizontalCardHolder hand = ga.IsPlayer
 			? cardSystem.PlayerCardHolder
 			: cardSystem.OpponentCardHolder;
 
-		List<Card> toDestroy = ga.cardsToSwap ?? new();
+		if (ga.IsUltimate)
+		{
+			List<CardData> sourceDeck = ga.IsPlayer ? deck.playerDeck : deck.opponentDeck;
+			int availableTens = sourceDeck.FindAll(c => c.cardValue == 10).Count;
 
-		foreach (Card card in toDestroy)
+			if (availableTens < ga.cardsToSwap.Count)
+			{
+				Debug.LogWarning("[DoubtReactions] Efeito Ultimate cancelado: Não há cartas 10 suficientes no deck.");
+				return;
+			}
+		}
+
+		foreach (Card card in ga.cardsToSwap)
 		{
 			GameObject discard = GameObject.FindWithTag("DiscardPoint");
-			if (discard == null) continue;
+			if (discard == null)
+				continue;
 
 			Vector3 targetPosition = discard.transform.position;
 
@@ -80,8 +95,8 @@ public class DoubtReactions : MonoBehaviour
 		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
 
 		var drawAction = ga.IsUltimate
-			? new DrawCardGA(hand, toDestroy.Count, 10)
-			: new DrawCardGA(hand, toDestroy.Count);
+			? new DrawCardGA(hand, ga.cardsToSwap.Count, 10)
+			: new DrawCardGA(hand, ga.cardsToSwap.Count);
 
 		ActionSystem.Instance.AddReaction(drawAction);
 		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));

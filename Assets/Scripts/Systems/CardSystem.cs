@@ -90,13 +90,25 @@ public class CardSystem : MonoBehaviour
 
 		for (int i = 0; i < ga.amount; i++)
 		{
-			CardData data;
+			CardData data = null;
 
 			if (ga.forcedValue.HasValue)
 			{
-				data = ga.targetHolder.IsPlayerCardHolder
-					? deckSystem.DrawFromPlayerDeckWithValue(ga.forcedValue.Value)
-					: deckSystem.DrawFromOpponentDeckWithValue(ga.forcedValue.Value);
+				var sourceDeck = ga.targetHolder.IsPlayerCardHolder
+					? deckSystem.playerDeck
+					: deckSystem.opponentDeck;
+
+				var candidates = sourceDeck.FindAll(c => c.cardValue == ga.forcedValue.Value);
+				if (candidates.Count > 0)
+				{
+					data = candidates[Random.Range(0, candidates.Count)];
+					sourceDeck.Remove(data);
+				}
+				else
+				{
+					Debug.LogWarning($"[DrawCardGA] Nenhuma carta de valor {ga.forcedValue.Value} encontrada. Efeito especial pode ter falhado.");
+					continue;
+				}
 			}
 			else
 			{

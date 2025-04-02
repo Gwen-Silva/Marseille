@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -25,6 +26,7 @@ public class EffectSystem : MonoBehaviour
 		ActionSystem.AttachPerformer<GriefNullifyEffectGA>(GriefNullifyEffectPerformer);
 		ActionSystem.AttachPerformer<GuiltGA>(GuiltPerformer);
 		ActionSystem.AttachPerformer<GuiltApplyDebuffGA>(GuiltApplyDebuffPerformer);
+		ActionSystem.AttachPerformer<DoubtGA>(DoubtPerformer);
 	}
 
 	private void OnDisable()
@@ -35,6 +37,7 @@ public class EffectSystem : MonoBehaviour
 		ActionSystem.DetachPerformer<GriefNullifyEffectGA>();
 		ActionSystem.DetachPerformer<GuiltGA>();
 		ActionSystem.DetachPerformer<GuiltApplyDebuffGA>();
+		ActionSystem.DetachPerformer<DoubtGA>();
 	}
 
 	#endregion
@@ -214,6 +217,30 @@ public class EffectSystem : MonoBehaviour
 			string newValue = targetCard.cardData.cardValue.ToString();
 			display.cardTopValue.text = newValue;
 			display.cardBottomValue.text = newValue;
+		}
+
+		yield return null;
+	}
+
+	private IEnumerator DoubtPerformer(DoubtGA ga)
+	{
+		if (ga.Card == null)
+			yield break;
+
+		int value = ga.Card.cardData.cardValue;
+		int tier = CardEffectUtils.GetTier(value);
+		bool isPlayer = ga.Card.isPlayerCard;
+
+		Color doubtColor = CardEffectUtils.GetEffectColor(CardEffect.Doubt);
+		ga.Card.cardVisual.PulseEffect(doubtColor);
+
+		if (tier == 4)
+		{
+			ActionSystem.Instance.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
+		}
+		else
+		{
+			ActionSystem.Instance.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
 		}
 
 		yield return null;

@@ -207,6 +207,9 @@ public class ResolveRoundReactions : MonoBehaviour
 			case CardEffect.Guilt:
 				ActionSystem.Instance.AddReaction(new GuiltGA(effectCard));
 				break;
+			case CardEffect.Doubt:
+				ActionSystem.Instance.AddReaction(new DoubtGA(effectCard));
+				break;
 		}
 	}
 

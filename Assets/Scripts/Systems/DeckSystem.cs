@@ -100,5 +100,26 @@ public class DeckSystem : MonoBehaviour
 
 		yield return null;
 	}
+
+	public CardData DrawFromPlayerDeckWithValue(int value)
+	{
+		var candidates = playerDeck.FindAll(card => card.cardValue == value);
+		if (candidates.Count == 0) return null;
+
+		CardData selected = candidates[Random.Range(0, candidates.Count)];
+		playerDeck.Remove(selected);
+		return selected;
+	}
+
+	public CardData DrawFromOpponentDeckWithValue(int value)
+	{
+		var candidates = opponentDeck.FindAll(card => card.cardValue == value);
+		if (candidates.Count == 0) return null;
+
+		CardData selected = candidates[Random.Range(0, candidates.Count)];
+		opponentDeck.Remove(selected);
+		return selected;
+	}
+
+	#endregion
 }
-#endregion

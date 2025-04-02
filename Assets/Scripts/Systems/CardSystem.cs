@@ -90,9 +90,20 @@ public class CardSystem : MonoBehaviour
 
 		for (int i = 0; i < ga.amount; i++)
 		{
-			CardData data = ga.targetHolder.IsPlayerCardHolder
-				? deckSystem.DrawFromPlayerDeck()
-				: deckSystem.DrawFromOpponentDeck();
+			CardData data;
+
+			if (ga.forcedValue.HasValue)
+			{
+				data = ga.targetHolder.IsPlayerCardHolder
+					? deckSystem.DrawFromPlayerDeckWithValue(ga.forcedValue.Value)
+					: deckSystem.DrawFromOpponentDeckWithValue(ga.forcedValue.Value);
+			}
+			else
+			{
+				data = ga.targetHolder.IsPlayerCardHolder
+					? deckSystem.DrawFromPlayerDeck()
+					: deckSystem.DrawFromOpponentDeck();
+			}
 
 			GameObject slotGO = Instantiate(ga.targetHolder.SlotPrefab, ga.targetHolder.transform);
 			Card card = slotGO.GetComponentInChildren<Card>();

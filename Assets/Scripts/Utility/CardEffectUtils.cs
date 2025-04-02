@@ -16,7 +16,7 @@ public static class CardEffectUtils
 	public static readonly Color LoveColor = new Color(1f, 0.53f, 0.76f); // pink
 	public static readonly Color GriefColor = new Color(0.54f, 0.39f, 0.82f); // lavender
 	public static readonly Color GuiltyColor = new Color(0.1f, 0.2f, 0.4f); // dark blue
-	public static readonly Color DoubtColor = new Color(0.27f, 0.83f, 1f); // cyan
+	public static readonly Color DoubtColor = new Color(0.6f, 0.4f, 1f); // purple
 	public static readonly Color DefaultColor = Color.white;
 	#endregion
 
@@ -76,6 +76,15 @@ public static class CardEffectUtils
 					2 => "Reduz em 2 o Valor do Argumento do Oponente",
 					3 => "Reduz em 3 o Valor do Argumento do Oponente",
 					4 => "Reduz em 5 o Valor do Argumento do Oponente",
+					_ => "Sem Efeito"
+				};
+			case CardEffect.Doubt:
+				return tier switch
+				{
+					1 => "Troca 1 Carta aleatória da sua mão por outra aleatória do Baralho",
+					2 => "Troca 2 Cartas aleatória da sua mão por outras 2 aleatórias do Baralho",
+					3 => "Troca 3 Cartas aleatória da sua mão por outras 3 aleatórias do Baralho",
+					4 => "Troca 1 Carta aleatória da sua mão por uma Carta 10 aleatória do Baralho",
 					_ => "Sem Efeito"
 				};
 			default: return "Sem Efeito";

@@ -1128,10 +1128,10 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   deck: {fileID: 1497232451}
   slotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
-  targetHolder: {fileID: 911302868}
   isPlayerCardHolder: 0
-  cards: []
   tweenCardReturn: 1
+  cards: []
+  targetHolder: {fileID: 911302868}
 --- !u!1 &913965588
 GameObject:
   m_ObjectHideFlags: 0
@@ -7487,10 +7487,10 @@ MonoBehaviour:
   hoveredCard: {fileID: 0}
   deck: {fileID: 1497232451}
   slotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
-  targetHolder: {fileID: 1673909257}
   isPlayerCardHolder: 1
-  cards: []
   tweenCardReturn: 1
+  cards: []
+  targetHolder: {fileID: 1673909257}
 --- !u!114 &1673909258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8780,9 +8780,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHand: {fileID: 1673909257}
   opponentHand: {fileID: 911302868}
+  cardSlotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
   playerDeck: []
   opponentDeck: []
-  cardSlotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
 --- !u!1 &2145992736
 GameObject:
   m_ObjectHideFlags: 0

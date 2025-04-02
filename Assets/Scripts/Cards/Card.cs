@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
-using DG.Tweening;
 
 public class Card : MonoBehaviour,
 	IDragHandler,
@@ -24,6 +23,8 @@ public class Card : MonoBehaviour,
 	#region Serialized Fields
 	[SerializeField] private bool instantiateVisual = true;
 	[SerializeField] private GameObject cardVisualPrefab;
+	[SerializeField] private GameObject cardHoverPopupPrefab;
+	private const float popupYOffset = 2.5f;
 	#endregion
 
 	#region Public Fields
@@ -59,6 +60,7 @@ public class Card : MonoBehaviour,
 	private Vector3 dragOffset;
 	private float pointerDownTime;
 	private float pointerUpTime;
+	private GameObject currentPopupInstance;
 	#endregion
 
 	#region Unity Methods
@@ -135,6 +137,7 @@ public class Card : MonoBehaviour,
 	{
 		EndDragEvent.Invoke(this);
 		isDragging = false;
+
 		parentCanvas.GetComponent<GraphicRaycaster>().enabled = true;
 		imageComponent.raycastTarget = true;
 
@@ -167,11 +170,28 @@ public class Card : MonoBehaviour,
 	{
 		PointerEnterEvent.Invoke(this);
 		isHovering = true;
+
+		if (cardData == null || cardHoverPopupPrefab == null || cardVisual == null)
+			return;
+
+		Vector3 worldAnchor = cardVisual.transform.position + Vector3.up * popupYOffset;
+
+		currentPopupInstance = Instantiate(cardHoverPopupPrefab, worldAnchor, Quaternion.identity, parentCanvas.transform);
+
+		var popupScript = currentPopupInstance.GetComponent<CardHoverPopup>();
+		popupScript?.Show(cardData);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		PointerExitEvent.Invoke(this);
+
+		if (currentPopupInstance != null)
+		{
+			Destroy(currentPopupInstance);
+			currentPopupInstance = null;
+		}
+
 		isHovering = false;
 	}
 

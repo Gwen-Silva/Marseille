@@ -4,7 +4,7 @@ public enum CardEffect
 {
 	None = 0,
 	Love = 1,
-	Guilty = 2,
+	Guilt = 2,
 	Doubt = 3,
 	Grief = 4
 }

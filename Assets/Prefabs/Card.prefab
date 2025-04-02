@@ -62,15 +62,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instantiateVisual: 1
-  cardData: {fileID: 0}
-  moveSpeedLimit: 50
-  selected: 0
-  selectionOffset: 50
   cardVisualPrefab: {fileID: 7310339964073049012, guid: 432b6f487de8fea42a7b33fb7e8cf183, type: 3}
+  cardHoverPopupPrefab: {fileID: 3335231113377531765, guid: 39c14b3fdadc18a4fa311551b0916bf6, type: 3}
+  popupYOffset: 0.005
+  cardData: {fileID: 0}
   cardVisual: {fileID: 0}
+  isPlayerCard: 1
+  wasDragged: 0
   isHovering: 0
   isDragging: 0
-  wasDragged: 0
+  selected: 0
   PointerEnterEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -92,7 +93,6 @@ MonoBehaviour:
   SelectEvent:
     m_PersistentCalls:
       m_Calls: []
-  isPlayerCard: 1
 --- !u!114 &2813900446313811149
 MonoBehaviour:
   m_ObjectHideFlags: 0

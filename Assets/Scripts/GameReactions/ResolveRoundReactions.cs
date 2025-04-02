@@ -102,11 +102,15 @@ public class ResolveRoundReactions : MonoBehaviour
 		{
 			TryAddGriefNullify(playerEffectCard, false);
 			TryAddGriefNullify(opponentEffectCard, true);
+			TryAddGuiltDebuff(playerEffectCard, false);
+			TryAddGuiltDebuff(opponentEffectCard, true);
 		}
 		else
 		{
 			TryAddGriefNullify(opponentEffectCard, true);
 			TryAddGriefNullify(playerEffectCard, false);
+			TryAddGuiltDebuff(playerEffectCard, false);
+			TryAddGuiltDebuff(opponentEffectCard, true);
 		}
 	}
 
@@ -178,6 +182,15 @@ public class ResolveRoundReactions : MonoBehaviour
 		}
 	}
 
+	private void TryAddGuiltDebuff(Card card, bool targetIsPlayer)
+	{
+		if (card != null && card.cardData.cardEffect == CardEffect.Guilt)
+		{
+			int tier = CardEffectUtils.GetTier(card.cardData.cardValue);
+			ActionSystem.Instance.AddReaction(new GuiltApplyDebuffGA(tier, targetIsPlayer));
+		}
+	}
+
 	private void TriggerEffect(Card effectCard)
 	{
 		if (effectCard == null || effectCard.cardData.cardEffect == CardEffect.None)
@@ -191,6 +204,9 @@ public class ResolveRoundReactions : MonoBehaviour
 			case CardEffect.Grief:
 				ActionSystem.Instance.AddReaction(new GriefGA(effectCard));
 				break;
+			case CardEffect.Guilt:
+				ActionSystem.Instance.AddReaction(new GuiltGA(effectCard));
+				break;
 		}
 	}
 
@@ -199,8 +215,7 @@ public class ResolveRoundReactions : MonoBehaviour
 		if (display == null || string.IsNullOrEmpty(display.cardTopValue.text))
 			return 0;
 
-		int.TryParse(display.cardTopValue.text, out int value);
-		return value;
+		return display.OwnerCard.cardData.cardValue;
 	}
 
 	#endregion

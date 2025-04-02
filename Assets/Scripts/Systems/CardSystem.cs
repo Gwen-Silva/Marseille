@@ -140,6 +140,7 @@ public class CardSystem : MonoBehaviour
 		Card card = display.OwnerCard;
 
 		card.DisableInteraction();
+
 		display.transform.position = action.TargetSlot.transform.position;
 		display.transform.rotation = action.TargetSlot.transform.rotation;
 

@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
-using DG.Tweening;
 
 public class Card : MonoBehaviour,
 	IDragHandler,
@@ -24,6 +23,8 @@ public class Card : MonoBehaviour,
 	#region Serialized Fields
 	[SerializeField] private bool instantiateVisual = true;
 	[SerializeField] private GameObject cardVisualPrefab;
+	[SerializeField] private GameObject cardHoverPopupPrefab;
+	private const float popupYOffset = 2.5f;
 	#endregion
 
 	#region Public Fields
@@ -34,6 +35,7 @@ public class Card : MonoBehaviour,
 	public bool isHovering;
 	public bool isDragging;
 	public bool selected;
+	public bool isInHand = false;
 	private float _selectionOffset = DefaultSelectionOffset;
 	#endregion
 
@@ -59,6 +61,7 @@ public class Card : MonoBehaviour,
 	private Vector3 dragOffset;
 	private float pointerDownTime;
 	private float pointerUpTime;
+	private GameObject currentPopupInstance;
 	#endregion
 
 	#region Unity Methods
@@ -135,6 +138,7 @@ public class Card : MonoBehaviour,
 	{
 		EndDragEvent.Invoke(this);
 		isDragging = false;
+
 		parentCanvas.GetComponent<GraphicRaycaster>().enabled = true;
 		imageComponent.raycastTarget = true;
 
@@ -167,12 +171,37 @@ public class Card : MonoBehaviour,
 	{
 		PointerEnterEvent.Invoke(this);
 		isHovering = true;
+
+		Transform slot = transform.parent;
+
+		isInHand = false;
+
+		if (slot != null && slot.name.Contains("CardSlot"))
+		{
+			Vector3 localPos = transform.localPosition;
+			float threshold = 0.01f;
+
+			if (Mathf.Abs(localPos.x) < threshold && Mathf.Abs(localPos.y) < threshold)
+			{
+				Transform holder = slot.parent;
+				if (holder != null && holder.GetComponent<HorizontalCardHolder>() != null)
+					isInHand = true;
+			}
+		}
+
+		if (!isInHand || cardData == null || cardVisual == null)
+			return;
+
+		Vector3 worldAnchor = cardVisual.transform.position + Vector3.up * popupYOffset;
+		CardPopupManager.Instance?.ShowPopup(cardData, worldAnchor);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		PointerExitEvent.Invoke(this);
 		isHovering = false;
+
+		CardPopupManager.Instance?.HidePopup();
 	}
 
 	public void OnPointerDown(PointerEventData eventData)

@@ -45,6 +45,5 @@ public class PlayCardReactions : MonoBehaviour
 
 		ActionSystem.Instance.AddReaction(new AdvanceTurnGA());
 	}
-
 	#endregion
 }

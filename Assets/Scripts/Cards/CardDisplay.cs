@@ -58,7 +58,7 @@ public class CardDisplay : MonoBehaviour
 			CardEffect.Love => loveSprite,
 			CardEffect.Doubt => doubtSprite,
 			CardEffect.Grief => griefSprite,
-			CardEffect.Guilty => guiltySprite,
+			CardEffect.Guilt => guiltySprite,
 			_ => valueOnlySprite
 		};
 	}

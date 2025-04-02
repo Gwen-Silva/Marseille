@@ -41,9 +41,48 @@ public static class CardEffectUtils
 		{
 			CardEffect.Love => LoveColor,
 			CardEffect.Grief => GriefColor,
-			CardEffect.Guilty => GuiltyColor,
+			CardEffect.Guilt => GuiltyColor,
 			CardEffect.Doubt => DoubtColor,
 			_ => DefaultColor
+		};
+	}
+
+	public static string GetEffectDescription(CardEffect effect, int tier)
+	{
+		switch (effect)
+		{
+			case CardEffect.Love:
+				return tier switch
+				{
+					1 => "Cura 1 de Vida",
+					2 => "Cura 2 de Vida",
+					3 => "Cura 3 de Vida",
+					4 => "Cura 5 de Vida",
+					_ => "Sem Efeito"
+				};
+			case CardEffect.Grief:
+				return tier switch
+				{
+					1 => "Anula efeitos Fracos",
+					2 => "Anula efeitos Médios ou menores",
+					3 => "Anula efeitos Fortes ou menores",
+					4 => "Recebe um Escudo que Anula o próximo Dano Letal",
+					_ => "Sem Efeito"
+				};
+			default: return "Sem Efeito";
+		}
+	}
+
+	public static string GetEffectNameLocalized(CardEffect effect)
+	{
+		return effect switch
+		{
+			CardEffect.Love => "Amor",
+			CardEffect.Grief => "Luto",
+			CardEffect.Guilt => "Culpa",
+			CardEffect.Doubt => "Dúvida",
+			CardEffect.None => "Nenhum",
+			_ => effect.ToString()
 		};
 	}
 }

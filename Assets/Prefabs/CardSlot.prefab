@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3022145405964351368}
   - component: {fileID: 8873837015451014232}
+  - component: {fileID: 8951708133098184212}
   m_Layer: 0
   m_Name: CardSlot
   m_TagString: Slot
@@ -29,7 +30,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1272150535864055091}
+  - {fileID: 7294768738557370893}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -45,6 +46,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8064341329699037201}
   m_CullTransparentMesh: 1
+--- !u!210 &8951708133098184212
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8064341329699037201}
+  m_Enabled: 1
+  m_SortingLayerID: -1579982893
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1001 &8735677949052884011
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -142,8 +155,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cfe40794e781d34e888aba59065429b, type: 3}
---- !u!224 &1272150535864055091 stripped
+--- !u!224 &7294768738557370893 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7538122955696202008, guid: 8cfe40794e781d34e888aba59065429b, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2019694331062171174, guid: 8cfe40794e781d34e888aba59065429b, type: 3}
   m_PrefabInstance: {fileID: 8735677949052884011}
   m_PrefabAsset: {fileID: 0}

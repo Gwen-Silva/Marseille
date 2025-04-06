@@ -119,6 +119,38 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &45312235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 45312236}
+  m_Layer: 0
+  m_Name: ---- CAMERAS ----
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &45312236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45312235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 519420032}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &108163971
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +162,7 @@ GameObject:
   - component: {fileID: 108163972}
   - component: {fileID: 108163974}
   - component: {fileID: 108163973}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,6 +291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerValueSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 1982729240300969232, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5804738931377351250, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.009259259
@@ -315,6 +351,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -943405455880525219, guid: abafd43fdc0490b439e9baf5ba1a446e, type: 3}
+    - target: {fileID: 6838334140296013598, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136963566849656716, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -334,8 +378,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 190306849}
-  m_Layer: 5
-  m_Name: GameManagers
+  m_Layer: 0
+  m_Name: --- MANAGERS ---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373,9 +417,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: OpponentHealthEffectPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 188918889861899512, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 489475325402481427, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855074369496310778, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5386733284056908419, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Name
       value: OpponentHealthVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386733284056908419, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: isPlayerHealth
@@ -629,12 +689,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 45312236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &590961228
 GameObject:
@@ -724,7 +784,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 602678879}
-  m_Layer: 0
+  - component: {fileID: 602678880}
+  m_Layer: 7
   m_Name: Slots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -750,6 +811,18 @@ Transform:
   - {fileID: 934399523}
   m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &602678880
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602678878}
+  m_Enabled: 1
+  m_SortingLayerID: -1579982893
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1001 &604807105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -773,6 +846,10 @@ PrefabInstance:
     - target: {fileID: 1982729240300969232, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
       propertyPath: m_Name
       value: OpponentValueSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 1982729240300969232, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5804738931377351250, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
       propertyPath: m_LocalScale.x
@@ -830,6 +907,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -943405455880525219, guid: abafd43fdc0490b439e9baf5ba1a446e, type: 3}
+    - target: {fileID: 6838334140296013598, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136963566849656716, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -849,7 +934,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 606641087}
-  m_Layer: 0
+  - component: {fileID: 606641088}
+  m_Layer: 6
   m_Name: VisualCardsHandlers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -873,6 +959,18 @@ Transform:
   - {fileID: 913965589}
   m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &606641088
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606641086}
+  m_Enabled: 1
+  m_SortingLayerID: 188217817
+  m_SortingLayer: 4
+  m_SortingOrder: 10
+  m_SortAtRoot: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +1008,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 0000000061430330492865a5d9f9370b9d752286cb5833a8cdeda75ed35fd3a1
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -1021,7 +1119,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 815984864}
-  m_Layer: 0
+  - component: {fileID: 815984865}
+  m_Layer: 6
   m_Name: Hands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1045,6 +1144,18 @@ Transform:
   - {fileID: 911302864}
   m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &815984865
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 815984863}
+  m_Enabled: 1
+  m_SortingLayerID: 188217817
+  m_SortingLayer: 4
+  m_SortingOrder: 5
+  m_SortAtRoot: 0
 --- !u!1 &830965915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +1166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830965916}
   - component: {fileID: 830965917}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CardPopupManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1107,7 +1218,7 @@ GameObject:
   - component: {fileID: 911302867}
   - component: {fileID: 911302866}
   - component: {fileID: 911302865}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: OpponentHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1227,7 +1338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 913965589}
   - component: {fileID: 913965590}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: VisualCardsHandlerOpponent
   m_TagString: OpponentVisualHandler
   m_Icon: {fileID: 0}
@@ -1285,6 +1396,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OpponentEffectSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 1982729240300969232, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5804738931377351250, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.009259259
@@ -1341,6 +1456,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -6974418589067875543, guid: 9cfa7d6a3ace95247980af22619923d4, type: 3}
+    - target: {fileID: 6838334140296013598, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136963566849656716, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1507,8 +1630,9 @@ GameObject:
   - component: {fileID: 1113886924}
   - component: {fileID: 1113886923}
   - component: {fileID: 1113886922}
-  m_Layer: 5
-  m_Name: Board
+  - component: {fileID: 1113886925}
+  m_Layer: 0
+  m_Name: --- BOARD ---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1606,6 +1730,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!210 &1113886925
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113886920}
+  m_Enabled: 1
+  m_SortingLayerID: 805520225
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &1183456620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,9 +1956,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerHealthEffectPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 188918889861899512, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 489475325402481427, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1855074369496310778, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5386733284056908419, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: m_Name
       value: PlayerHealthVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386733284056908419, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6715734546342391170, guid: 3b0792bbcfa4cb24b860cb610fc87a62, type: 3}
       propertyPath: effectSpawnPoint
@@ -2091,7 +2243,7 @@ GameObject:
   - component: {fileID: 1286663131}
   - component: {fileID: 1286663133}
   - component: {fileID: 1286663132}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: RoundParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7034,7 +7186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1329755503}
   - component: {fileID: 1329755504}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: VisualCardsHandlerPlayer
   m_TagString: PlayerVisualHandler
   m_Icon: {fileID: 0}
@@ -7136,7 +7288,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1361470401}
-  m_Layer: 0
+  - component: {fileID: 1361470402}
+  m_Layer: 10
   m_Name: PlayersHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7160,6 +7313,18 @@ Transform:
   - {fileID: 441540124}
   m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &1361470402
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361470400}
+  m_Enabled: 1
+  m_SortingLayerID: -1473029941
+  m_SortingLayer: 6
+  m_SortingOrder: 2
+  m_SortAtRoot: 0
 --- !u!1 &1447327724
 GameObject:
   m_ObjectHideFlags: 0
@@ -7169,7 +7334,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1447327725}
-  m_Layer: 0
+  - component: {fileID: 1447327726}
+  m_Layer: 8
   m_Name: Decks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7194,6 +7360,18 @@ Transform:
   - {fileID: 1587984266}
   m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &1447327726
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447327724}
+  m_Enabled: 1
+  m_SortingLayerID: -1520097207
+  m_SortingLayer: 2
+  m_SortingOrder: 1
+  m_SortAtRoot: 0
 --- !u!1 &1473724929
 GameObject:
   m_ObjectHideFlags: 0
@@ -7204,7 +7382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1473724930}
   m_Layer: 0
-  m_Name: GameSystems
+  m_Name: --- SYSTEMS ---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7241,7 +7419,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1497232451}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: PlayerDeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7371,7 +7549,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1587984266}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Discard
   m_TagString: DiscardPoint
   m_Icon: {fileID: 0}
@@ -7550,7 +7728,7 @@ GameObject:
   - component: {fileID: 1673909261}
   - component: {fileID: 1673909258}
   - component: {fileID: 1673909260}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: PlayerHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7949,7 +8127,8 @@ GameObject:
   - component: {fileID: 1740496442}
   - component: {fileID: 1740496444}
   - component: {fileID: 1740496443}
-  m_Layer: 5
+  - component: {fileID: 1740496445}
+  m_Layer: 0
   m_Name: BackgroundShader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8013,6 +8192,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1740496441}
   m_CullTransparentMesh: 1
+--- !u!210 &1740496445
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740496441}
+  m_Enabled: 1
+  m_SortingLayerID: 805520225
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &1781988339
 GameObject:
   m_ObjectHideFlags: 0
@@ -8068,7 +8259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1799591358}
   m_Layer: 0
-  m_Name: Controllers
+  m_Name: --- CONTROLLERS ---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8102,7 +8293,8 @@ GameObject:
   - component: {fileID: 1818587213}
   - component: {fileID: 1818587214}
   - component: {fileID: 1818587215}
-  m_Layer: 5
+  - component: {fileID: 1818587216}
+  m_Layer: 11
   m_Name: RoundAnnouncement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8159,6 +8351,18 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!210 &1818587216
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818587212}
+  m_Enabled: 1
+  m_SortingLayerID: -2044562019
+  m_SortingLayer: 5
+  m_SortingOrder: 20
+  m_SortAtRoot: 0
 --- !u!1 &1825959501
 GameObject:
   m_ObjectHideFlags: 0
@@ -8170,7 +8374,7 @@ GameObject:
   - component: {fileID: 1825959502}
   - component: {fileID: 1825959504}
   - component: {fileID: 1825959503}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8377,7 +8581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1886688586}
   m_Layer: 0
-  m_Name: GameReactions
+  m_Name: --- REACTIONS ---
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8417,7 +8621,8 @@ GameObject:
   - component: {fileID: 1952251921}
   - component: {fileID: 1952251923}
   - component: {fileID: 1952251922}
-  m_Layer: 5
+  - component: {fileID: 1952251924}
+  m_Layer: 0
   m_Name: BoardSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8481,6 +8686,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1952251920}
   m_CullTransparentMesh: 1
+--- !u!210 &1952251924
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952251920}
+  m_Enabled: 1
+  m_SortingLayerID: 805520225
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &1984501195
 GameObject:
   m_ObjectHideFlags: 0
@@ -8537,7 +8754,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1990542644}
-  m_Layer: 0
+  - component: {fileID: 1990542645}
+  m_Layer: 5
   m_Name: DrawButtons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8561,6 +8779,18 @@ Transform:
   - {fileID: 1877143907}
   m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &1990542645
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990542643}
+  m_Enabled: 1
+  m_SortingLayerID: -1473029941
+  m_SortingLayer: 6
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &2051486369
 GameObject:
   m_ObjectHideFlags: 0
@@ -8572,7 +8802,8 @@ GameObject:
   - component: {fileID: 2051486370}
   - component: {fileID: 2051486372}
   - component: {fileID: 2051486371}
-  m_Layer: 5
+  - component: {fileID: 2051486373}
+  m_Layer: 0
   m_Name: BoardBackgroundSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8636,6 +8867,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2051486369}
   m_CullTransparentMesh: 1
+--- !u!210 &2051486373
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051486369}
+  m_Enabled: 1
+  m_SortingLayerID: 805520225
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1001 &2082317148
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8651,6 +8894,10 @@ PrefabInstance:
     - target: {fileID: 1982729240300969232, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
       propertyPath: m_Name
       value: PlayerEffectSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 1982729240300969232, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5804738931377351250, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
       propertyPath: m_LocalScale.x
@@ -8708,6 +8955,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -6974418589067875543, guid: 9cfa7d6a3ace95247980af22619923d4, type: 3}
+    - target: {fileID: 6838334140296013598, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136963566849656716, guid: adaac26b27c26cd4595b87777eccc3c9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8740,7 +8995,7 @@ GameObject:
   - component: {fileID: 2092291655}
   - component: {fileID: 2092291657}
   - component: {fileID: 2092291656}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: RoundText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8923,7 +9178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2145992737}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: OpponentDeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8954,7 +9209,7 @@ RectTransform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
+  - {fileID: 45312236}
   - {fileID: 619394802}
   - {fileID: 590961231}
   - {fileID: 1249723709}

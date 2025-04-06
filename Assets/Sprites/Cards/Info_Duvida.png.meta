@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b1cbaf7f76c97a5479d03f38186cff23
+guid: 806f3f7a096c2224e815c20ae05b0c6c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8370641247498439556
-    second: Info_Duvida_0
+      213: -2159281938288108587
+    second: Info_Duvida 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Info_Duvida_0
+      name: Info_Duvida 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c747f9c822285db80800000000000000
-      internalID: -8370641247498439556
+      spriteID: 5db9b6a7480b802e0800000000000000
+      internalID: -2159281938288108587
       vertices: []
       indices: 
       edges: []
@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Info_Duvida 1_0: -2159281938288108587
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

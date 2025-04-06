@@ -156,7 +156,7 @@ TextureImporter:
       name: Tabuleiro Componentes_1
       rect:
         serializedVersion: 2
-        x: 441
+        x: 442
         y: 798
         width: 1053
         height: 265
@@ -178,8 +178,8 @@ TextureImporter:
       name: Tabuleiro Componentes_2
       rect:
         serializedVersion: 2
-        x: 1635
-        y: 750
+        x: 1636
+        y: 650
         width: 225
         height: 265
       alignment: 0
@@ -244,8 +244,8 @@ TextureImporter:
       name: Tabuleiro Componentes_5
       rect:
         serializedVersion: 2
-        x: 1635
-        y: 57
+        x: 1636
+        y: 157
         width: 225
         height: 266
       alignment: 0
@@ -266,7 +266,7 @@ TextureImporter:
       name: Tabuleiro Componentes_6
       rect:
         serializedVersion: 2
-        x: 441
+        x: 442
         y: 3
         width: 1053
         height: 266

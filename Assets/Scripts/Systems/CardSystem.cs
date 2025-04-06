@@ -106,7 +106,7 @@ public class CardSystem : MonoBehaviour
 				}
 				else
 				{
-					Debug.LogWarning($"[DrawCardGA] Nenhuma carta de valor {ga.forcedValue.Value} encontrada. Efeito especial pode ter falhado.");
+					Debug.LogWarning($"[DrawCardGA] Nenhuma carta de valor {ga.forcedValue.Value} encontrada.");
 					continue;
 				}
 			}
@@ -115,7 +115,17 @@ public class CardSystem : MonoBehaviour
 				data = ga.targetHolder.IsPlayerCardHolder
 					? deckSystem.DrawFromPlayerDeck()
 					: deckSystem.DrawFromOpponentDeck();
+
+				if (data == null)
+				{
+					Debug.Log("Deck vazio! Fim de jogo.");
+					bool playerWon = !ga.targetHolder.IsPlayerCardHolder;
+					ActionSystem.Instance.AddReaction(new EndGameGA(playerWon));
+					yield break;
+				}
 			}
+			if (ga.targetHolder == null)
+				yield break;
 
 			GameObject slotGO = Instantiate(ga.targetHolder.SlotPrefab, ga.targetHolder.transform);
 			Card card = slotGO.GetComponentInChildren<Card>();

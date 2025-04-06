@@ -16,12 +16,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Card
+  - Slot
+  - Deck
+  - GameUI
+  - Health
+  - Effect
   - 
   - 
   - 
@@ -45,6 +45,27 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 805520225
+    locked: 0
+  - name: Board
+    uniqueID: 2774870089
+    locked: 0
+  - name: Slots
+    uniqueID: 2714984403
+    locked: 0
+  - name: Cards
+    uniqueID: 188217817
+    locked: 0
+  - name: Effects
+    uniqueID: 2250405277
+    locked: 0
+  - name: UI
+    uniqueID: 2821937355
+    locked: 0
+  - name: Overlay
+    uniqueID: 1588063693
     locked: 0
   m_RenderingLayers:
   - Default

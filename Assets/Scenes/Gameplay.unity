@@ -420,7 +420,6 @@ RectTransform:
   m_LocalScale: {x: 0.009259259, y: 0.009259259, z: 0.009259259}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 830965916}
   - {fileID: 274721639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1390,7 +1389,8 @@ GameObject:
   m_Component:
   - component: {fileID: 830965916}
   - component: {fileID: 830965917}
-  m_Layer: 0
+  - component: {fileID: 830965918}
+  m_Layer: 11
   m_Name: CardPopupManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1404,12 +1404,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 830965915}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 190306849}
+  m_Father: {fileID: 1113886921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1429,6 +1429,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 578510646620498781, guid: 39c14b3fdadc18a4fa311551b0916bf6, type: 3}
+--- !u!210 &830965918
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830965915}
+  m_Enabled: 1
+  m_SortingLayerID: 1588063693
+  m_SortingLayer: 7
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &911302863
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,6 +1918,7 @@ RectTransform:
   - {fileID: 1056976270}
   - {fileID: 1361470401}
   - {fileID: 606641087}
+  - {fileID: 830965916}
   - {fileID: 1818587213}
   - {fileID: 1868903657}
   - {fileID: 2132456490}

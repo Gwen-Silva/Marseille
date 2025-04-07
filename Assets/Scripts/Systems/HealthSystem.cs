@@ -101,6 +101,12 @@ public class HealthSystem : MonoBehaviour
 		}
 
 		yield return ga.Target.ReduceHealth(ga.Amount);
+
+		if (ga.Target.CurrentHealth <= 0)
+		{
+			bool playerWon = !ga.Target.isPlayerHealth;
+			ActionSystem.Instance.AddReaction(new EndGameGA(playerWon));
+		}
 	}
 
 	/// <summary>

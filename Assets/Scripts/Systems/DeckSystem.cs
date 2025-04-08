@@ -57,6 +57,17 @@ public class DeckSystem : MonoBehaviour
 		return card;
 	}
 
+	public static void Reset()
+	{
+		var instance = FindAnyObjectByType<DeckSystem>();
+		if (instance == null) return;
+
+		instance.playerDeck.Clear();
+		instance.opponentDeck.Clear();
+
+		Debug.Log("[DeckSystem] Decks limpos com sucesso.");
+	}
+
 	#endregion
 
 	#region Performers

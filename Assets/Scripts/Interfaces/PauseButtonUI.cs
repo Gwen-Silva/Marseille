@@ -6,14 +6,26 @@ public class PauseButtonUI : MonoBehaviour
 
 	public void TogglePause()
 	{
-		if (GameStateManager.Instance.CurrentState == GameState.Paused)
+		var gameState = GameStateManager.Instance.CurrentState;
+
+		if (gameState == GameState.Playing)
+		{
+			GameStateManager.Instance.TogglePause();
+		}
+		else if (gameState == GameState.Paused)
 		{
 			if (pauseHandler != null)
+			{
 				pauseHandler.RequestResume();
+			}
+			else
+			{
+				GameStateManager.Instance.TogglePause();
+			}
 		}
 		else
 		{
-			GameStateManager.Instance.TogglePause();
+			Debug.LogWarning("[PauseButtonUI] Não é possível pausar/despausar fora da gameplay.");
 		}
 	}
 }

@@ -247,4 +247,26 @@ public class EffectSystem : MonoBehaviour
 	}
 
 	#endregion
+
+	public static void Reset()
+	{
+		var instance = FindAnyObjectByType<EffectSystem>();
+		if (instance == null) return;
+
+		if (instance.playerHealth != null)
+		{
+			instance.playerHealth.HasGriefShield = false;
+			if (instance.playerHealth.ActiveShieldIcon != null)
+				Destroy(instance.playerHealth.ActiveShieldIcon);
+		}
+
+		if (instance.opponentHealth != null)
+		{
+			instance.opponentHealth.HasGriefShield = false;
+			if (instance.opponentHealth.ActiveShieldIcon != null)
+				Destroy(instance.opponentHealth.ActiveShieldIcon);
+		}
+
+		Debug.Log("[EffectSystem] Estado visual e escudos limpos.");
+	}
 }

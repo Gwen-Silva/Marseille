@@ -91,6 +91,6 @@ public class PauseHandler : MonoBehaviour
 	private IEnumerator ResumeWithAnimation()
 	{
 		yield return HidePanelSequence();
-		GameStateManager.Instance.SetState(GameState.Playing);
+		GameStateManager.Instance.ChangeState(GameState.Playing);
 	}
 }

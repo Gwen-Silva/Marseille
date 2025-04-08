@@ -148,4 +148,12 @@ public class HealthSystem : MonoBehaviour
 	}
 
 	#endregion
+
+	public static void Reset()
+	{
+		var instance = FindAnyObjectByType<HealthSystem>();
+		if (instance == null) return;
+
+		Debug.Log("[HealthSystem] Reset placeholder executado.");
+	}
 }

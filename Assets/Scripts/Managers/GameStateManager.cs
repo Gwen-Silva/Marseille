@@ -1,10 +1,8 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Manages the current state of the game and notifies listeners of changes.
-/// </summary>
-public class GameStateManager : MonoBehaviour
+public class GameStateManager : MonoBehaviour, IPersistentSystem
 {
 	public static GameStateManager Instance { get; private set; }
 
@@ -12,7 +10,9 @@ public class GameStateManager : MonoBehaviour
 
 	public static event Action<GameState> OnGameStateChanged;
 
-	private void Awake()
+	public bool IsInitialized => Instance != null;
+
+	public void Initialize()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -21,34 +21,70 @@ public class GameStateManager : MonoBehaviour
 		}
 
 		Instance = this;
+		DontDestroyOnLoad(gameObject);
+
+		if (CurrentState == default)
+		{
+			string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+			if (sceneName == "Gameplay")
+			{
+				CurrentState = GameState.Playing;
+				Debug.Log("[GameStateManager] Cena Gameplay detectada. Estado inicial definido como Playing.");
+			}
+			else if (sceneName == "Main Menu")
+			{
+				CurrentState = GameState.MainMenu;
+				Debug.Log("[GameStateManager] Cena Main Menu detectada. Estado inicial definido como MainMenu.");
+			}
+		}
 	}
 
-	private void Start()
+	private void Awake()
 	{
-		SetState(GameState.Playing);
+		Initialize();
 	}
 
-	public void SetState(GameState newState)
+	public void ChangeState(GameState newState)
 	{
-		if (newState == CurrentState) return;
+		if (newState == CurrentState)
+		{
+			Debug.Log($"[GameStateManager] Estado já é {newState}, ignorando troca.");
+			return;
+		}
 
+		Debug.Log($"[GameStateManager] Mudando de estado {CurrentState} para {newState}");
 		CurrentState = newState;
-
 		OnGameStateChanged?.Invoke(newState);
+
+		switch (newState)
+		{
+			case GameState.MainMenu:
+				Debug.Log("[GameStateManager] Carregando cena MainMenu...");
+				SceneLoaderManager.Instance?.LoadScene("Main Menu");
+				break;
+			case GameState.Playing:
+				if (SceneManager.GetActiveScene().name != "Gameplay")
+				{
+					Debug.Log("[GameStateManager] Carregando cena Gameplay...");
+					SceneLoaderManager.Instance?.LoadScene("Gameplay");
+				}
+				break;
+			case GameState.Paused:
+				Debug.Log("[GameStateManager] Estado pausado");
+				break;
+			case GameState.GameOver:
+				Debug.Log("[GameStateManager] Game Over.");
+				break;
+		}
 	}
 
-	/// <summary>
-	/// Switches between the Playing and Paused states.
-	/// </summary>
 	public void TogglePause()
 	{
+		Debug.Log("[GameStateManager] Alternando pausa...");
 		if (CurrentState == GameState.Playing)
-		{
-			SetState(GameState.Paused);
-		}
+			ChangeState(GameState.Paused);
 		else if (CurrentState == GameState.Paused)
-		{
-			SetState(GameState.Playing);
-		}
+			ChangeState(GameState.Playing);
 	}
 }

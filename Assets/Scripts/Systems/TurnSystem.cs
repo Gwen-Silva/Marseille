@@ -169,5 +169,20 @@ public class TurnSystem : MonoBehaviour
 		}
 	}
 
+	public static void Reset()
+	{
+		var instance = FindAnyObjectByType<TurnSystem>();
+		if (instance == null) return;
+
+		instance.StopAllCoroutines();
+
+		instance.turnOrder.Clear();
+		instance.currentTurnIndex = 0;
+		instance.roundCount = 0;
+		instance.isPlayerStarting = true;
+
+		Debug.Log("[TurnSystem] Sistema de turno resetado.");
+	}
+
 	#endregion
 }

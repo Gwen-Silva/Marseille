@@ -139,4 +139,24 @@ public class ActionSystem : Singleton<ActionSystem>
 	}
 
 	#endregion
+
+	#region Reset Methods
+
+	/// <summary>
+	/// Clears all queued reactions and registered performers and subscribers.
+	/// Use this when resetting the game to avoid residual logic from previous sessions.
+	/// </summary>
+	public static void Clear()
+	{
+		Debug.Log("[ActionSystem] Limpando reações, performers e inscrições...");
+
+		Instance.reactions.Clear();
+		performers.Clear();
+		preSubs.Clear();
+		postSubs.Clear();
+
+		Debug.Log("[ActionSystem] Limpeza concluída.");
+	}
+
+	#endregion
 }

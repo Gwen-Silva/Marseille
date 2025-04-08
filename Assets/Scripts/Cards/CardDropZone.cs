@@ -60,7 +60,7 @@ public class CardDropZone : MonoBehaviour, ICardDropArea
 
 		var cardDisplay = card.cardVisual.GetComponent<CardDisplay>();
 
-		ActionSystem.Instance.Perform(new PlayCardGA
+		ActionSystem.Shared?.Perform(new PlayCardGA
 		{
 			Card = cardDisplay,
 			TargetSlot = this,

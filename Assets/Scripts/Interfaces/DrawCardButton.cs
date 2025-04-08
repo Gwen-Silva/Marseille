@@ -27,10 +27,10 @@ public class DrawCardButton : MonoBehaviour
 	/// </summary>
 	public void Draw()
 	{
-		if (ActionSystem.Instance.IsPerforming) return;
+		if (ActionSystem.Shared.IsPerforming) return;
 
 		DrawCardGA drawCardGA = new(targetHolder, cardsToSpawn);
-		ActionSystem.Instance.Perform(drawCardGA);
+		ActionSystem.Shared?.Perform(drawCardGA);
 	}
 
 	#endregion

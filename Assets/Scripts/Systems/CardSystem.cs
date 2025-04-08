@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class CardSystem : MonoBehaviour
+public class CardSystem : MonoState<CardSystem>
 {
 	#region Constants
 
@@ -120,7 +120,7 @@ public class CardSystem : MonoBehaviour
 				{
 					Debug.Log("Deck vazio! Fim de jogo.");
 					bool playerWon = !ga.targetHolder.IsPlayerCardHolder;
-					ActionSystem.Instance.AddReaction(new EndGameGA(playerWon));
+					ActionSystem.Shared?.AddReaction(new EndGameGA(playerWon));
 					yield break;
 				}
 			}
@@ -160,9 +160,9 @@ public class CardSystem : MonoBehaviour
 	/// <summary>Triggers the drawing of both players' initial cards and starts the game.</summary>
 	private IEnumerator DrawInitialCardsPerformer(DrawInitialCardsGA ga)
 	{
-		ActionSystem.Instance.AddReaction(new DrawCardGA(ga.playerHand, ga.amount));
-		ActionSystem.Instance.AddReaction(new DrawCardGA(ga.opponentHand, ga.amount));
-		ActionSystem.Instance.AddReaction(new StartGameGA());
+		ActionSystem.Shared?.AddReaction(new DrawCardGA(ga.playerHand, ga.amount));
+		ActionSystem.Shared?.AddReaction(new DrawCardGA(ga.opponentHand, ga.amount));
+		ActionSystem.Shared?.AddReaction(new StartGameGA());
 		yield return null;
 	}
 

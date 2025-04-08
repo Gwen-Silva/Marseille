@@ -42,7 +42,7 @@ public class ClearBoardReactions : MonoBehaviour
 			Card card = slot.GetComponentInChildren<Card>();
 			if (card != null && card.cardVisual != null)
 			{
-				ActionSystem.Instance.AddReaction(new FlipCardGA(card, CARD_FLIP_DELAY));
+				ActionSystem.Shared?.AddReaction(new FlipCardGA(card, CARD_FLIP_DELAY));
 			}
 		}
 	}

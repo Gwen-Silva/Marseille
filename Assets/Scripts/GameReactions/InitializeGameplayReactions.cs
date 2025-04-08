@@ -23,7 +23,7 @@ public class InitializeGameplayReactions : MonoBehaviour
 	/// </summary>
 	private void InitializeGameplayReaction(InitializeGameplayGA action)
 	{
-		ActionSystem.Instance.AddReaction(new GenerateDecksGA());
+		ActionSystem.Shared?.AddReaction(new GenerateDecksGA());
 	}
 	#endregion
 }

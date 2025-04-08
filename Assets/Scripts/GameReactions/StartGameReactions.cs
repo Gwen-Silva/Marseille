@@ -49,8 +49,8 @@ public class StartGameReactions : MonoBehaviour
 			return;
 		}
 
-		ActionSystem.Instance.AddReaction(new DrawCardGA(cardSystem.PlayerCardHolder, cardsToDraw));
-		ActionSystem.Instance.AddReaction(new DrawCardGA(cardSystem.OpponentCardHolder, cardsToDraw));
+		ActionSystem.Shared?.AddReaction(new DrawCardGA(cardSystem.PlayerCardHolder, cardsToDraw));
+		ActionSystem.Shared?.AddReaction(new DrawCardGA(cardSystem.OpponentCardHolder, cardsToDraw));
 	}
 
 	#endregion

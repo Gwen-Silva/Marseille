@@ -5,7 +5,7 @@ using System.Collections;
 /// <summary>
 /// Controls the turn order, round progression and active slot during the game.
 /// </summary>
-public class TurnSystem : MonoBehaviour
+public class TurnSystem : MonoState<CardSystem>
 {
 	#region Constants
 
@@ -91,7 +91,7 @@ public class TurnSystem : MonoBehaviour
 
 		if (currentTurnIndex >= turnOrder.Count)
 		{
-			ActionSystem.Instance.AddReaction(new ResolveRoundGA());
+			ActionSystem.Shared.AddReaction(new ResolveRoundGA());
 		}
 		else
 		{
@@ -171,15 +171,15 @@ public class TurnSystem : MonoBehaviour
 
 	public static void Reset()
 	{
-		var instance = FindAnyObjectByType<TurnSystem>();
-		if (instance == null) return;
+		var Instance = FindAnyObjectByType<TurnSystem>();
+		if (Instance == null) return;
 
-		instance.StopAllCoroutines();
+		Instance.StopAllCoroutines();
 
-		instance.turnOrder.Clear();
-		instance.currentTurnIndex = 0;
-		instance.roundCount = 0;
-		instance.isPlayerStarting = true;
+		Instance.turnOrder.Clear();
+		Instance.currentTurnIndex = 0;
+		Instance.roundCount = 0;
+		Instance.isPlayerStarting = true;
 
 		Debug.Log("[TurnSystem] Sistema de turno resetado.");
 	}

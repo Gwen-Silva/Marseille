@@ -47,7 +47,7 @@ public class DoubtReactions : MonoBehaviour
 			Card cardToFlip = pool[index];
 			pool.RemoveAt(index);
 
-			ActionSystem.Instance.AddReaction(new FlipCardGA(cardToFlip, 0.2f));
+			ActionSystem.Shared?.AddReaction(new FlipCardGA(cardToFlip, 0.2f));
 			ga.cardsToSwap.Add(cardToFlip);
 		}
 	}
@@ -88,17 +88,17 @@ public class DoubtReactions : MonoBehaviour
 			seq.Append(card.transform.DOMove(targetPosition, 0.2f).SetEase(Ease.InOutQuad));
 			seq.OnComplete(() =>
 			{
-				ActionSystem.Instance.AddReaction(new DestroyCardGA(card));
+				ActionSystem.Shared?.AddReaction(new DestroyCardGA(card));
 			});
 		}
 
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Medium));
 
 		var drawAction = ga.IsUltimate
 			? new DrawCardGA(hand, ga.cardsToSwap.Count, 10)
 			: new DrawCardGA(hand, ga.cardsToSwap.Count);
 
-		ActionSystem.Instance.AddReaction(drawAction);
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+		ActionSystem.Shared?.AddReaction(drawAction);
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Medium));
 	}
 }

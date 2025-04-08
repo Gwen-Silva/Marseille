@@ -193,7 +193,7 @@ public class Card : MonoBehaviour,
 			return;
 
 		Vector3 worldAnchor = cardVisual.transform.position + Vector3.up * popupYOffset;
-		CardPopupManager.Instance?.ShowPopup(cardData, worldAnchor);
+		CardPopupManager.Instance.ShowPopup(cardData, worldAnchor);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
@@ -201,7 +201,7 @@ public class Card : MonoBehaviour,
 		PointerExitEvent.Invoke(this);
 		isHovering = false;
 
-		CardPopupManager.Instance?.HidePopup();
+		CardPopupManager.Instance.HidePopup();
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -218,14 +218,14 @@ public class Card : MonoBehaviour,
 		bool isHold = pointerUpTime - pointerDownTime > HoldThreshold;
 		PointerUpEvent.Invoke(this, isHold);
 		if (isHold || wasDragged) return;
-		ActionSystem.Instance.Perform(new SelectCardGA(this));
+		ActionSystem.Shared?.Perform(new SelectCardGA(this));
 	}
 	#endregion
 
 	#region Utility
 	public void Deselect()
 	{
-		ActionSystem.Instance.Perform(new DeselectCardGA(this));
+		ActionSystem.Shared?.Perform(new DeselectCardGA(this));
 	}
 
 	public int SiblingAmount() => transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount - 1 : 0;
@@ -238,9 +238,9 @@ public class Card : MonoBehaviour,
 	#region Lifecycle
 	private void OnDestroy()
 	{
-		if (ActionSystem.Instance != null)
+		if (ActionSystem.Shared != null)
 		{
-			ActionSystem.Instance.Perform(new DestroyCardGA(this));
+			ActionSystem.Shared?.Perform(new DestroyCardGA(this));
 		}
 	}
 	#endregion

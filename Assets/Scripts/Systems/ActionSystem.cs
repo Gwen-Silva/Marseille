@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ActionSystem : Singleton<ActionSystem>
+public class ActionSystem : MonoState<ActionSystem>
 {
 	#region Fields
 
@@ -18,11 +18,6 @@ public class ActionSystem : Singleton<ActionSystem>
 
 	#region Public Methods
 
-	/// <summary>
-	/// Performs the given GameAction immediately, executing all pre, performer, and post reactions.
-	/// </summary>
-	/// <param name="action">The GameAction to perform.</param>
-	/// <param name="OnPerformFinished">Optional callback after completion.</param>
 	public void Perform(GameAction action, Action OnPerformFinished = null)
 	{
 		if (IsPerforming) return;
@@ -35,18 +30,12 @@ public class ActionSystem : Singleton<ActionSystem>
 		}));
 	}
 
-	/// <summary>
-	/// Adds a GameAction to the reaction queue.
-	/// </summary>
 	public void AddReaction(GameAction action)
 	{
 		reactions ??= new List<GameAction>();
 		reactions.Add(action);
 	}
 
-	/// <summary>
-	/// Attaches a coroutine performer for a specific GameAction type.
-	/// </summary>
 	public static void AttachPerformer<T>(Func<T, IEnumerator> performer) where T : GameAction
 	{
 		Type type = typeof(T);
@@ -54,17 +43,11 @@ public class ActionSystem : Singleton<ActionSystem>
 		performers[type] = wrappedPerformer;
 	}
 
-	/// <summary>
-	/// Detaches the performer for the specified GameAction type.
-	/// </summary>
 	public static void DetachPerformer<T>() where T : GameAction
 	{
 		performers.Remove(typeof(T));
 	}
 
-	/// <summary>
-	/// Subscribes a reaction to be executed at the specified timing for a GameAction.
-	/// </summary>
 	public static void SubscribeReaction<T>(Action<T> reaction, ReactionTiming timing) where T : GameAction
 	{
 		var subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
@@ -80,9 +63,6 @@ public class ActionSystem : Singleton<ActionSystem>
 		list.Add(wrapped);
 	}
 
-	/// <summary>
-	/// Unsubscribes a previously registered reaction.
-	/// </summary>
 	public static void UnsubscribeReaction<T>(Action<T> reaction, ReactionTiming timing) where T : GameAction
 	{
 		var subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
@@ -90,7 +70,6 @@ public class ActionSystem : Singleton<ActionSystem>
 
 		list.RemoveAll(sub =>
 		{
-			// Create a wrapper and compare method info for precise match
 			var method1 = ((Action<GameAction>)((a) => reaction((T)a))).Method;
 			return sub.Method.Equals(method1);
 		});
@@ -142,15 +121,11 @@ public class ActionSystem : Singleton<ActionSystem>
 
 	#region Reset Methods
 
-	/// <summary>
-	/// Clears all queued reactions and registered performers and subscribers.
-	/// Use this when resetting the game to avoid residual logic from previous sessions.
-	/// </summary>
 	public static void Clear()
 	{
 		Debug.Log("[ActionSystem] Limpando reações, performers e inscrições...");
 
-		Instance.reactions.Clear();
+		Shared?.reactions?.Clear();
 		performers.Clear();
 		preSubs.Clear();
 		postSubs.Clear();

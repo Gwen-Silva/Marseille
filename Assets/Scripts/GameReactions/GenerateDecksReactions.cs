@@ -34,8 +34,8 @@ public class GenerateDecksReactions : MonoBehaviour
 		var shufflePlayerDeck = new ShuffleDeckGA(deckSystem.playerDeck);
 		var shuffleOpponentDeck = new ShuffleDeckGA(deckSystem.opponentDeck);
 
-		ActionSystem.Instance.AddReaction(shufflePlayerDeck);
-		ActionSystem.Instance.AddReaction(shuffleOpponentDeck);
+		ActionSystem.Shared?.AddReaction(shufflePlayerDeck);
+		ActionSystem.Shared?.AddReaction(shuffleOpponentDeck);
 	}
 
 	#endregion

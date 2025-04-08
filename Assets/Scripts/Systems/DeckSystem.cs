@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeckSystem : MonoBehaviour
+public class DeckSystem : MonoState<CardSystem>
 {
 	#region Fields
 
@@ -59,11 +59,11 @@ public class DeckSystem : MonoBehaviour
 
 	public static void Reset()
 	{
-		var instance = FindAnyObjectByType<DeckSystem>();
-		if (instance == null) return;
+		var Shared = FindAnyObjectByType<DeckSystem>();
+		if (Shared == null) return;
 
-		instance.playerDeck.Clear();
-		instance.opponentDeck.Clear();
+		Shared?.playerDeck.Clear();
+		Shared?.opponentDeck.Clear();
 
 		Debug.Log("[DeckSystem] Decks limpos com sucesso.");
 	}

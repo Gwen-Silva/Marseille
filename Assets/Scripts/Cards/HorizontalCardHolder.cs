@@ -86,12 +86,12 @@ public class HorizontalCardHolder : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Delete) && hoveredCard != null && cards.Contains(hoveredCard))
 		{
-			ActionSystem.Instance.Perform(new DestroyCardGA(hoveredCard));
+			ActionSystem.Shared?.Perform(new DestroyCardGA(hoveredCard));
 		}
 
 		if (Input.GetKeyDown(KeyCode.Space) && hoveredCard != null)
 		{
-			ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard, FlipDuration));
+			ActionSystem.Shared?.Perform(new FlipCardGA(hoveredCard, FlipDuration));
 		}
 	}
 
@@ -106,13 +106,13 @@ public class HorizontalCardHolder : MonoBehaviour
 
 			if (selectedLeftOfCard && selectedCard.ParentIndex() < cards[i].ParentIndex())
 			{
-				ActionSystem.Instance.Perform(new SwapCardGA(selectedCard, cards[i], transform));
+				ActionSystem.Shared?.Perform(new SwapCardGA(selectedCard, cards[i], transform));
 				break;
 			}
 
 			if (selectedRightOfCard && selectedCard.ParentIndex() > cards[i].ParentIndex())
 			{
-				ActionSystem.Instance.Perform(new SwapCardGA(selectedCard, cards[i], transform));
+				ActionSystem.Shared?.Perform(new SwapCardGA(selectedCard, cards[i], transform));
 				break;
 			}
 		}

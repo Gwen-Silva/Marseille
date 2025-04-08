@@ -62,15 +62,15 @@ public class ResolveRoundReactions : MonoBehaviour
 
 		PlayEffectsWithConditions(playerEffectCard, opponentEffectCard, isPlayerAttacking, bothAreGriefAndNullifiable);
 
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Medium));
 
 		CombatResult result = DetermineCombatResult(playerValue, opponentValue, isPlayerAttacking);
 
 		Card attacker = isPlayerAttacking ? playerCardComponent : opponentCardComponent;
 		Card defender = isPlayerAttacking ? opponentCardComponent : playerCardComponent;
 
-		ActionSystem.Instance.AddReaction(new CardCombatAnimationGA(attacker, defender, result));
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+		ActionSystem.Shared?.AddReaction(new CardCombatAnimationGA(attacker, defender, result));
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Medium));
 
 		int difference = isPlayerAttacking
 			? playerValue - opponentValue
@@ -79,15 +79,15 @@ public class ResolveRoundReactions : MonoBehaviour
 		if (result == CombatResult.AttackSuccess && difference > 0)
 		{
 			ApplyDamage(playerCard, opponentCard, difference, isPlayerAttacking);
-			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
+			ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Short));
 		}
 
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
-		ActionSystem.Instance.AddReaction(new ClearBoardGA());
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
-		ActionSystem.Instance.AddReaction(new ToggleTurnOwnerGA());
-		ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Short));
-		ActionSystem.Instance.AddReaction(new StartGameGA());
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Short));
+		ActionSystem.Shared?.AddReaction(new ClearBoardGA());
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Short));
+		ActionSystem.Shared?.AddReaction(new ToggleTurnOwnerGA());
+		ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Short));
+		ActionSystem.Shared?.AddReaction(new StartGameGA());
 	}
 
 	/// <summary>
@@ -134,7 +134,7 @@ public class ResolveRoundReactions : MonoBehaviour
 			if (!skipEffects || playerEffect?.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(playerEffect);
 
-			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+			ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Medium));
 
 			if (!skipEffects || opponentEffect?.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(opponentEffect);
@@ -144,7 +144,7 @@ public class ResolveRoundReactions : MonoBehaviour
 			if (!skipEffects || opponentEffect?.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(opponentEffect);
 
-			ActionSystem.Instance.AddReaction(new WaitGA(DelayType.Medium));
+			ActionSystem.Shared?.AddReaction(new WaitGA(DelayType.Medium));
 
 			if (!skipEffects || playerEffect?.cardData.cardEffect != CardEffect.Grief)
 				TriggerEffect(playerEffect);
@@ -164,11 +164,11 @@ public class ResolveRoundReactions : MonoBehaviour
 	{
 		if (playerIsAttacking)
 		{
-			ActionSystem.Instance.AddReaction(new DealDamageGA(playerCard, opponentCard, opponentHealth, dmg));
+			ActionSystem.Shared?.AddReaction(new DealDamageGA(playerCard, opponentCard, opponentHealth, dmg));
 		}
 		else
 		{
-			ActionSystem.Instance.AddReaction(new DealDamageGA(opponentCard, playerCard, playerHealth, dmg));
+			ActionSystem.Shared?.AddReaction(new DealDamageGA(opponentCard, playerCard, playerHealth, dmg));
 		}
 	}
 
@@ -178,7 +178,7 @@ public class ResolveRoundReactions : MonoBehaviour
 		{
 			int tier = CardEffectUtils.GetTier(card.cardData.cardValue);
 			if (tier >= 1 && tier <= MAX_NULLIFIABLE_TIER)
-				ActionSystem.Instance.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer));
+				ActionSystem.Shared?.AddReaction(new GriefNullifyEffectGA(tier, targetIsPlayer));
 		}
 	}
 
@@ -187,7 +187,7 @@ public class ResolveRoundReactions : MonoBehaviour
 		if (card != null && card.cardData.cardEffect == CardEffect.Guilt)
 		{
 			int tier = CardEffectUtils.GetTier(card.cardData.cardValue);
-			ActionSystem.Instance.AddReaction(new GuiltApplyDebuffGA(tier, targetIsPlayer));
+			ActionSystem.Shared?.AddReaction(new GuiltApplyDebuffGA(tier, targetIsPlayer));
 		}
 	}
 
@@ -199,16 +199,16 @@ public class ResolveRoundReactions : MonoBehaviour
 		switch (effectCard.cardData.cardEffect)
 		{
 			case CardEffect.Love:
-				ActionSystem.Instance.AddReaction(new LoveGA(effectCard));
+				ActionSystem.Shared?.AddReaction(new LoveGA(effectCard));
 				break;
 			case CardEffect.Grief:
-				ActionSystem.Instance.AddReaction(new GriefGA(effectCard));
+				ActionSystem.Shared?.AddReaction(new GriefGA(effectCard));
 				break;
 			case CardEffect.Guilt:
-				ActionSystem.Instance.AddReaction(new GuiltGA(effectCard));
+				ActionSystem.Shared?.AddReaction(new GuiltGA(effectCard));
 				break;
 			case CardEffect.Doubt:
-				ActionSystem.Instance.AddReaction(new DoubtGA(effectCard));
+				ActionSystem.Shared?.AddReaction(new DoubtGA(effectCard));
 				break;
 		}
 	}

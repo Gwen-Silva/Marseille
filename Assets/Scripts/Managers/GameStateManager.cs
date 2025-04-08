@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -49,7 +49,7 @@ public class GameStateManager : MonoBehaviour, IPersistentSystem
 	{
 		if (newState == CurrentState)
 		{
-			Debug.Log($"[GameStateManager] Estado já é {newState}, ignorando troca.");
+			Debug.Log($"[GameStateManager] Estado jï¿½ ï¿½ {newState}, ignorando troca.");
 			return;
 		}
 

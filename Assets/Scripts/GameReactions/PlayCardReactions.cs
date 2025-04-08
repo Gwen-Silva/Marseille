@@ -43,7 +43,7 @@ public class PlayCardReactions : MonoBehaviour
 			int value = int.Parse(cardDisplay.cardTopValue.text);
 		}
 
-		ActionSystem.Instance.AddReaction(new AdvanceTurnGA());
+		ActionSystem.Shared?.AddReaction(new AdvanceTurnGA());
 	}
 	#endregion
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Handles the visual and gameplay effects triggered by card actions such as healing or grief mechanics.
 /// </summary>
-public class EffectSystem : MonoBehaviour
+public class EffectSystem : MonoState<CardSystem>
 {
 	#region Serialized Fields
 
@@ -73,7 +73,7 @@ public class EffectSystem : MonoBehaviour
 				Color loveColor = CardEffectUtils.GetEffectColor(CardEffect.Love);
 				ga.Card.cardVisual.PulseEffect(loveColor);
 
-				ActionSystem.Instance.AddReaction(new HealHealthGA(target, healAmount));
+				ActionSystem.Shared?.AddReaction(new HealHealthGA(target, healAmount));
 			}
 		}
 
@@ -93,7 +93,7 @@ public class EffectSystem : MonoBehaviour
 
 		if (tier == 4)
 		{
-			ActionSystem.Instance.AddReaction(new GriefApplyShieldGA(ga.Card));
+			ActionSystem.Shared?.AddReaction(new GriefApplyShieldGA(ga.Card));
 		}
 
 		yield return null;
@@ -236,11 +236,11 @@ public class EffectSystem : MonoBehaviour
 
 		if (tier == 4)
 		{
-			ActionSystem.Instance.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
+			ActionSystem.Shared?.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
 		}
 		else
 		{
-			ActionSystem.Instance.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
+			ActionSystem.Shared?.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
 		}
 
 		yield return null;

@@ -48,7 +48,7 @@ public class ShuffleDeckReactions : MonoBehaviour
 		if (ga.deck == deckSystem.opponentDeck)
 		{
 			var drawInitial = new DrawInitialCardsGA(gameSystem.PlayerHand, gameSystem.OpponentHand, INITIAL_HAND_SIZE);
-			ActionSystem.Instance.AddReaction(drawInitial);
+			ActionSystem.Shared?.AddReaction(drawInitial);
 		}
 	}
 

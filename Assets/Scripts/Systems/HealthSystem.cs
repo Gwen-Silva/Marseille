@@ -5,7 +5,7 @@ using DG.Tweening;
 /// <summary>
 /// Handles damage, healing, and visual feedback for health-related interactions.
 /// </summary>
-public class HealthSystem : MonoBehaviour
+public class HealthSystem : MonoState<CardSystem>
 {
 	#region Constants
 
@@ -105,7 +105,7 @@ public class HealthSystem : MonoBehaviour
 		if (ga.Target.CurrentHealth <= 0)
 		{
 			bool playerWon = !ga.Target.isPlayerHealth;
-			ActionSystem.Instance.AddReaction(new EndGameGA(playerWon));
+			ActionSystem.Shared?.AddReaction(new EndGameGA(playerWon));
 		}
 	}
 
@@ -151,8 +151,8 @@ public class HealthSystem : MonoBehaviour
 
 	public static void Reset()
 	{
-		var instance = FindAnyObjectByType<HealthSystem>();
-		if (instance == null) return;
+		var Shared = FindAnyObjectByType<HealthSystem>();
+		if (Shared == null) return;
 
 		Debug.Log("[HealthSystem] Reset placeholder executado.");
 	}

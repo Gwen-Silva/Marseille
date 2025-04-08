@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSystem : MonoBehaviour
+public class GameSystem : MonoState<CardSystem>
 {
 	#region Constants
 
@@ -53,10 +53,7 @@ public class GameSystem : MonoBehaviour
 
 	private void Start()
 	{
-		if (ActionSystem.Instance != null)
-		{
-			ActionSystem.Instance.Perform(new InitializeGameplayGA());
-		}
+		ActionSystem.Shared?.Perform(new InitializeGameplayGA());
 	}
 
 	#endregion

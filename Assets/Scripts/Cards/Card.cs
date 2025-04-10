@@ -18,13 +18,13 @@ public class Card : MonoBehaviour,
 	private const float MoveSpeedLimit = 50f;
 	private const float DefaultSelectionOffset = 50f;
 	private const float HoldThreshold = 0.2f;
+	private const float popupYOffset = 2.5f;
 	#endregion
 
 	#region Serialized Fields
 	[SerializeField] private bool instantiateVisual = true;
 	[SerializeField] private GameObject cardVisualPrefab;
 	[SerializeField] private GameObject cardHoverPopupPrefab;
-	private const float popupYOffset = 2.5f;
 	#endregion
 
 	#region Public Fields
@@ -58,10 +58,11 @@ public class Card : MonoBehaviour,
 	private Canvas parentCanvas;
 	private Image imageComponent;
 	private VisualCardsHandler visualHandler;
+	private CardPopupManager cardPopupManager;
+	private ActionSystem actionSystem;
 	private Vector3 dragOffset;
 	private float pointerDownTime;
 	private float pointerUpTime;
-	private GameObject currentPopupInstance;
 	#endregion
 
 	#region Unity Methods
@@ -70,13 +71,18 @@ public class Card : MonoBehaviour,
 		parentCanvas = GetComponentInParent<Canvas>();
 		imageComponent = GetComponent<Image>();
 
+		actionSystem = Object.FindFirstObjectByType<ActionSystem>();
+		cardPopupManager = Object.FindFirstObjectByType<CardPopupManager>();
+
 		if (!instantiateVisual) return;
 
-		string handlerTag = isPlayerCard ? "PlayerVisualHandler" : "OpponentVisualHandler";
-		GameObject handlerGO = GameObject.FindGameObjectWithTag(handlerTag);
-		visualHandler = handlerGO ? handlerGO.GetComponent<VisualCardsHandler>() : null;
+		string tagToFind = isPlayerCard ? "PlayerVisualHandler" : "OpponentVisualHandler";
+		GameObject handlerGO = GameObject.FindGameObjectWithTag(tagToFind);
+		if (handlerGO != null)
+			visualHandler = handlerGO.GetComponent<VisualCardsHandler>();
 
-		Transform parentTransform = visualHandler ? visualHandler.transform : parentCanvas.transform;
+		Transform parentTransform = visualHandler != null ? visualHandler.transform : parentCanvas.transform;
+
 		cardVisual = Instantiate(cardVisualPrefab, parentTransform).GetComponent<CardVisual>();
 		cardVisual.Initialize(this);
 
@@ -173,7 +179,6 @@ public class Card : MonoBehaviour,
 		isHovering = true;
 
 		Transform slot = transform.parent;
-
 		isInHand = false;
 
 		if (slot != null && slot.name.Contains("CardSlot"))
@@ -189,19 +194,17 @@ public class Card : MonoBehaviour,
 			}
 		}
 
-		if (!isInHand || cardData == null || cardVisual == null)
-			return;
+		if (!isInHand || cardData == null || cardVisual == null) return;
 
 		Vector3 worldAnchor = cardVisual.transform.position + Vector3.up * popupYOffset;
-		CardPopupManager.Instance?.ShowPopup(cardData, worldAnchor);
+		cardPopupManager?.ShowPopup(cardData, worldAnchor);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		PointerExitEvent.Invoke(this);
 		isHovering = false;
-
-		CardPopupManager.Instance?.HidePopup();
+		cardPopupManager?.HidePopup();
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -218,14 +221,14 @@ public class Card : MonoBehaviour,
 		bool isHold = pointerUpTime - pointerDownTime > HoldThreshold;
 		PointerUpEvent.Invoke(this, isHold);
 		if (isHold || wasDragged) return;
-		ActionSystem.Instance.Perform(new SelectCardGA(this));
+		actionSystem.Perform(new SelectCardGA(this));
 	}
 	#endregion
 
 	#region Utility
 	public void Deselect()
 	{
-		ActionSystem.Instance.Perform(new DeselectCardGA(this));
+		actionSystem.Perform(new DeselectCardGA(this));
 	}
 
 	public int SiblingAmount() => transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount - 1 : 0;
@@ -238,10 +241,8 @@ public class Card : MonoBehaviour,
 	#region Lifecycle
 	private void OnDestroy()
 	{
-		if (ActionSystem.Instance != null)
-		{
-			ActionSystem.Instance.Perform(new DestroyCardGA(this));
-		}
+		if (actionSystem != null)
+			actionSystem.Perform(new DestroyCardGA(this));
 	}
 	#endregion
 

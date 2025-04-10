@@ -16,6 +16,10 @@ public class HorizontalCardHolder : MonoBehaviour
 	[SerializeField] private GameObject slotPrefab;
 	[SerializeField] private bool isPlayerCardHolder = true;
 	[SerializeField] private bool tweenCardReturn = true;
+
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
+
 	[Header("Spawn Settings")]
 	public List<Card> cards;
 	#endregion
@@ -86,12 +90,12 @@ public class HorizontalCardHolder : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Delete) && hoveredCard != null && cards.Contains(hoveredCard))
 		{
-			ActionSystem.Instance.Perform(new DestroyCardGA(hoveredCard));
+			actionSystem.Perform(new DestroyCardGA(hoveredCard));
 		}
 
 		if (Input.GetKeyDown(KeyCode.Space) && hoveredCard != null)
 		{
-			ActionSystem.Instance.Perform(new FlipCardGA(hoveredCard, FlipDuration));
+			actionSystem.Perform(new FlipCardGA(hoveredCard, FlipDuration));
 		}
 	}
 
@@ -106,13 +110,13 @@ public class HorizontalCardHolder : MonoBehaviour
 
 			if (selectedLeftOfCard && selectedCard.ParentIndex() < cards[i].ParentIndex())
 			{
-				ActionSystem.Instance.Perform(new SwapCardGA(selectedCard, cards[i], transform));
+				actionSystem.Perform(new SwapCardGA(selectedCard, cards[i], transform));
 				break;
 			}
 
 			if (selectedRightOfCard && selectedCard.ParentIndex() > cards[i].ParentIndex())
 			{
-				ActionSystem.Instance.Perform(new SwapCardGA(selectedCard, cards[i], transform));
+				actionSystem.Perform(new SwapCardGA(selectedCard, cards[i], transform));
 				break;
 			}
 		}

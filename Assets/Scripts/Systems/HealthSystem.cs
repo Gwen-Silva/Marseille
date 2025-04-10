@@ -27,6 +27,9 @@ public class HealthSystem : MonoBehaviour
 	[SerializeField] private Transform playerEffectPoint;
 	[SerializeField] private Transform opponentEffectPoint;
 
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
+
 	#endregion
 
 	#region Unity Events
@@ -105,7 +108,7 @@ public class HealthSystem : MonoBehaviour
 		if (ga.Target.CurrentHealth <= 0)
 		{
 			bool playerWon = !ga.Target.isPlayerHealth;
-			ActionSystem.Instance.AddReaction(new EndGameGA(playerWon));
+			actionSystem.AddReaction(new EndGameGA(playerWon));
 		}
 	}
 

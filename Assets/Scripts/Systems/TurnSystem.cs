@@ -20,6 +20,9 @@ public class TurnSystem : MonoBehaviour
 	[SerializeField] private List<CardDropZone> opponentValueSlots;
 	[SerializeField] private List<CardDropZone> opponentEffectSlots;
 
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
+
 	#endregion
 
 	#region Public Properties
@@ -91,7 +94,7 @@ public class TurnSystem : MonoBehaviour
 
 		if (currentTurnIndex >= turnOrder.Count)
 		{
-			ActionSystem.Instance.AddReaction(new ResolveRoundGA());
+			actionSystem.AddReaction(new ResolveRoundGA());
 		}
 		else
 		{

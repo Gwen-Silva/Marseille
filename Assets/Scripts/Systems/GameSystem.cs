@@ -21,6 +21,9 @@ public class GameSystem : MonoBehaviour
 	[SerializeField] private HorizontalCardHolder opponentHand;
 	[SerializeField] private GameObject cardSlotPrefab;
 
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
+
 	#endregion
 
 	#region Public Properties
@@ -42,37 +45,38 @@ public class GameSystem : MonoBehaviour
 	private void OnEnable()
 	{
 		ActionSystem.AttachPerformer<WaitGA>(WaitPerformer);
+		ActionSystem.AttachPerformer<InitializeGameplayGA>(InitializeGameplayPerformer);
 	}
 
 	private void OnDisable()
 	{
 		ActionSystem.DetachPerformer<WaitGA>();
+		ActionSystem.DetachPerformer<InitializeGameplayGA>();
 	}
 
 	private void Start()
 	{
-		ActionSystem.Instance.Perform(new GenerateDecksGA());
+		actionSystem.Perform(new InitializeGameplayGA());
 	}
 
 	#endregion
 
 	#region Performers
 
-	/// <summary>
-	/// Waits for a specified delay duration based on the DelayType provided.
-	/// </summary>
 	private IEnumerator WaitPerformer(WaitGA ga)
 	{
 		yield return new WaitForSeconds(GetDelayValue(ga.DelayLevel));
+	}
+
+	private IEnumerator InitializeGameplayPerformer(InitializeGameplayGA ga)
+	{
+		yield return null;
 	}
 
 	#endregion
 
 	#region Helpers
 
-	/// <summary>
-	/// Returns the corresponding float delay time for a given DelayType enum.
-	/// </summary>
 	private float GetDelayValue(DelayType delayType)
 	{
 		return delayType switch

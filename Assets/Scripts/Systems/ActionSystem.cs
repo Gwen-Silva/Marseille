@@ -3,8 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ActionSystem : Singleton<ActionSystem>
+public class ActionSystem : MonoBehaviour
 {
+	#region Serialized Fields
+
+	[SerializeField] private GameSystem gameSystem;
+
+	#endregion
+
 	#region Fields
 
 	private List<GameAction> reactions = new();
@@ -18,13 +24,10 @@ public class ActionSystem : Singleton<ActionSystem>
 
 	#region Public Methods
 
-	/// <summary>
-	/// Performs the given GameAction immediately, executing all pre, performer, and post reactions.
-	/// </summary>
-	/// <param name="action">The GameAction to perform.</param>
-	/// <param name="OnPerformFinished">Optional callback after completion.</param>
 	public void Perform(GameAction action, Action OnPerformFinished = null)
 	{
+		Debug.Log($"[ActionSystem] Perform chamado com GA: {action.GetType().Name}\nStackTrace:\n" + new System.Diagnostics.StackTrace());
+
 		if (IsPerforming) return;
 
 		IsPerforming = true;
@@ -35,18 +38,12 @@ public class ActionSystem : Singleton<ActionSystem>
 		}));
 	}
 
-	/// <summary>
-	/// Adds a GameAction to the reaction queue.
-	/// </summary>
 	public void AddReaction(GameAction action)
 	{
 		reactions ??= new List<GameAction>();
 		reactions.Add(action);
 	}
 
-	/// <summary>
-	/// Attaches a coroutine performer for a specific GameAction type.
-	/// </summary>
 	public static void AttachPerformer<T>(Func<T, IEnumerator> performer) where T : GameAction
 	{
 		Type type = typeof(T);
@@ -54,17 +51,11 @@ public class ActionSystem : Singleton<ActionSystem>
 		performers[type] = wrappedPerformer;
 	}
 
-	/// <summary>
-	/// Detaches the performer for the specified GameAction type.
-	/// </summary>
 	public static void DetachPerformer<T>() where T : GameAction
 	{
 		performers.Remove(typeof(T));
 	}
 
-	/// <summary>
-	/// Subscribes a reaction to be executed at the specified timing for a GameAction.
-	/// </summary>
 	public static void SubscribeReaction<T>(Action<T> reaction, ReactionTiming timing) where T : GameAction
 	{
 		var subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
@@ -77,23 +68,33 @@ public class ActionSystem : Singleton<ActionSystem>
 			subs[typeof(T)] = list;
 		}
 
-		list.Add(wrapped);
+		bool alreadyExists = list.Exists(existing =>
+			existing.Method == reaction.Method &&
+			existing.Target == reaction.Target);
+
+		if (!alreadyExists)
+		{
+			list.Add(wrapped);
+			Debug.Log($"[ActionSystem] SubscribeReaction: {reaction.Method.DeclaringType.Name}.{reaction.Method.Name} para {typeof(T).Name} ({timing})");
+		}
+		else
+		{
+			Debug.LogWarning($"[ActionSystem] Reação já estava registrada para {typeof(T).Name} ({timing}): {reaction.Method.DeclaringType.Name}.{reaction.Method.Name}");
+		}
 	}
 
-	/// <summary>
-	/// Unsubscribes a previously registered reaction.
-	/// </summary>
 	public static void UnsubscribeReaction<T>(Action<T> reaction, ReactionTiming timing) where T : GameAction
 	{
 		var subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
-		if (!subs.TryGetValue(typeof(T), out var list)) return;
+		if (!subs.TryGetValue(typeof(T), out var list) || list.Count == 0)
+			return;
 
-		list.RemoveAll(sub =>
-		{
-			// Create a wrapper and compare method info for precise match
-			var method1 = ((Action<GameAction>)((a) => reaction((T)a))).Method;
-			return sub.Method.Equals(method1);
-		});
+		int removed = list.RemoveAll(sub =>
+			sub.Method == reaction.Method &&
+			sub.Target == reaction.Target);
+
+		if (removed > 0)
+			Debug.Log($"[ActionSystem] UnsubscribeReaction: {reaction.Method.DeclaringType.Name}.{reaction.Method.Name} removido de {typeof(T).Name} ({timing})");
 	}
 
 	#endregion
@@ -102,14 +103,17 @@ public class ActionSystem : Singleton<ActionSystem>
 
 	private IEnumerator Flow(GameAction action, Action OnFlowFinished = null)
 	{
+		// Pre
 		reactions = action.PreReactions ?? new List<GameAction>();
 		PerformSubscribers(action, preSubs);
 		yield return PerformReactions();
 
+		// Perform
 		reactions = action.PerformReactions ?? new List<GameAction>();
 		yield return PerformPerformer(action);
 		yield return PerformReactions();
 
+		// Post
 		reactions = action.PostReactions ?? new List<GameAction>();
 		PerformSubscribers(action, postSubs);
 		yield return PerformReactions();
@@ -127,6 +131,8 @@ public class ActionSystem : Singleton<ActionSystem>
 	{
 		if (performers.TryGetValue(action.GetType(), out var performer))
 			yield return performer(action);
+		else
+			Debug.LogWarning($"[ActionSystem] Nenhum performer registrado para: {action.GetType().Name}");
 	}
 
 	private void PerformSubscribers(GameAction action, Dictionary<Type, List<Action<GameAction>>> subs)

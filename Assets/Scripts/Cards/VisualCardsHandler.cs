@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class VisualCardsHandler : MonoBehaviour
 {
-	public static VisualCardsHandler instance;
+	public static VisualCardsHandler Instance;
 
 	private void Awake()
 	{
-		instance = this;
+		Instance = this;
 	}
 
 	void Start() { }

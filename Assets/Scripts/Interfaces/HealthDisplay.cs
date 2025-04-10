@@ -14,8 +14,8 @@ public class HealthDisplay : MonoBehaviour
 
 	#region Public Fields
 
-	public int maxHealth = 20;
-	public int currentHealth = 20;
+	public int maxHealth = 15;
+	public int currentHealth = 15;
 	public bool isPlayerHealth = true;
 
 	public bool HasGriefShield { get; set; } = false;

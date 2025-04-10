@@ -12,7 +12,10 @@ public class EffectSystem : MonoBehaviour
 
 	[SerializeField] private HealthDisplay playerHealth;
 	[SerializeField] private HealthDisplay opponentHealth;
+
+	[Header("Dependencies")]
 	[SerializeField] private TurnSystem turnSystem;
+	[SerializeField] private ActionSystem actionSystem;
 
 	#endregion
 
@@ -73,7 +76,7 @@ public class EffectSystem : MonoBehaviour
 				Color loveColor = CardEffectUtils.GetEffectColor(CardEffect.Love);
 				ga.Card.cardVisual.PulseEffect(loveColor);
 
-				ActionSystem.Instance.AddReaction(new HealHealthGA(target, healAmount));
+				actionSystem.AddReaction(new HealHealthGA(target, healAmount));
 			}
 		}
 
@@ -93,7 +96,7 @@ public class EffectSystem : MonoBehaviour
 
 		if (tier == 4)
 		{
-			ActionSystem.Instance.AddReaction(new GriefApplyShieldGA(ga.Card));
+			actionSystem.AddReaction(new GriefApplyShieldGA(ga.Card));
 		}
 
 		yield return null;
@@ -236,11 +239,11 @@ public class EffectSystem : MonoBehaviour
 
 		if (tier == 4)
 		{
-			ActionSystem.Instance.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
+			actionSystem.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
 		}
 		else
 		{
-			ActionSystem.Instance.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
+			actionSystem.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
 		}
 
 		yield return null;

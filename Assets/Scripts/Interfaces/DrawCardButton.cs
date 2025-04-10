@@ -11,6 +11,7 @@ public class DrawCardButton : MonoBehaviour
 	#region Serialized Fields
 
 	public HorizontalCardHolder targetHolder;
+	[SerializeField] private ActionSystem actionSystem;
 
 	#endregion
 
@@ -27,10 +28,10 @@ public class DrawCardButton : MonoBehaviour
 	/// </summary>
 	public void Draw()
 	{
-		if (ActionSystem.Instance.IsPerforming) return;
+		if (actionSystem.IsPerforming) return;
 
 		DrawCardGA drawCardGA = new(targetHolder, cardsToSpawn);
-		ActionSystem.Instance.Perform(drawCardGA);
+		actionSystem.Perform(drawCardGA);
 	}
 
 	#endregion

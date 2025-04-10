@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class CardSystem : MonoState<CardSystem>
+public class CardSystem : MonoBehaviour
 {
 	#region Constants
 
@@ -38,6 +38,10 @@ public class CardSystem : MonoState<CardSystem>
 	[SerializeField] private Transform discardPoint;
 	[SerializeField] private HorizontalCardHolder playerHand;
 	[SerializeField] private HorizontalCardHolder opponentHand;
+
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
+	[SerializeField] private DeckSystem deckSystem;
 
 	#endregion
 
@@ -85,7 +89,6 @@ public class CardSystem : MonoState<CardSystem>
 	/// <summary>Draws cards from the deck into the given card holder.</summary>
 	private IEnumerator DrawCardPerformer(DrawCardGA ga)
 	{
-		DeckSystem deckSystem = FindFirstObjectByType<DeckSystem>();
 		List<Card> spawnedCards = new();
 
 		for (int i = 0; i < ga.amount; i++)
@@ -120,7 +123,7 @@ public class CardSystem : MonoState<CardSystem>
 				{
 					Debug.Log("Deck vazio! Fim de jogo.");
 					bool playerWon = !ga.targetHolder.IsPlayerCardHolder;
-					ActionSystem.Shared?.AddReaction(new EndGameGA(playerWon));
+					actionSystem.AddReaction(new EndGameGA(playerWon));
 					yield break;
 				}
 			}
@@ -160,9 +163,9 @@ public class CardSystem : MonoState<CardSystem>
 	/// <summary>Triggers the drawing of both players' initial cards and starts the game.</summary>
 	private IEnumerator DrawInitialCardsPerformer(DrawInitialCardsGA ga)
 	{
-		ActionSystem.Shared?.AddReaction(new DrawCardGA(ga.playerHand, ga.amount));
-		ActionSystem.Shared?.AddReaction(new DrawCardGA(ga.opponentHand, ga.amount));
-		ActionSystem.Shared?.AddReaction(new StartGameGA());
+		actionSystem.AddReaction(new DrawCardGA(ga.playerHand, ga.amount));
+		actionSystem.AddReaction(new DrawCardGA(ga.opponentHand, ga.amount));
+		actionSystem.AddReaction(new StartGameGA());
 		yield return null;
 	}
 

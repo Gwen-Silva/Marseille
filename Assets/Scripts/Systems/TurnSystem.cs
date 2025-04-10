@@ -5,7 +5,7 @@ using System.Collections;
 /// <summary>
 /// Controls the turn order, round progression and active slot during the game.
 /// </summary>
-public class TurnSystem : MonoState<CardSystem>
+public class TurnSystem : MonoBehaviour
 {
 	#region Constants
 
@@ -19,6 +19,9 @@ public class TurnSystem : MonoState<CardSystem>
 	[SerializeField] private List<CardDropZone> playerEffectSlots;
 	[SerializeField] private List<CardDropZone> opponentValueSlots;
 	[SerializeField] private List<CardDropZone> opponentEffectSlots;
+
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
 
 	#endregion
 
@@ -91,7 +94,7 @@ public class TurnSystem : MonoState<CardSystem>
 
 		if (currentTurnIndex >= turnOrder.Count)
 		{
-			ActionSystem.Shared.AddReaction(new ResolveRoundGA());
+			actionSystem.AddReaction(new ResolveRoundGA());
 		}
 		else
 		{
@@ -167,21 +170,6 @@ public class TurnSystem : MonoState<CardSystem>
 			slot.ToggleHighlight(false);
 			slot.enabled = false;
 		}
-	}
-
-	public static void Reset()
-	{
-		var Instance = FindAnyObjectByType<TurnSystem>();
-		if (Instance == null) return;
-
-		Instance.StopAllCoroutines();
-
-		Instance.turnOrder.Clear();
-		Instance.currentTurnIndex = 0;
-		Instance.roundCount = 0;
-		Instance.isPlayerStarting = true;
-
-		Debug.Log("[TurnSystem] Sistema de turno resetado.");
 	}
 
 	#endregion

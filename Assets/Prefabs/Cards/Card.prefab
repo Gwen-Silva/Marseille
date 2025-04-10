@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2019694331062171174}
   - component: {fileID: 5876692120630651882}
-  - component: {fileID: 2745263926937095226}
+  - component: {fileID: 8160682617917604730}
   - component: {fileID: 2813900446313811149}
   - component: {fileID: 3302717078008830122}
   - component: {fileID: 2691321764415091305}
@@ -49,7 +49,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2750650831735487502}
   m_CullTransparentMesh: 1
---- !u!114 &2745263926937095226
+--- !u!114 &8160682617917604730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,7 +64,10 @@ MonoBehaviour:
   instantiateVisual: 1
   cardVisualPrefab: {fileID: 7310339964073049012, guid: 432b6f487de8fea42a7b33fb7e8cf183, type: 3}
   cardHoverPopupPrefab: {fileID: 3335231113377531765, guid: 39c14b3fdadc18a4fa311551b0916bf6, type: 3}
-  popupYOffset: 0.005
+  actionSystem: {fileID: 0}
+  playerVisualHandlerObject: {fileID: 0}
+  opponentVisualHandlerObject: {fileID: 0}
+  cardPopupManager: {fileID: 0}
   cardData: {fileID: 0}
   cardVisual: {fileID: 0}
   isPlayerCard: 1
@@ -72,6 +75,7 @@ MonoBehaviour:
   isHovering: 0
   isDragging: 0
   selected: 0
+  isInHand: 0
   PointerEnterEvent:
     m_PersistentCalls:
       m_Calls: []

@@ -3,8 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ActionSystem : MonoState<ActionSystem>
+public class ActionSystem : MonoBehaviour
 {
+	#region Serialized Fields
+
+	[SerializeField] private GameSystem gameSystem;
+
+	#endregion
+
 	#region Fields
 
 	private List<GameAction> reactions = new();
@@ -20,6 +26,8 @@ public class ActionSystem : MonoState<ActionSystem>
 
 	public void Perform(GameAction action, Action OnPerformFinished = null)
 	{
+		Debug.Log($"[ActionSystem] Perform chamado com GA: {action.GetType().Name}\nStackTrace:\n" + new System.Diagnostics.StackTrace());
+
 		if (IsPerforming) return;
 
 		IsPerforming = true;
@@ -60,19 +68,33 @@ public class ActionSystem : MonoState<ActionSystem>
 			subs[typeof(T)] = list;
 		}
 
-		list.Add(wrapped);
+		bool alreadyExists = list.Exists(existing =>
+			existing.Method == reaction.Method &&
+			existing.Target == reaction.Target);
+
+		if (!alreadyExists)
+		{
+			list.Add(wrapped);
+			Debug.Log($"[ActionSystem] SubscribeReaction: {reaction.Method.DeclaringType.Name}.{reaction.Method.Name} para {typeof(T).Name} ({timing})");
+		}
+		else
+		{
+			Debug.LogWarning($"[ActionSystem] Reação já estava registrada para {typeof(T).Name} ({timing}): {reaction.Method.DeclaringType.Name}.{reaction.Method.Name}");
+		}
 	}
 
 	public static void UnsubscribeReaction<T>(Action<T> reaction, ReactionTiming timing) where T : GameAction
 	{
 		var subs = timing == ReactionTiming.PRE ? preSubs : postSubs;
-		if (!subs.TryGetValue(typeof(T), out var list)) return;
+		if (!subs.TryGetValue(typeof(T), out var list) || list.Count == 0)
+			return;
 
-		list.RemoveAll(sub =>
-		{
-			var method1 = ((Action<GameAction>)((a) => reaction((T)a))).Method;
-			return sub.Method.Equals(method1);
-		});
+		int removed = list.RemoveAll(sub =>
+			sub.Method == reaction.Method &&
+			sub.Target == reaction.Target);
+
+		if (removed > 0)
+			Debug.Log($"[ActionSystem] UnsubscribeReaction: {reaction.Method.DeclaringType.Name}.{reaction.Method.Name} removido de {typeof(T).Name} ({timing})");
 	}
 
 	#endregion
@@ -81,14 +103,17 @@ public class ActionSystem : MonoState<ActionSystem>
 
 	private IEnumerator Flow(GameAction action, Action OnFlowFinished = null)
 	{
+		// Pre
 		reactions = action.PreReactions ?? new List<GameAction>();
 		PerformSubscribers(action, preSubs);
 		yield return PerformReactions();
 
+		// Perform
 		reactions = action.PerformReactions ?? new List<GameAction>();
 		yield return PerformPerformer(action);
 		yield return PerformReactions();
 
+		// Post
 		reactions = action.PostReactions ?? new List<GameAction>();
 		PerformSubscribers(action, postSubs);
 		yield return PerformReactions();
@@ -106,6 +131,8 @@ public class ActionSystem : MonoState<ActionSystem>
 	{
 		if (performers.TryGetValue(action.GetType(), out var performer))
 			yield return performer(action);
+		else
+			Debug.LogWarning($"[ActionSystem] Nenhum performer registrado para: {action.GetType().Name}");
 	}
 
 	private void PerformSubscribers(GameAction action, Dictionary<Type, List<Action<GameAction>>> subs)
@@ -115,22 +142,6 @@ public class ActionSystem : MonoState<ActionSystem>
 			foreach (var sub in list)
 				sub(action);
 		}
-	}
-
-	#endregion
-
-	#region Reset Methods
-
-	public static void Clear()
-	{
-		Debug.Log("[ActionSystem] Limpando reações, performers e inscrições...");
-
-		Shared?.reactions?.Clear();
-		performers.Clear();
-		preSubs.Clear();
-		postSubs.Clear();
-
-		Debug.Log("[ActionSystem] Limpeza concluída.");
 	}
 
 	#endregion

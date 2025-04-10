@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeckSystem : MonoState<CardSystem>
+public class DeckSystem : MonoBehaviour
 {
 	#region Fields
 
@@ -38,6 +38,7 @@ public class DeckSystem : MonoState<CardSystem>
 	/// </summary>
 	public CardData DrawFromPlayerDeck()
 	{
+		Debug.Log("[DeckSystem] Comprando do Deck do Player");
 		if (playerDeck.Count == 0) return null;
 
 		CardData card = playerDeck[0];
@@ -50,22 +51,12 @@ public class DeckSystem : MonoState<CardSystem>
 	/// </summary>
 	public CardData DrawFromOpponentDeck()
 	{
+		Debug.Log("[DeckSystem] Comprando do Deck do Oponente");
 		if (opponentDeck.Count == 0) return null;
 
 		CardData card = opponentDeck[0];
 		opponentDeck.RemoveAt(0);
 		return card;
-	}
-
-	public static void Reset()
-	{
-		var Shared = FindAnyObjectByType<DeckSystem>();
-		if (Shared == null) return;
-
-		Shared?.playerDeck.Clear();
-		Shared?.opponentDeck.Clear();
-
-		Debug.Log("[DeckSystem] Decks limpos com sucesso.");
 	}
 
 	#endregion
@@ -77,6 +68,7 @@ public class DeckSystem : MonoState<CardSystem>
 	/// </summary>
 	private IEnumerator GenerateDecksPerformer(GenerateDecksGA ga)
 	{
+		Debug.Log("[DeckSystem] GenerateDecksPerformer chamado.");
 		playerDeck.Clear();
 		opponentDeck.Clear();
 

@@ -6,13 +6,16 @@ using UnityEngine;
 /// <summary>
 /// Handles the visual and gameplay effects triggered by card actions such as healing or grief mechanics.
 /// </summary>
-public class EffectSystem : MonoState<CardSystem>
+public class EffectSystem : MonoBehaviour
 {
 	#region Serialized Fields
 
 	[SerializeField] private HealthDisplay playerHealth;
 	[SerializeField] private HealthDisplay opponentHealth;
+
+	[Header("Dependencies")]
 	[SerializeField] private TurnSystem turnSystem;
+	[SerializeField] private ActionSystem actionSystem;
 
 	#endregion
 
@@ -73,7 +76,7 @@ public class EffectSystem : MonoState<CardSystem>
 				Color loveColor = CardEffectUtils.GetEffectColor(CardEffect.Love);
 				ga.Card.cardVisual.PulseEffect(loveColor);
 
-				ActionSystem.Shared?.AddReaction(new HealHealthGA(target, healAmount));
+				actionSystem.AddReaction(new HealHealthGA(target, healAmount));
 			}
 		}
 
@@ -93,7 +96,7 @@ public class EffectSystem : MonoState<CardSystem>
 
 		if (tier == 4)
 		{
-			ActionSystem.Shared?.AddReaction(new GriefApplyShieldGA(ga.Card));
+			actionSystem.AddReaction(new GriefApplyShieldGA(ga.Card));
 		}
 
 		yield return null;
@@ -236,37 +239,15 @@ public class EffectSystem : MonoState<CardSystem>
 
 		if (tier == 4)
 		{
-			ActionSystem.Shared?.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
+			actionSystem.AddReaction(new DoubtSwapCardsGA(1, isPlayer, true));
 		}
 		else
 		{
-			ActionSystem.Shared?.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
+			actionSystem.AddReaction(new DoubtSwapCardsGA(tier, isPlayer));
 		}
 
 		yield return null;
 	}
 
 	#endregion
-
-	public static void Reset()
-	{
-		var instance = FindAnyObjectByType<EffectSystem>();
-		if (instance == null) return;
-
-		if (instance.playerHealth != null)
-		{
-			instance.playerHealth.HasGriefShield = false;
-			if (instance.playerHealth.ActiveShieldIcon != null)
-				Destroy(instance.playerHealth.ActiveShieldIcon);
-		}
-
-		if (instance.opponentHealth != null)
-		{
-			instance.opponentHealth.HasGriefShield = false;
-			if (instance.opponentHealth.ActiveShieldIcon != null)
-				Destroy(instance.opponentHealth.ActiveShieldIcon);
-		}
-
-		Debug.Log("[EffectSystem] Estado visual e escudos limpos.");
-	}
 }

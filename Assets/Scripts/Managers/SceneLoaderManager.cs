@@ -31,6 +31,10 @@ public class SceneLoaderManager : MonoBehaviour
 	{
 		yield return FadeOut();
 
+		// REMOVIDO: MonoStateUtility.ResetAllMonoStates();
+
+		yield return null;
+
 		SceneManager.LoadScene(sceneName);
 		yield return null;
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSystem : MonoState<CardSystem>
+public class GameSystem : MonoBehaviour
 {
 	#region Constants
 
@@ -20,6 +20,9 @@ public class GameSystem : MonoState<CardSystem>
 	[SerializeField] private HorizontalCardHolder playerHand;
 	[SerializeField] private HorizontalCardHolder opponentHand;
 	[SerializeField] private GameObject cardSlotPrefab;
+
+	[Header("Dependencies")]
+	[SerializeField] private ActionSystem actionSystem;
 
 	#endregion
 
@@ -53,7 +56,7 @@ public class GameSystem : MonoState<CardSystem>
 
 	private void Start()
 	{
-		ActionSystem.Shared?.Perform(new InitializeGameplayGA());
+		actionSystem.Perform(new InitializeGameplayGA());
 	}
 
 	#endregion
@@ -85,29 +88,6 @@ public class GameSystem : MonoState<CardSystem>
 			DelayType.VeryLong => DELAY_VERY_LONG,
 			_ => DEFAULT_DELAY
 		};
-	}
-
-	#endregion
-
-	#region Reset System
-
-	public static void ResetGame()
-	{
-		Debug.Log("[GameSystem] Resetando o jogo...");
-
-		ActionSystem.Clear();
-
-		TurnSystem.Reset();
-		DeckSystem.Reset();
-		HealthSystem.Reset();
-		EffectSystem.Reset();
-
-		foreach (var card in GameObject.FindObjectsByType<Card>(FindObjectsSortMode.None))
-		{
-			Destroy(card.gameObject);
-		}
-
-		Debug.Log("[GameSystem] Jogo resetado com sucesso.");
 	}
 
 	#endregion

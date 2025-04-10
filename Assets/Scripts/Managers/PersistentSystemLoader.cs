@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class PersistentSystemLoader : MonoBehaviour
 {
-	[Header("Prefabs de sistemas persistentes")]
-	[Tooltip("Arraste aqui os prefabs como GameStateManager, AudioManager, etc.")]
+	[Header("Managers Prefabs")]
 	[SerializeField] private GameObject[] persistentPrefabs;
 
 	private void Awake()
@@ -13,7 +12,7 @@ public class PersistentSystemLoader : MonoBehaviour
 			TryLoadPersistentSystem(prefab);
 		}
 
-		DontDestroyOnLoad(gameObject); // Opcional: persistir o loader entre cenas
+		DontDestroyOnLoad(gameObject);
 	}
 
 	private void TryLoadPersistentSystem(GameObject prefab)
@@ -54,8 +53,6 @@ public class PersistentSystemLoader : MonoBehaviour
 				return result as Object;
 			}
 		}
-
-		Debug.LogError($"[PersistentSystemLoader] Método FindFirstObjectByType<T>() não encontrado.");
 		return null;
 	}
 
@@ -69,7 +66,6 @@ public class PersistentSystemLoader : MonoBehaviour
 		if (prefab != null)
 		{
 			GameObject.Instantiate(prefab);
-			Debug.Log("[PersistentSystemLoader] Instanciado automaticamente via Resources.");
 		}
 		else
 		{

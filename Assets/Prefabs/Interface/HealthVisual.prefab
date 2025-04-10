@@ -300,4 +300,8 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 20
   isPlayerHealth: 1
+  griefShieldOnEffect: {fileID: 1633385134506183751, guid: a0be464261358c04099ce1a761ee4f0f, type: 3}
+  griefShieldBreakEffect: {fileID: 0}
+  griefShieldUIIconPrefab: {fileID: 0}
+  effectSpawnPoint: {fileID: 0}
   healthText: {fileID: 1355159104610074663}

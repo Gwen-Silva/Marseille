@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameStateManager : MonoBehaviour, IPersistentSystem
+public class GameStateManager : MonoBehaviour
 {
 	public static GameStateManager Instance { get; private set; }
 
@@ -10,9 +10,7 @@ public class GameStateManager : MonoBehaviour, IPersistentSystem
 
 	public static event Action<GameState> OnGameStateChanged;
 
-	public bool IsInitialized => Instance != null;
-
-	public void Initialize()
+	private void Awake()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -23,33 +21,33 @@ public class GameStateManager : MonoBehaviour, IPersistentSystem
 		Instance = this;
 		DontDestroyOnLoad(gameObject);
 
-		if (CurrentState == default)
-		{
-			string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-
-			if (sceneName == "Gameplay")
-			{
-				CurrentState = GameState.Playing;
-				Debug.Log("[GameStateManager] Cena Gameplay detectada. Estado inicial definido como Playing.");
-			}
-			else if (sceneName == "Main Menu")
-			{
-				CurrentState = GameState.MainMenu;
-				Debug.Log("[GameStateManager] Cena Main Menu detectada. Estado inicial definido como MainMenu.");
-			}
-		}
+		InitializeState();
 	}
 
-	private void Awake()
+	private void InitializeState()
 	{
-		Initialize();
+		if (CurrentState != default)
+			return;
+
+		string sceneName = SceneManager.GetActiveScene().name;
+
+		if (sceneName == "Gameplay")
+		{
+			CurrentState = GameState.Playing;
+			Debug.Log("[GameStateManager] Cena Gameplay detectada. Estado inicial definido como Playing.");
+		}
+		else if (sceneName == "Main Menu")
+		{
+			CurrentState = GameState.MainMenu;
+			Debug.Log("[GameStateManager] Cena Main Menu detectada. Estado inicial definido como MainMenu.");
+		}
 	}
 
 	public void ChangeState(GameState newState)
 	{
 		if (newState == CurrentState)
 		{
-			Debug.Log($"[GameStateManager] Estado j� � {newState}, ignorando troca.");
+			Debug.Log($"[GameStateManager] Estado já é {newState}, ignorando troca.");
 			return;
 		}
 
@@ -63,6 +61,7 @@ public class GameStateManager : MonoBehaviour, IPersistentSystem
 				Debug.Log("[GameStateManager] Carregando cena MainMenu...");
 				SceneLoaderManager.Instance?.LoadScene("Main Menu");
 				break;
+
 			case GameState.Playing:
 				if (SceneManager.GetActiveScene().name != "Gameplay")
 				{
@@ -70,9 +69,11 @@ public class GameStateManager : MonoBehaviour, IPersistentSystem
 					SceneLoaderManager.Instance?.LoadScene("Gameplay");
 				}
 				break;
+
 			case GameState.Paused:
 				Debug.Log("[GameStateManager] Estado pausado");
 				break;
+
 			case GameState.GameOver:
 				Debug.Log("[GameStateManager] Game Over.");
 				break;

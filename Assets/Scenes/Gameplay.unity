@@ -1488,7 +1488,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
   isPlayerCardHolder: 0
   tweenCardReturn: 1
-  actionSystem: {fileID: 0}
+  actionSystem: {fileID: 1375085493}
   cards: []
   targetHolder: {fileID: 911302868}
 --- !u!1 &913965588
@@ -8068,7 +8068,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 8064341329699037201, guid: 77a47e7ba257a364bbaa6bcf0b6f9f14, type: 3}
   isPlayerCardHolder: 1
   tweenCardReturn: 1
-  actionSystem: {fileID: 0}
+  actionSystem: {fileID: 1375085493}
   cards: []
   targetHolder: {fileID: 1673909257}
 --- !u!114 &1673909258

@@ -38,7 +38,6 @@ public class DeckSystem : MonoBehaviour
 	/// </summary>
 	public CardData DrawFromPlayerDeck()
 	{
-		Debug.Log("[DeckSystem] Comprando do Deck do Player");
 		if (playerDeck.Count == 0) return null;
 
 		CardData card = playerDeck[0];
@@ -51,7 +50,6 @@ public class DeckSystem : MonoBehaviour
 	/// </summary>
 	public CardData DrawFromOpponentDeck()
 	{
-		Debug.Log("[DeckSystem] Comprando do Deck do Oponente");
 		if (opponentDeck.Count == 0) return null;
 
 		CardData card = opponentDeck[0];
@@ -68,7 +66,6 @@ public class DeckSystem : MonoBehaviour
 	/// </summary>
 	private IEnumerator GenerateDecksPerformer(GenerateDecksGA ga)
 	{
-		Debug.Log("[DeckSystem] GenerateDecksPerformer chamado.");
 		playerDeck.Clear();
 		opponentDeck.Clear();
 

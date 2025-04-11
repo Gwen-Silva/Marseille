@@ -2123,10 +2123,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allCardTemplates:
-  - {fileID: 11400000, guid: d3351f25946364b468950decd7752d1a, type: 2}
+  - {fileID: 11400000, guid: 489e8cdc662a7e845a8893d8d33859a7, type: 2}
   - {fileID: 11400000, guid: be629c2e4a471874897c55f72ae4205f, type: 2}
   - {fileID: 11400000, guid: 5c2466c6959d4cd41bcd485fdd49a643, type: 2}
-  - {fileID: 11400000, guid: 489e8cdc662a7e845a8893d8d33859a7, type: 2}
+  - {fileID: 11400000, guid: d3351f25946364b468950decd7752d1a, type: 2}
   playerDeck: []
   opponentDeck: []
   cardsPerSuit: 10

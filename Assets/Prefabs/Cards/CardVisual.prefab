@@ -742,6 +742,9 @@ MonoBehaviour:
   doubtSprite: {fileID: -2805723754308519534, guid: bc331ee2f1b41ac4897c49ac40bf7018, type: 3}
   griefSprite: {fileID: 3157145390269506736, guid: 9e415de31ef23024d8ec17443beb0e41, type: 3}
   guiltySprite: {fileID: -4622842356103122130, guid: 86ae2e6bfd40ac34c9c970eef8137818, type: 3}
+  angerSprite: {fileID: -9181724635258427942, guid: 513ea4c8ff4d22542bc561c620583487, type: 3}
+  empathySprite: {fileID: -8565421531080737764, guid: 38db74b8a31a7cc4fae13ae768521385, type: 3}
+  sympathySprite: {fileID: 4643279891095108012, guid: 1671a8c5728cd304bb2e789b5b53529d, type: 3}
   valueOnlySprite: {fileID: 7540585947550909261, guid: aff0bac2d941bf64b8250d358121182b, type: 3}
   OwnerCard: {fileID: 0}
 --- !u!114 &7994647478966201829
@@ -757,11 +760,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentCard: {fileID: 0}
-  visualShadow: {fileID: 9157190824811683565}
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   flipParent: {fileID: 2705550890348967682}
   auraImage: {fileID: 1152322004953613206}
+  visualShadow: {fileID: 9157190824811683565}
   followSpeed: 25
   rotationAmount: 70
   rotationSpeed: 50

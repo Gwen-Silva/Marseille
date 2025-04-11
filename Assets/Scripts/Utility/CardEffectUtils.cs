@@ -17,6 +17,9 @@ public static class CardEffectUtils
 	public static readonly Color GriefColor = new Color(0.54f, 0.39f, 0.82f); // lavender
 	public static readonly Color GuiltyColor = new Color(0.1f, 0.2f, 0.4f); // dark blue
 	public static readonly Color DoubtColor = new Color(0.6f, 0.4f, 1f); // purple
+	public static readonly Color AngerColor = new Color(0.54f, 0.39f, 0.82f); // lavender
+	public static readonly Color SympathyColor = new Color(0.1f, 0.2f, 0.4f); // dark blue
+	public static readonly Color EmpathyColor = new Color(0.6f, 0.4f, 1f); // purple
 	public static readonly Color DefaultColor = Color.white;
 	#endregion
 
@@ -43,6 +46,9 @@ public static class CardEffectUtils
 			CardEffect.Grief => GriefColor,
 			CardEffect.Guilt => GuiltyColor,
 			CardEffect.Doubt => DoubtColor,
+			CardEffect.Anger => AngerColor,
+			CardEffect.Empathy => EmpathyColor,
+			CardEffect.Sympathy => SympathyColor,
 			_ => DefaultColor
 		};
 	}
@@ -99,6 +105,9 @@ public static class CardEffectUtils
 			CardEffect.Grief => "Luto",
 			CardEffect.Guilt => "Culpa",
 			CardEffect.Doubt => "Dúvida",
+			CardEffect.Anger => "Raiva",
+			CardEffect.Empathy => "Empatia",
+			CardEffect.Sympathy => "Simpatia",
 			CardEffect.None => "Nenhum",
 			_ => effect.ToString()
 		};

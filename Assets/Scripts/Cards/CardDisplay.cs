@@ -17,6 +17,9 @@ public class CardDisplay : MonoBehaviour
 	public Sprite doubtSprite;
 	public Sprite griefSprite;
 	public Sprite guiltySprite;
+	public Sprite angerSprite;
+	public Sprite empathySprite;
+	public Sprite sympathySprite;
 
 	[Header("Neutral Sprite")]
 	public Sprite valueOnlySprite;
@@ -59,6 +62,9 @@ public class CardDisplay : MonoBehaviour
 			CardEffect.Doubt => doubtSprite,
 			CardEffect.Grief => griefSprite,
 			CardEffect.Guilt => guiltySprite,
+			CardEffect.Anger => angerSprite,
+			CardEffect.Sympathy => sympathySprite,
+			CardEffect.Empathy => empathySprite,
 			_ => valueOnlySprite
 		};
 	}

@@ -6,7 +6,10 @@ public enum CardEffect
 	Love = 1,
 	Guilt = 2,
 	Doubt = 3,
-	Grief = 4
+	Grief = 4,
+	Anger = 5,
+	Sympathy = 6,
+	Empathy = 7
 }
 
 [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card Data")]

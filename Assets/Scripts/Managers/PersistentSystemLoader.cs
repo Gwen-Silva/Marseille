@@ -38,7 +38,6 @@ public class PersistentSystemLoader : MonoBehaviour
 		}
 
 		var instance = Instantiate(prefab);
-		Debug.Log($"[PersistentSystemLoader] Instanciado {type.Name}.");
 	}
 
 	private Object FindFirstInstanceOfType(System.Type type)

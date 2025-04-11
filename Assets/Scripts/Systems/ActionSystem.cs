@@ -26,8 +26,6 @@ public class ActionSystem : MonoBehaviour
 
 	public void Perform(GameAction action, Action OnPerformFinished = null)
 	{
-		Debug.Log($"[ActionSystem] Perform chamado com GA: {action.GetType().Name}\nStackTrace:\n" + new System.Diagnostics.StackTrace());
-
 		if (IsPerforming) return;
 
 		IsPerforming = true;
@@ -75,11 +73,6 @@ public class ActionSystem : MonoBehaviour
 		if (!alreadyExists)
 		{
 			list.Add(wrapped);
-			Debug.Log($"[ActionSystem] SubscribeReaction: {reaction.Method.DeclaringType.Name}.{reaction.Method.Name} para {typeof(T).Name} ({timing})");
-		}
-		else
-		{
-			Debug.LogWarning($"[ActionSystem] Reação já estava registrada para {typeof(T).Name} ({timing}): {reaction.Method.DeclaringType.Name}.{reaction.Method.Name}");
 		}
 	}
 
@@ -92,9 +85,6 @@ public class ActionSystem : MonoBehaviour
 		int removed = list.RemoveAll(sub =>
 			sub.Method == reaction.Method &&
 			sub.Target == reaction.Target);
-
-		if (removed > 0)
-			Debug.Log($"[ActionSystem] UnsubscribeReaction: {reaction.Method.DeclaringType.Name}.{reaction.Method.Name} removido de {typeof(T).Name} ({timing})");
 	}
 
 	#endregion
@@ -131,8 +121,6 @@ public class ActionSystem : MonoBehaviour
 	{
 		if (performers.TryGetValue(action.GetType(), out var performer))
 			yield return performer(action);
-		else
-			Debug.LogWarning($"[ActionSystem] Nenhum performer registrado para: {action.GetType().Name}");
 	}
 
 	private void PerformSubscribers(GameAction action, Dictionary<Type, List<Action<GameAction>>> subs)

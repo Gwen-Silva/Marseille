@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3de583e0ebff0374ca215cb7910a8244, type: 3}
+  m_Name: IntroMage
+  m_EditorClassIdentifier: 
+  background: {fileID: -8462765999735424977, guid: a4621a1a40bef0341b0054eae6a90474, type: 3}
+  lines:
+  - speakerName: Mage
+    text: "Ol\xE1 mundo"
+    speakerIcon: {fileID: 2009195431862339236, guid: bcf6b3f1e6d2198499ba17202e09c083, type: 3}
+    isPlayerSpeaking: 1
+  - speakerName: Mage
+    text: Eu sou o axolote
+    speakerIcon: {fileID: 2009195431862339236, guid: bcf6b3f1e6d2198499ba17202e09c083, type: 3}
+    isPlayerSpeaking: 1
+  - speakerName: Mage
+    text: Fim
+    speakerIcon: {fileID: 2009195431862339236, guid: bcf6b3f1e6d2198499ba17202e09c083, type: 3}
+    isPlayerSpeaking: 1
